@@ -6,7 +6,7 @@ package com.cn.ncvt.result;
 public class ResultFactory {
 
     public static Result buildSuccessResult(Object data) {
-        return buildResult(ResultCode.SUCCESS, false, "成功", data);
+        return buildResult(ResultCode.SUCCESS, false, "请求成功", data);
     }
 
     public static Result buildFailResult(String message) {

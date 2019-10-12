@@ -13,6 +13,7 @@ export default new Vuex.Store({
     },
     token:null,
     sessionId:null,
+    routes:[],
   },
   mutations: {
     login(state, user){
@@ -34,6 +35,11 @@ export default new Vuex.Store({
         state.user = [];
         state.token = "";
         state.sessionId = "";
+        state.routes = [];
+    },
+    initMenu(state, menus){
+        console.log("正在添加菜单到状态")
+        state.routes = menus;
     },
   },
   actions: {

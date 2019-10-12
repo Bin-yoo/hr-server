@@ -5,6 +5,7 @@ import com.cn.ncvt.entity.Hr;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -43,14 +44,17 @@ public class DatabaseRealm extends AuthorizingRealm {
 		String userName = token.getPrincipal().toString();
 		// 获取数据库中的密码
 		Hr hr = hrBiz.getByName(userName);
-		String passwordInDB = hr.getPassword();
-		String salt = hr.getSalt();
-		// 认证信息里存放账号密码, getName() 是当前Realm的继承方法,通常返回当前类名 :databaseRealm
-		// 盐也放进去
-		// 这样通过applicationContext-shiro.xml里配置的 HashedCredentialsMatcher 进行自动校验
-		SimpleAuthenticationInfo a = new SimpleAuthenticationInfo(userName, passwordInDB, ByteSource.Util.bytes(salt),
-				getName());
-		return a;
+		if (hr == null){
+			return null;
+		} else {
+            String passwordInDB = hr.getPassword();
+            String salt = hr.getSalt();
+            // 认证信息里存放账号密码, getName() 是当前Realm的继承方法,通常返回当前类名 :databaseRealm
+            // 盐也放进去
+            // 这样通过applicationContext-shiro.xml里配置的 HashedCredentialsMatcher 进行自动校验
+            SimpleAuthenticationInfo a = new SimpleAuthenticationInfo(hr, passwordInDB, ByteSource.Util.bytes(salt),getName());
+            return a;
+        }
 	}
 
 }

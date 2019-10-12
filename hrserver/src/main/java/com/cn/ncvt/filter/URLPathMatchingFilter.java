@@ -4,6 +4,7 @@ package com.cn.ncvt.filter;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import com.cn.ncvt.util.SpringContextUtils;
+import com.cn.ncvt.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -19,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.util.Set;
 
+import static com.cn.ncvt.util.Token.verifyToken;
+
 public class URLPathMatchingFilter extends PathMatchingFilter {
 	/*@Autowired
 	PermissionService permissionService;*/
@@ -31,27 +34,30 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         response.setContentType("application/json;charset=UTF-8");
 
         HttpServletRequest req = (HttpServletRequest)request;
-        String token = req.getHeader("token");
+        String headerToken = req.getHeader("token");
 
-        String sessionId = req.getHeader("sessionId");
-        System.out.println("头部传递sessionId:" + sessionId);
-        System.out.println("当前sessionId:" + WebUtils.toHttp(request).getSession().getId());
-
+        //String sessionId = req.getHeader("sessionId");
+        //System.out.println("头部传递sessionId:" + sessionId);
+        //System.out.println("当前sessionId:" + WebUtils.toHttp(request).getSession().getId());
+        //
         //获取请求连接
         String requestURI = getPathWithinApplication(request);
 		System.out.println("requestURI:" + requestURI);
 
         //Subject subject = new Subject.Builder().sessionId(sessionId).buildSubject();
         Subject subject = SecurityUtils.getSubject();
-        System.out.println("当前用户:" + subject.getPrincipal());
+        //System.out.println("当前用户:" + subject.getPrincipal());
 
-        System.out.println("isAuthenticated:"+subject.isAuthenticated());
+        //System.out.println("isAuthenticated:"+subject.isAuthenticated());
 
         if (!subject.isAuthenticated()){
             WebUtils.issueRedirect(request, response, "/unauthorized");
             return false;
         } else {
-            return true;
+            if (verifyToken(headerToken))
+                return true;
+            else
+                return false;
         }
 
 

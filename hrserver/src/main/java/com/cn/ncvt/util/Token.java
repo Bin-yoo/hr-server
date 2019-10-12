@@ -5,7 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.cn.ncvt.entity.Hr;
+import org.apache.shiro.SecurityUtils;
 
 import java.util.*;
 
@@ -16,22 +19,23 @@ public class Token {
     /**
      * 签发自定义token
      */
-    public String createTokenWithClaim(String userName) {
+    public String createTokenWithClaim(int userId, String userName) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(key);
             Map<String, Object> map = new HashMap<String, Object>();
             Date nowDate = new Date();
-            //Date expireDate = getAfterDate(nowDate, 0, 0, 7, 0, 0, 10);    //获取当前时间2小时后的时间
+            Date expireDate = getAfterDate(nowDate, 0, 0, 7, 0, 0, 10);    //获取当前时间2小时后的时间
             map.put("alg", "HS256");
             map.put("typ", "JWT");
             String token = JWT.create()
                     .withHeader(map)    //设置头部信息 Header
+                    .withClaim("userId", userId)    //设置 载荷 Payload
                     .withClaim("userName", userName)    //设置 载荷 Payload
                     .withIssuer("DickDragon")    //签名是有谁生成 例如 服务器
                     //.withNotBefore(new Date())    //定义在什么时间之前，该jwt都是不可用的.
                     .withAudience("APP")    //签名的观众 也可以理解谁接受签名的
                     .withIssuedAt(nowDate)     //生成签名的时间
-                    //.withExpiresAt(expireDate)    //签名过期的时间
+                    .withExpiresAt(expireDate)    //签名过期的时间
                     .sign(algorithm);    //签名 Signature
             return token;
         } catch (JWTCreationException exception) {
@@ -51,13 +55,22 @@ public class Token {
                 .withIssuer("DickDragon")
                 .build();
             DecodedJWT jwt = verifier.verify(token);
-            /*Map<String, Claim> claims = jwt.getClaims();
-            Claim claim = claims.get("userName");    //负载内容
-            System.out.println(claim.asString());
+            Map<String, Claim> claims = jwt.getClaims();
+            Claim claimUserId = claims.get("userId");    //负载内容
+            Claim claimUserName = claims.get("userName");    //负载内容
+
+            Hr hr= (Hr) SecurityUtils.getSubject().getPrincipal();
+            if(hr.getId() == claimUserId.asInt() && hr.getUsername().equals(claimUserName.asString())){
+                return true;
+            } else {
+                return false;
+            }
+
+            /*System.out.println(claim.asString());
             List<String> audience = jwt.getAudience();    //接收token的用户
             System.out.println(jwt.getSubject());    //主题
             System.out.println(audience.get(0));*/
-            return true;
+            //return true;
         } catch (JWTVerificationException exception){
             exception.printStackTrace();
             return false;

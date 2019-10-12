@@ -15,16 +15,41 @@
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem @click.native="Logout">退出系统</DropdownItem>
-                            <DropdownItem >{{this.restate.token}}</DropdownItem>
-                            <DropdownItem >{{this.restate.sessionId}}</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </Col>
             </Row>
         </Header>
         <Layout>
-            <Sider hide-trigger>Sider</Sider>
-            <Content>Content</Content>
+            <Sider hide-trigger>
+                <Menu :theme="theme2" width="auto">
+                    <template v-for="(item,index) in this.routes">
+                        <Submenu :name="index+1" :key="index">
+                            <template slot="title">
+                                <Icon type="ios-paper" />
+                                {{item.name}}
+                            </template>
+                            <MenuItem
+                                v-for="child in item.children"
+                                :key="child.path"
+                                :name="child.path"
+                                :to="child.path">{{child.name}}
+                            </MenuItem>
+                        </Submenu>
+                    </template>
+                </Menu>
+            </Sider>
+            <Content>
+                <Breadcrumb>
+                    <BreadcrumbItem to="/home">首页</BreadcrumbItem>
+                    <BreadcrumbItem v-text="this.$router.currentRoute.name">Components</BreadcrumbItem>
+                </Breadcrumb>
+                <keep-alive>
+                <router-view v-if="this.$route.meta.keepAlive"></router-view>
+                </keep-alive>
+                <router-view v-if="!this.$route.meta.keepAlive"></router-view>
+                <router-view></router-view>
+            </Content>
         </Layout>
         <Footer>Footer</Footer>
     </Layout>
@@ -35,6 +60,7 @@ export default {
     name: 'home',
     data(){
         return {
+            theme2: 'light',
             menuList:[]
         }
     },
@@ -46,14 +72,14 @@ export default {
             }).catch(error => {
                 console.log(error);
             });
-        }
+        },
     },
     computed: {
       user(){
         return this.$store.state.user;
       },
-      restate(){
-        return this.$store.state;
+      routes(){
+        return this.$store.state.routes;
       },
     }
 }
