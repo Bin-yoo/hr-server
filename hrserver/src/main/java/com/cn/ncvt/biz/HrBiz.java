@@ -45,7 +45,7 @@ public class HrBiz {
             Map map = new HashMap();
             map.put("hr",hrDB);
             map.put("sessionId",session.getId());
-            map.put("token",userToken.createTokenWithClaim(hr.getUsername()));
+            map.put("token",userToken.createTokenWithClaim(hr.getId(), hr.getUsername()));
             return ResultFactory.buildSuccessResult(map);
         } catch (AuthenticationException e){
             return ResultFactory.buildPermissionFailResult("登录失败,用户名或密码错误");
