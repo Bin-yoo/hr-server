@@ -22,7 +22,7 @@
         </Header>
         <Layout>
             <Sider hide-trigger>
-                <Menu :theme="theme2" width="auto">
+                <Menu :theme="theme2" width="auto" accordion>
                     <template v-for="(item,index) in this.routes">
                         <Submenu :name="index+1" :key="index">
                             <template slot="title">
@@ -39,17 +39,18 @@
                     </template>
                 </Menu>
             </Sider>
-            <Content>
-                <Breadcrumb>
+            <Layout :style="{padding: '0 24px 24px'}">
+                <Breadcrumb :style="{margin: '24px 0', textAlign: 'left'}">
                     <BreadcrumbItem to="/home">首页</BreadcrumbItem>
                     <BreadcrumbItem v-text="this.$router.currentRoute.name">Components</BreadcrumbItem>
                 </Breadcrumb>
-                <keep-alive>
-                <router-view v-if="this.$route.meta.keepAlive"></router-view>
-                </keep-alive>
-                <router-view v-if="!this.$route.meta.keepAlive"></router-view>
-                <router-view></router-view>
-            </Content>
+                <Content>
+                    <keep-alive>
+                    <router-view v-if="this.$route.meta.keepAlive"></router-view>
+                    </keep-alive>
+                    <router-view v-if="!this.$route.meta.keepAlive"></router-view>
+                </Content>
+            </Layout>
         </Layout>
         <Footer>Footer</Footer>
     </Layout>
@@ -66,12 +67,9 @@ export default {
     },
     methods: {
         Logout : function() {
-            this.getRequest("/logout",null).then(resp =>{
-                this.$store.commit("logout");
-                this.$router.push({name: 'login'})
-            }).catch(error => {
-                console.log(error);
-            });
+            this.getRequest("/logout",null);
+            this.$store.commit("logout");
+            this.$router.push({name: 'login'})
         },
     },
     computed: {
