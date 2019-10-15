@@ -43,7 +43,10 @@
                 >Check</Button>
             </FormItem>
         </Form>
-        <Spin size="large" fix v-if="spinShow"></Spin>
+        <Spin fix v-if="spinShow">
+            <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+            <div>Loading</div>
+        </Spin>
     </div>
 </template>
 
@@ -66,21 +69,22 @@ export default {
                 username:this.hr.username,
                 password:this.hr.password,
             }).then(resp =>{
-                console.log(resp);
-                if(resp.data.code == 200 && resp.data.error ==false){
+                if (resp.data.code == 200 && resp.data.error ==false){
                     this.$store.commit("login", resp.data.data.hr);
                     this.$store.commit("token", resp.data.data.token);
                     this.$store.commit("sessionId", resp.data.data.sessionId);
                     this.$Message.success("登陆成功");
                     this.spinShow = false;
                     this.$router.push({name: 'home'})
-                } else {
-                    this.$Message.error("登陆失败");
+                }
+                // if (resp.data.code == 401 && resp.data.error == true) {
+                else{
+                    this.$Message.error(resp.data.message);
                     this.spinShow = false;
                 }
             }).catch(error => {
                 this.spinShow = false;
-                this.$Message.error("登陆失败");
+                this.$Message.error("登陆失败,出现错误");
             });
         },
         Check : function() {
