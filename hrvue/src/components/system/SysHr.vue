@@ -1,23 +1,26 @@
 ﻿<template>
     <Tabs value="RoleMana">
         <TabPane label="权限管理" name="RoleMana">
-            <Row>
-                <Col span="4">
-                    <Input v-model="newRole" placeholder="请输入角色的英文名">
-                        <span slot="prepend">http://</span>
-                        <span slot="append">.com</span>
-                    </Input>
-                </Col>
-                <Col span="4" offset="1">
-                    <Input v-model="newRoleZh" placeholder="请输入角色的中文名"></Input>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" @click="addNewRole">添加角色</Button>
+            <Row type="flex" justify="start" >
+                <Col span="10">
+                    <Form :rules="rules" :model="newRole" ref="newRole" inline>
+                        <FormItem prop="role">
+                            <Input v-model="newRole.role" placeholder="请输入角色的英文名">
+                                <span slot="prepend">ROLE_</span>
+                            </Input>
+                        </FormItem>
+                        <FormItem prop="roleZh">
+                            <Input v-model="newRole.roleZh" placeholder="请输入角色的中文名"></Input>
+                        </FormItem>
+                        <FormItem>
+                            <Button type="primary" @click="addNewRole" :loading="spinShow">添加角色</Button>
+                        </FormItem>
+                    </Form>
                 </Col>
             </Row>
-            <Row :style="{marginTop: '20px', textAlign: 'left'}">
+            <Row :style="{textAlign: 'left'}">
                 <Col span="10">
-                    <Collapse v-model="activeColItem" accordion @on-change="collapseChange">
+                    <Collapse accordion @on-change="collapseChange">
                         <Panel v-for="item in roles" :key="item.id">
                             {{item.nameZh}}
                             <p slot="content">
@@ -38,11 +41,11 @@
                             </p>
                         </Panel>
                     </Collapse>
+                    <Spin fix v-if="spinShow">
+                        <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                        <div>Loading</div>
+                    </Spin>
                 </Col>
-                <Spin fix v-if="spinShow">
-                    <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
-                    <div>Loading</div>
-                </Spin>
             </Row>
         </TabPane>
         <TabPane label="角色管理" name="CharacterMana">标签一的内容</TabPane>
@@ -53,9 +56,18 @@
     export default{
         data(){
             return {
-                activeColItem: "-1",
-                newRole: '',
-                newRoleZh: '',
+                rules: {
+                    role: [
+                        {required: true, message: '角色英文名不能为空', trigger: 'blur' }
+                    ],
+                    roleZh: [
+                        {required: true, message: '角色中文名不能为空', trigger: 'blur' }
+                    ]
+                },
+                newRole: {
+                    role: '',
+                    roleZh: ''
+                },
                 roles: [],
                 treeData: [],
                 checkedKeys: [],
@@ -69,11 +81,9 @@
             initRoles(){
                 this.spinShow = true;
                 this.getRequest("/system/basic/roles").then(resp=> {
-                    console.log(resp);
                     this.spinShow = false;
                     if (resp.status == 200 && resp.data.data != null) {
                         this.roles = resp.data.data;
-                        this.activeColItem = "-1";
                     }
                 })
             },
@@ -83,35 +93,31 @@
                 }
                 var Roleid = this.roles[activeName].id;
                 this.getRequest("/system/basic/menuTree/" + Roleid).then(resp=> {
-                    console.log(resp.data.data);
                     if (resp && resp.status == 200) {
                         this.treeData = resp.data.data;
                     }
                 })
             },
             addNewRole(){
-                console.log(this.newRole);
-                console.log(this.newRoleZh);
-                // if (this.newRole != null && this.newRole != '' && this.newRoleZh != null && this.newRoleZh != '' && this.newRole != undefined) {
-                if(isNotNullORBlank(this.newRole, this.newRoleZh)){
-                    console.log("不为空");
-                    console.log(this.newRole);
-                    console.log(this.newRoleZh);
-                    // this.spinShow = true;
-                    // this.postRequest("/system/basic/addRole", {
-                    //     role: this.newRole,
-                    //     roleZh: this.newRoleZh
-                    // }).then(resp=> {
-                    //     if (resp.data.error == false && resp.data.code == 200) {
-                    //         this.initRoles();
-                    //         this.newRole = '';
-                    //         this.newRoleZh = '';
-                    //     } else {
-                    //         this.loading = false;
-                    //     }
-                    // })
+                var check = /\s/;
+                if(!check.test(this.newRole.role) && !check.test(this.newRole.roleZh) && isNotNullORBlank(this.newRole.role,this.newRole.roleZh)){
+                    this.spinShow = true;
+                    this.postRequest("/system/basic/role", {
+                        name: this.newRole.role,
+                        nameZh: this.newRole.roleZh
+                    }).then(resp=> {
+                        if (resp.data.error == false && resp.data.code == 200) {
+                            this.initRoles();
+                            this.newRole.role = '';
+                            this.newRole.roleZh = '';
+                            this.loading = false;
+                        }
+                    }).catch(error => {
+                        this.spinShow = false;
+                        this.$Message.error(error);
+                    });
                 } else {
-                    this.$Message.error("请填写完整新用户的中英文");
+                    this.$Message.error("角色中英文名称不能为空");
                 }
             },
         }

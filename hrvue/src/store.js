@@ -6,32 +6,32 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user:{
-        name: window.localStorage.getItem('user' || '[]') == null ? '未登录' : JSON.parse(window.localStorage.getItem('user' || '[]')).name,
-        userface: window.localStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).userface,
-        username: window.localStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username,
-        // roles: window.localStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).roles
+        name: window.sessionStorage.getItem('user' || '[]') == null ? '未登录' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).name,
+        userface: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).userface,
+        username: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).username,
+        // roles: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).roles
     },
-    token:null,
-    sessionId:null,
-    routes:[],
+    token: window.sessionStorage.getItem('token') == null ? '' : window.sessionStorage.getItem('token'),
+    sessionId: window.sessionStorage.getItem('sessionId') == null ? '' : window.sessionStorage.getItem('sessionId'),
+    routes: [],
   },
   mutations: {
     login(state, user){
         state.user = user;
-        window.localStorage.setItem('user', JSON.stringify(user));
+        window.sessionStorage.setItem('user', JSON.stringify(user));
     },
     token(state, token){
         state.token = token;
-        window.localStorage.setItem('token', token);
+        window.sessionStorage.setItem('token', token);
     },
     sessionId(state, sessionId){
         state.sessionId = sessionId;
-        window.localStorage.setItem('sessionId', sessionId);
+        window.sessionStorage.setItem('sessionId', sessionId);
     },
     logout(state){
-        window.localStorage.removeItem('user');
-        window.localStorage.removeItem('token');
-        window.localStorage.removeItem('sessionId');
+        window.sessionStorage.removeItem('user');
+        window.sessionStorage.removeItem('token');
+        window.sessionStorage.removeItem('sessionId');
         state.user = [];
         state.token = "";
         state.sessionId = "";

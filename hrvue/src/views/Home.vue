@@ -2,10 +2,10 @@
     <Layout>
         <Header>
             <Row>
-                <Col span="4">
+                <Col span="2">
                     <h1 class="header_title">臭逼系统</h1>
                 </Col>
-                <Col span="1" offset="17">
+                <Col span="1" offset="19">
                     <h3 class="header_userName">{{this.user.name}}</h3>
                 </Col>
                 <Col span="1">
@@ -21,7 +21,7 @@
             </Row>
         </Header>
         <Layout>
-            <Sider hide-trigger>
+            <Sider hide-trigger width="250">
                 <Menu :theme="theme2" width="auto" accordion>
                     <template v-for="(item,index) in this.routes">
                         <Submenu :name="index+1" :key="index">
