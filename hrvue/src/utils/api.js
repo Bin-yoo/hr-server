@@ -35,6 +35,7 @@ axios.interceptors.response.use(data => {
 })
 let base = 'http://localhost:8082/hrserver';
 export const postRequest = (url, params) => {
+    console.log(params)
   return axios({
     method: 'post',
     url: `${base}${url}`,

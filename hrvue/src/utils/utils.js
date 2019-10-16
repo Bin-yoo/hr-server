@@ -11,6 +11,14 @@ export const isNotNullORBlank = (...args)=> {
   return true;
 }
 
+export const getMenu = (router, store)=> {
+    if (store.state.routes.length > 0) {
+        var fmtRoutes = store.state.routes;
+        router.addRoutes(fmtRoutes);
+        store.commit('initMenu', fmtRoutes);
+    } 
+}
+
 export const initMenu = (router, store)=> {
   if (store.state.routes.length > 0) {
     return;
@@ -19,7 +27,6 @@ export const initMenu = (router, store)=> {
     if (resp && resp.status == 200) {
       console.log("开始请求获取菜单");
       var fmtRoutes = formatRoutes(resp.data.data);
-      console.log(fmtRoutes);
       router.addRoutes(fmtRoutes);
       store.commit('initMenu', fmtRoutes);
     }

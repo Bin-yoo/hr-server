@@ -11,6 +11,7 @@
                     type="text"
                     v-model="hr.username"
                     placeholder="用户名"
+                    @on-enter="Login"
                 >
                     <Icon
                         type="ios-person-outline"
@@ -23,6 +24,7 @@
                     type="password"
                     v-model="hr.password"
                     placeholder="密码"
+                    @on-enter="Login"
                 >
                     <Icon
                         type="ios-lock-outline"
@@ -34,13 +36,8 @@
                 <Button
                     type="primary"
                     @click="Login()"
-                >Signin</Button>
-            </FormItem>
-            <FormItem>
-                <Button
-                    type="primary"
-                    @click="Check()"
-                >Check</Button>
+                    long
+                >登录</Button>
             </FormItem>
         </Form>
         <Spin fix v-if="spinShow">
@@ -87,13 +84,6 @@ export default {
                 this.$Message.error("登陆失败,出现错误");
             });
         },
-        Check : function() {
-            this.getRequest("/check",null).then(resp =>{
-                console.log(resp);
-            }).catch(error => {
-                console.log(error);
-            });
-        }
     }
 };
 </script>
@@ -103,13 +93,13 @@ export default {
         background-clip: padding-box;
         margin: 180px auto;
         width: 350px;
-        padding: 35px 35px 15px 35px;
+        padding: 35px;
         background: #fff;
         border: 1px solid #eaeaea;
         box-shadow: 0 0 25px #cac6c6;
     }
     .login_title {
-        margin: 10px auto 40px auto;
+        margin: 10px auto 25px auto;
         text-align: center;
         color: #505458;
     }
