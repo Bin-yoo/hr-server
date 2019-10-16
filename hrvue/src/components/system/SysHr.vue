@@ -49,6 +49,7 @@
     </Tabs>
 </template>
 <script>
+    import {isNotNullORBlank} from '../../utils/utils'
     export default{
         data(){
             return {
@@ -91,7 +92,8 @@
             addNewRole(){
                 console.log(this.newRole);
                 console.log(this.newRoleZh);
-                if (this.newRole != null && this.newRole != '' && this.newRoleZh != null && this.newRoleZh != '' && this.newRole != undefined) {
+                // if (this.newRole != null && this.newRole != '' && this.newRoleZh != null && this.newRoleZh != '' && this.newRole != undefined) {
+                if(isNotNullORBlank(this.newRole, this.newRoleZh)){
                     console.log("不为空");
                     console.log(this.newRole);
                     console.log(this.newRoleZh);

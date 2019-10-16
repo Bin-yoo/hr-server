@@ -1,5 +1,5 @@
 ﻿import axios from 'axios'
-import {Message} from 'view-design'
+import {Message} from 'iview'
 import store from '../store'
 
 axios.interceptors.request.use(config => {
@@ -33,7 +33,7 @@ axios.interceptors.response.use(data => {
   }
   // return Promise.resolve(err);
 })
-let base = 'http://localhost:8080/hrserver';
+let base = 'http://localhost:8082/hrserver';
 export const postRequest = (url, params) => {
   return axios({
     method: 'post',
