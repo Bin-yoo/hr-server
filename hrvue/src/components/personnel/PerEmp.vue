@@ -1,23 +1,24 @@
 <template>
-  <div>
-      <Row><Col span="2"><h1>员工资料</h1></Col></Row>
-      <Row :style="{margin: '15px 0 0 0'}">
-          <Col span="3"><Input suffix="ios-search" placeholder="请输入..." style="width: auto" /></Col>
-          <Col span="1"><Button icon="ios-search">搜索</Button></Col>
-      </Row>
-      <Row :style="{margin: '20px 0 0 0'}">
-          <Table border ref="selection" :columns="columns" :data="data1">
-              <template slot-scope="{ row, index }" slot="action">
-                  <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">编辑</Button>
-                  <Button type="error" size="small" @click="remove(index)">删除</Button>
-              </template>
-          </Table>
-      </Row>
-      <Row :style="{margin: '20px 0 0 0'}">
-          <Col span="1"><Button type="error">批量删除</Button></Col>
-          <Page :total="100" show-elevator />
-      </Row>
-  </div>
+    <div>
+        <Row><Col span="2"><h1>员工资料</h1></Col></Row>
+        <Row :style="{margin: '15px 0 0 0'}">
+            <Col span="3"><Input suffix="ios-search" placeholder="请输入..." style="width: auto" /></Col>
+            <Col span="1"><Button icon="ios-search">搜索</Button></Col>
+            <Col span="1" offset="18"><Button type="primary">添加</Button></Col>
+        </Row>
+        <Row :style="{margin: '20px 0 0 0'}">
+            <Table border ref="selection" :columns="columns" :data="data1">
+                <template slot-scope="{ row, index }" slot="action">
+                    <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">编辑</Button>
+                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                </template>
+            </Table>
+        </Row>
+        <Row :style="{margin: '20px 0 0 0'}">
+            <Col span="1"><Button type="error">批量删除</Button></Col>
+            <Page :total="100" show-elevator />
+        </Row>
+    </div>
 </template>
 
 <script>
