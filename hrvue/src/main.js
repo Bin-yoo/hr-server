@@ -3,8 +3,8 @@ import App from './App.vue'
 import router from './router'
 import VueRouter from 'vue-router';
 import store from './store'
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
 import VueAxios from 'vue-axios/dist/vue-axios.min';
 import axios from 'axios/dist/axios.min';
 import qs from 'qs/dist/qs';
@@ -19,7 +19,7 @@ Vue.prototype.putRequest = putRequest;
 Vue.prototype.postRequest = postRequest;
 
 Vue.use(VueRouter);
-Vue.use(iView);
+Vue.use(ViewUI);
 Vue.use(VueAxios,axios);
 Vue.use(qs);
 

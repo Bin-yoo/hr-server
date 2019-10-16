@@ -12,7 +12,7 @@
                     <Input v-model="newRoleZh" placeholder="请输入角色的中文名"></Input>
                 </Col>
                 <Col span="2">
-                    <Button type="primary">添加角色</Button>
+                    <Button type="primary" @click="addNewRole">添加角色</Button>
                 </Col>
             </Row>
             <Row :style="{marginTop: '20px', textAlign: 'left'}">
@@ -22,7 +22,7 @@
                             {{item.nameZh}}
                             <p slot="content">
                                 <Row>
-                                    <Tree :data="treeData" show-checkbox></Tree>
+                                    <Tree :data="treeData" show-checkbox multiple></Tree>
                                 </Row>
                                 <Row :style="{marginTop: '20px'}">
                                     <Col span="3">
@@ -57,6 +57,7 @@
                 newRoleZh: '',
                 roles: [],
                 treeData: [],
+                checkedKeys: [],
                 spinShow: false,
             }
         },
@@ -81,12 +82,35 @@
                 }
                 var Roleid = this.roles[activeName].id;
                 this.getRequest("/system/basic/menuTree/" + Roleid).then(resp=> {
+                    console.log(resp.data.data);
                     if (resp && resp.status == 200) {
-                        var data = resp.data;
-                        this.treeData = data.menus;
-                        this.checkedKeys = data.mids;
+                        this.treeData = resp.data.data;
                     }
                 })
+            },
+            addNewRole(){
+                console.log(this.newRole);
+                console.log(this.newRoleZh);
+                if (this.newRole != null && this.newRole != '' && this.newRoleZh != null && this.newRoleZh != '' && this.newRole != undefined) {
+                    console.log("不为空");
+                    console.log(this.newRole);
+                    console.log(this.newRoleZh);
+                    // this.spinShow = true;
+                    // this.postRequest("/system/basic/addRole", {
+                    //     role: this.newRole,
+                    //     roleZh: this.newRoleZh
+                    // }).then(resp=> {
+                    //     if (resp.data.error == false && resp.data.code == 200) {
+                    //         this.initRoles();
+                    //         this.newRole = '';
+                    //         this.newRoleZh = '';
+                    //     } else {
+                    //         this.loading = false;
+                    //     }
+                    // })
+                } else {
+                    this.$Message.error("请填写完整新用户的中英文");
+                }
             },
         }
     }
