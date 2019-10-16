@@ -3,8 +3,8 @@ import App from './App.vue'
 import router from './router'
 import VueRouter from 'vue-router';
 import store from './store'
-import ViewUI from 'view-design';
-import 'view-design/dist/styles/iview.css';
+import ViewUI from 'iview';
+import 'iview/dist/styles/iview.css';
 import VueAxios from 'vue-axios/dist/vue-axios.min';
 import axios from 'axios/dist/axios.min';
 import qs from 'qs/dist/qs';
