@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by sang on 2017/12/28.
  */
 public class Role implements Serializable {
-    private Long id;
+    private int id;
     private String name;
     private String nameZh;
 
@@ -18,11 +18,11 @@ public class Role implements Serializable {
         this.nameZh = nameZh;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
