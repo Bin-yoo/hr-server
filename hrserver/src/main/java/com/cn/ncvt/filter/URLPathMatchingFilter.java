@@ -1,6 +1,7 @@
 package com.cn.ncvt.filter;
 
 
+import com.cn.ncvt.entity.Hr;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import com.cn.ncvt.util.SpringContextUtils;
@@ -36,28 +37,33 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         HttpServletRequest req = (HttpServletRequest)request;
         String headerToken = req.getHeader("token");
 
-        //String sessionId = req.getHeader("sessionId");
-        //System.out.println("头部传递sessionId:" + sessionId);
-        //System.out.println("当前sessionId:" + WebUtils.toHttp(request).getSession().getId());
-        //
+        String sessionId = req.getHeader("sessionId");
+        //System.out.println("头部传递token:" + headerToken);
+        System.out.println("头部传递sessionId:" + sessionId);
+        System.out.println("当前sessionId:" + WebUtils.toHttp(request).getSession().getId());
+
         //获取请求连接
         String requestURI = getPathWithinApplication(request);
 		System.out.println("requestURI:" + requestURI);
 
         //Subject subject = new Subject.Builder().sessionId(sessionId).buildSubject();
         Subject subject = SecurityUtils.getSubject();
-        //System.out.println("当前用户:" + subject.getPrincipal());
+        System.out.println("当前用户:" + subject.getPrincipal());
+        Hr hr = (Hr) SecurityUtils.getSubject().getPrincipal();
 
-        //System.out.println("isAuthenticated:"+subject.isAuthenticated());
+        System.out.println(hr.getUsername());
+
 
         if (!subject.isAuthenticated()){
             WebUtils.issueRedirect(request, response, "/unauthorized");
             return false;
         } else {
-            if (verifyToken(headerToken))
+            if (verifyToken(headerToken)) {
                 return true;
-            else
+            } else {
+                WebUtils.issueRedirect(request, response, "/unauthorized");
                 return false;
+            }
         }
 
 

@@ -9,7 +9,7 @@ axios.interceptors.request.use(config => {
   // return Promise.resolve(err);
 })
 axios.interceptors.response.use(data => {
-  if (data.status && data.status == 200 && data.data.status == 500) {
+  if (data.status && data.status == 200 && data.data.code == 401) {
     Message.error({message: data.data.message});
     return;
   }
@@ -43,7 +43,7 @@ export const postRequest = (url, params) => {
     headers: {
         'token': store.state.token,
         'sessionId': store.state.sessionId,
-    }
+    },
   });
 }
 export const uploadFileRequest = (url, params) => {
@@ -53,7 +53,7 @@ export const uploadFileRequest = (url, params) => {
     data: params,
     headers: {
       'Content-Type': 'multipart/form-data'
-    }
+    },
   });
 }
 export const putRequest = (url, params) => {
@@ -64,7 +64,7 @@ export const putRequest = (url, params) => {
     headers: {
         'token': store.state.token,
         'sessionId': store.state.sessionId,
-    }
+    },
   });
 }
 export const deleteRequest = (url) => {
@@ -74,7 +74,7 @@ export const deleteRequest = (url) => {
     headers: {
         'token': store.state.token,
         'sessionId': store.state.sessionId,
-    }
+    },
   });
 }
 export const getRequest = (url, params) => {
@@ -85,6 +85,6 @@ export const getRequest = (url, params) => {
     headers: {
         'token': store.state.token,
         'sessionId': store.state.sessionId,
-    }
+    },
   });
 }

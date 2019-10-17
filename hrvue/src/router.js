@@ -4,7 +4,6 @@ import Login from './views/Login.vue'
 import Home from './views/Home.vue'
 import store from './store'
 import {initMenu} from './utils/utils'
-import {getMenu} from './utils/utils'
 
 Vue.use(Router)
 
@@ -20,7 +19,7 @@ const router = new Router({
             name: 'home',
             component: Home,
             meta: {
-                //requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             },
             children: []
         },

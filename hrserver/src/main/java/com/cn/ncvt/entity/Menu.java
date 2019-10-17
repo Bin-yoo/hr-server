@@ -10,16 +10,34 @@ import java.util.List;
  * Created by sang on 2017/12/28.
  */
 public class Menu implements Serializable {
-    private Long id;
+    private int id;
     private String url;
     private String path;
     private Object component;
     private String name;
     private String iconCls;
-    private Long parentId;
+    private int parentId;
     private List<Role> roles;
     private List<Menu> children;
     private MenuMeta meta;
+    private boolean checked;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     public MenuMeta getMeta() {
         return meta;
@@ -37,11 +55,11 @@ public class Menu implements Serializable {
         this.children = children;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -88,11 +106,11 @@ public class Menu implements Serializable {
     }
 
     @JsonIgnore
-    public Long getParentId() {
+    public int getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(int parentId) {
         this.parentId = parentId;
     }
 

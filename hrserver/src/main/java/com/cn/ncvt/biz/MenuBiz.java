@@ -29,4 +29,14 @@ public class MenuBiz {
         Hr hr = (Hr) SecurityUtils.getSubject().getPrincipal();
         return ResultFactory.buildSuccessResult(menuMapper.selectMenusByHrId(hr.getId()));
     }
+
+    public Result getMenuTreeByRoleId(int rid) {
+
+        List<Menu> menus = menuMapper.getMenuTreeByRid(rid);
+        if (menus != null){
+            return ResultFactory.buildSuccessResult(menus);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
 }

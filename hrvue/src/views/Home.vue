@@ -45,11 +45,10 @@
                     <BreadcrumbItem v-text="this.$router.currentRoute.name">Components</BreadcrumbItem>
                 </Breadcrumb>
                 <Content>
-                    <!--                    <keep-alive>-->
-                    <!--                    <router-view v-if="this.$route.meta.keepAlive"></router-view>-->
-                    <!--                    </keep-alive>-->
-                    <!--                    <router-view v-if="!this.$route.meta.keepAlive"></router-view>-->.
-
+                    <keep-alive>
+                        <router-view v-if="this.$route.meta.keepAlive"></router-view>
+                    </keep-alive>
+                    <router-view v-if="!this.$route.meta.keepAlive"></router-view>
                 </Content>
             </Layout>
         </Layout>
@@ -60,13 +59,6 @@
 <script>
     export default {
         name: 'home',
-        // data() {
-        //     return {
-        //         theme2: 'light',
-        //         menuList: []
-        //     }
-        // },
-
         methods: {
             Logout: function () {
                 this.getRequest("/logout", null);
