@@ -4,7 +4,6 @@ import Login from './views/Login.vue'
 import Home from './views/Home.vue'
 import store from './store'
 import {initMenu} from './utils/utils'
-import {getMenu} from './utils/utils'
 
 Vue.use(Router)
 

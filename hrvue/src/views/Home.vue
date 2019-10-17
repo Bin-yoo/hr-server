@@ -11,7 +11,7 @@
                 <Col span="1">
                     <Dropdown trigger="click" style="margin-left: 20px">
                         <a href="javascript:void(0)">
-                            <Avatar :src="this.user.userface" size="large" />
+                            <Avatar :src="this.user.userface" size="large"/>
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem @click.native="Logout">退出系统</DropdownItem>
@@ -26,14 +26,14 @@
                     <template v-for="(item,index) in this.routes">
                         <Submenu :name="index+1" :key="index">
                             <template slot="title">
-                                <Icon type="ios-paper" />
+                                <Icon type="ios-paper"/>
                                 {{item.name}}
                             </template>
                             <MenuItem
-                                v-for="child in item.children"
-                                :key="child.path"
-                                :name="child.path"
-                                :to="child.path">{{child.name}}
+                                    v-for="child in item.children"
+                                    :key="child.path"
+                                    :name="child.path"
+                                    :to="child.path">{{child.name}}
                             </MenuItem>
                         </Submenu>
                     </template>
@@ -46,7 +46,7 @@
                 </Breadcrumb>
                 <Content>
                     <keep-alive>
-                    <router-view v-if="this.$route.meta.keepAlive"></router-view>
+                        <router-view v-if="this.$route.meta.keepAlive"></router-view>
                     </keep-alive>
                     <router-view v-if="!this.$route.meta.keepAlive"></router-view>
                 </Content>
@@ -57,36 +57,31 @@
 </template>
 
 <script>
-export default {
-    name: 'home',
-    data(){
-        return {
-            theme2: 'light',
-            menuList:[]
-        }
-    },
-    methods: {
-        Logout : function() {
-            this.getRequest("/logout",null);
-            this.$store.commit("logout");
-            this.$router.push({name: 'login'})
+    export default {
+        name: 'home',
+        methods: {
+            Logout: function () {
+                this.getRequest("/logout", null);
+                this.$store.commit("logout");
+                this.$router.push({name: 'login'})
+            },
         },
-    },
-    computed: {
-      user(){
-        return this.$store.state.user;
-      },
-      routes(){
-        return this.$store.state.routes;
-      },
+        computed: {
+            user() {
+                return this.$store.state.user;
+            },
+            routes() {
+                return this.$store.state.routes;
+            },
+        }
     }
-}
 </script>
 <style>
     .header_title {
         color: #fff;
         font-weight: normal;
     }
+
     .header_userName {
         color: #fff;
     }

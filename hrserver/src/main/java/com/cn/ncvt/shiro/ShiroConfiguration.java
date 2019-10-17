@@ -54,7 +54,7 @@ public class ShiroConfiguration {
         // 登录成功后要跳转的链接
         //shiroFilterFactoryBean.setSuccessUrl("/index");
         //未授权界面;
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
         //拦截器.
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<String,String>();
         //自定义拦截器
@@ -71,6 +71,11 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/unauthorized", "anon");
         filterChainDefinitionMap.put("/sysmenu", "anon");
+        filterChainDefinitionMap.put("/", "anon");
+        filterChainDefinitionMap.put("/doc.html", "anon");    //swagger所需路径
+        filterChainDefinitionMap.put("/webjars/**", "anon");    //swagger静态资源所需路径
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");    //swagger静态资源所需路径
+        filterChainDefinitionMap.put("/v2/**", "anon");    //swagger静态资源所需路径
         filterChainDefinitionMap.put("/**", "url");
         shiroFilterFactoryBean.setFilters(customisedFilter);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
