@@ -8,4 +8,7 @@ import java.util.List;
 @Mapper
 public interface MenuMapper {
     List<Menu> selectMenusByHrId(int id);
+
+    List<Menu> getMenuTreeByRid(int rid);
+
 }
