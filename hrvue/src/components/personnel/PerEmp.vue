@@ -27,166 +27,166 @@ export default {
     data() {
         return {
             columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '姓名',
-                        key: 'name'
-                    },
-                    {
-                        title: '工号',
-                        key: 'jobNum'
-                    },
-                    {
-                        title: '部门',
-                        key: 'department'
-                    },
-                    {
-                        title: '职位',
-                        key: 'position'
-                    },
-                    {
-                        title: '性别',
-                        key: 'sex'
-                    },
-                    {
-                        title: '出生日期',
-                        key: 'date'
-                    },
-                    {
-                        title: '籍贯',
-                        key: 'nativePlace'
-                    },
-                    {
-                        title: '联系方式',
-                        key: 'phone'
-                    },
-                    {
-                        title: '电子邮箱',
-                        key: 'email'
-                    },
-                    {
-                        title: '操作',
-                        slot: 'action',
-                        width: 150,
-                        align: 'center'
-                    }
-                ],
+                {
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
+                },
+                {
+                    title: '姓名',
+                    key: 'name'
+                },
+                {
+                    title: '工号',
+                    key: 'jobNum'
+                },
+                {
+                    title: '部门',
+                    key: 'department'
+                },
+                {
+                    title: '职位',
+                    key: 'position'
+                },
+                {
+                    title: '性别',
+                    key: 'sex'
+                },
+                {
+                    title: '出生日期',
+                    key: 'date'
+                },
+                {
+                    title: '籍贯',
+                    key: 'nativePlace'
+                },
+                {
+                    title: '联系方式',
+                    key: 'phone'
+                },
+                {
+                    title: '电子邮箱',
+                    key: 'email'
+                },
+                {
+                    title: '操作',
+                    slot: 'action',
+                    width: 150,
+                    align: 'center'
+                }
+            ],
             data1: [
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
 
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },{
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        sex: "男",
-                        date: "2019年10月16日",
-                        nativePlace: "广西",
-                        phone: "12345678910",
-                        email: "12345678@qq.com",
-                    },
-                ],
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },{
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    sex: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+            ],
         }
     }
 }
