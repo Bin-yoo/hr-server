@@ -329,12 +329,23 @@
                     </Row>
                 </Form>
             </Modal>
+            <Modal
+                v-model="showModal"
+                title="员工资料"
+                @on-ok="ok"
+                @on-cancel="cancel">
+                <Row>
+                    <Col span="12"><p>姓名：{{showData.name}}</p></Col>
+                    <Col span="12"><p>性别：{{showData.gender}}</p></Col>
+                </Row>
+            </Modal>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
             <Table border ref="selection" :columns="columns" :data="data1">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="primary" size="small" style="margin-right: 5px" @click="update(index)">编辑</Button>
-                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                    <Button style="margin-right: 5px" @click="show(index)">查看</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="update(index)">编辑</Button>
+                    <Button type="error" @click="remove(index)">删除</Button>
                 </template>
             </Table>
         </Row>
@@ -352,6 +363,8 @@ export default {
         return {
             modal1: false,
             updateModal: false,
+            showModal: false,
+            showData:[],
             formItem:{
                 name: '',       //名字
                 nationID:'',    //民族
@@ -398,7 +411,7 @@ export default {
                 },
                 {
                     title: '性别',
-                    key: 'sex'
+                    key: 'gender'
                 },
                 {
                     title: '出生日期',
@@ -429,7 +442,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -440,7 +453,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -451,7 +464,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -462,7 +475,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -473,7 +486,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -485,7 +498,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -495,7 +508,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -506,7 +519,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -517,7 +530,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -528,7 +541,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -548,6 +561,11 @@ export default {
             this.updateModal = true;
             console.log(index);
         },
+        show(index) {
+            this.showModal = true;
+            this.showData = this.data1[index];
+            console.log(index);
+        }
     }
 }
 </script>
