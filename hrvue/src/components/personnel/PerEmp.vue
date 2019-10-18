@@ -167,12 +167,185 @@
                     </Row>
                 </Form>
             </Modal>
+            <Modal
+                v-model="updateModal"
+                title="添加员工"
+                width=50%
+                @on-ok="ok"
+                @on-cancel="cancel">
+
+                <Form :model="formItem" :label-width="80">
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="姓名：">
+                                <Input v-model="formItem.name" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="民族：">
+                                <Input v-model="formItem.nationID" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="性别：">
+                                <RadioGroup v-model="formItem.gender">
+                                    <Radio label="1">男</Radio>
+                                    <Radio label="0">女</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="籍贯：">
+                                <Input v-model="formItem.nativePlace" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="身份证号：">
+                                <Input v-model="formItem.idCard" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="出生日期：">
+                                <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="政治面貌：">
+                                <Select v-model="formItem.politicID">
+                                    <Option value="1">群众</Option>
+                                    <Option value="2">共青团员</Option>
+                                    <Option value="3">中共党员</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="联系方式：">
+                                <Input v-model="formItem.phone" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="婚姻状态：">
+                                <RadioGroup v-model="formItem.wedlock">
+                                    <Radio label="0">未婚</Radio>
+                                    <Radio label="1">已婚</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="邮箱：">
+                                <Input v-model="formItem.email" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="居住地址：">
+                                <Input v-model="formItem.adress" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="所属部门：">
+                                <Select v-model="formItem.departmentID">
+                                    <Option value="0">人事部</Option>
+                                    <Option value="1">财务部</Option>
+                                    <Option value="2">技术部</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="职称：">
+                                <Select v-model="formItem.departmentID">
+                                    <Option value="0">正高级教师</Option>
+                                    <Option value="1">高级教师</Option>
+                                    <Option value="2">一级教师</Option>
+                                    <Option value="3">二级教师</Option>
+                                    <Option value="4">三级教师</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="职位：">
+                                <Select v-model="formItem.posID">
+                                    <Option value="0">教授</Option>
+                                    <Option value="1">教师</Option>
+                                    <Option value="2">教务管理人员</Option>
+                                    <Option value="3">其他</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="学历：">
+                                <Select v-model="formItem.titopDegree">
+                                    <Option value="0">小学</Option>
+                                    <Option value="1">初中</Option>
+                                    <Option value="2">高中</Option>
+                                    <Option value="3">中专</Option>
+                                    <Option value="3">职校</Option>
+                                    <Option value="3">专科</Option>
+                                    <Option value="3">本科</Option>
+                                    <Option value="3">硕士研究生</Option>
+                                    <Option value="3">博士研究生</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="毕业院校：">
+                                <Input v-model="formItem.school" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="专业：">
+                                <Input v-model="formItem.specialty" placeholder="请输入"></Input>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="就职日期：">
+                                <DatePicker type="date" placeholder="请选择就职日期" v-model="formItem.beginDate"></DatePicker>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="8">
+                            <FormItem label="就职状态：">
+                                <RadioGroup v-model="formItem.workState">
+                                    <Radio label="0">在职</Radio>
+                                    <Radio label="1">离职</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                        </Col>
+                        <Col span="8">
+                            <FormItem label="转正日期：">
+                                <DatePicker type="date" placeholder="请选择转正日期" v-model="formItem.conversionTime"></DatePicker>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal>
+            <Modal
+                v-model="showModal"
+                title="员工资料"
+                @on-ok="ok"
+                @on-cancel="cancel">
+                <Row>
+                    <Col span="12"><p>姓名：{{showData.name}}</p></Col>
+                    <Col span="12"><p>性别：{{showData.gender}}</p></Col>
+                </Row>
+            </Modal>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
             <Table border ref="selection" :columns="columns" :data="data1">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">编辑</Button>
-                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                    <Button style="margin-right: 5px" @click="show(index)">查看</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="update(index)">编辑</Button>
+                    <Button type="error" @click="remove(index)">删除</Button>
                 </template>
             </Table>
         </Row>
@@ -189,6 +362,9 @@ export default {
     data() {
         return {
             modal1: false,
+            updateModal: false,
+            showModal: false,
+            showData:[],
             formItem:{
                 name: '',       //名字
                 nationID:'',    //民族
@@ -235,7 +411,7 @@ export default {
                 },
                 {
                     title: '性别',
-                    key: 'sex'
+                    key: 'gender'
                 },
                 {
                     title: '出生日期',
@@ -266,7 +442,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -277,7 +453,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -288,7 +464,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -299,7 +475,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -310,7 +486,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -322,7 +498,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -332,7 +508,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -343,7 +519,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -354,7 +530,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -365,7 +541,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    sex: "男",
+                    gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
@@ -380,6 +556,15 @@ export default {
         },
         cancel () {
             this.$Message.info('Clicked cancel');
+        },
+        update (index) {
+            this.updateModal = true;
+            console.log(index);
+        },
+        show(index) {
+            this.showModal = true;
+            this.showData = this.data1[index];
+            console.log(index);
         }
     }
 }
