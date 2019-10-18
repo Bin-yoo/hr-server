@@ -1,6 +1,7 @@
 package com.cn.ncvt.biz;
 
 import com.cn.ncvt.entity.Role;
+import com.cn.ncvt.mapper.MenuRoleMapper;
 import com.cn.ncvt.mapper.RoleMapper;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
@@ -22,6 +23,9 @@ public class RoleBiz {
     @Autowired
     RoleMapper roleMapper;
 
+    @Autowired
+    MenuRoleMapper menuRoleMapper;
+
     public Result roles() {
         List<Role> roleList = roleMapper.roles();
         if (roleList != null)
@@ -39,6 +43,16 @@ public class RoleBiz {
             return ResultFactory.buildSuccessResult("添加成功");
         } catch (Exception e){
             return ResultFactory.buildFailResult("添加失败");
+        }
+    }
+
+    public Result deleteRoleByRid(int rid) {
+        try {
+            menuRoleMapper.deleteByRid(rid);    //数据库表不设置级联,所以要先删除关联的菜单权限表中数据
+            roleMapper.deleteRoleById(rid);
+            return ResultFactory.buildSuccessResult("删除成功");
+        } catch (Exception e) {
+            return ResultFactory.buildFailResult("删除失败");
         }
     }
 }

@@ -22,6 +22,15 @@ public class Menu implements Serializable {
     private MenuMeta meta;
     private boolean checked;
     private String title;
+    private boolean expand = true;
+
+    public boolean isExpand() {
+        return expand;
+    }
+
+    public void setExpand(boolean expand) {
+        this.expand = expand;
+    }
 
     public String getTitle() {
         return title;
@@ -95,6 +104,7 @@ public class Menu implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.title = name;
     }
 
     public String getIconCls() {

@@ -22,7 +22,7 @@
         </Header>
         <Layout>
             <Sider hide-trigger width="250">
-                <Menu :theme="theme2" width="auto" accordion>
+                <Menu width="auto" accordion>
                     <template v-for="(item,index) in this.routes">
                         <Submenu :name="index+1" :key="index">
                             <template slot="title">
