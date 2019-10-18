@@ -73,9 +73,7 @@ export default {
                     this.$Message.success("登陆成功");
                     this.spinShow = false;
                     this.$router.push({name: 'home'})
-                }
-                // if (resp.data.code == 401 && resp.data.error == true) {
-                else{
+                } else {
                     this.$Message.error(resp.data.message);
                     this.spinShow = false;
                 }

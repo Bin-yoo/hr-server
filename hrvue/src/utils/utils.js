@@ -11,14 +11,6 @@ export const isNotNullORBlank = (...args)=> {
   return true;
 }
 
-export const getMenu = (router, store)=> {
-    if (store.state.routes.length > 0) {
-        var fmtRoutes = store.state.routes;
-        router.addRoutes(fmtRoutes);
-        store.commit('initMenu', fmtRoutes);
-    } 
-}
-
 export const initMenu = (router, store)=> {
   if (store.state.routes.length > 0) {
     return;
