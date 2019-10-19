@@ -22,7 +22,7 @@ public class Menu implements Serializable {
     private MenuMeta meta;
     private boolean checked;
     private String title;
-    private boolean expand = true;
+    private boolean expand;
 
     public boolean isExpand() {
         return expand;
@@ -46,6 +46,7 @@ public class Menu implements Serializable {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+        this.expand = checked;
     }
 
     public MenuMeta getMeta() {
@@ -105,6 +106,8 @@ public class Menu implements Serializable {
     public void setName(String name) {
         this.name = name;
         this.title = name;
+        if(name.equals("所有"))
+            this.expand = true;
     }
 
     public String getIconCls() {
