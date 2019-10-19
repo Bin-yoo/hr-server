@@ -6,7 +6,6 @@
     </Tabs>
 </template>
 <script>
-    import MenuRole from './basic/MenuRole.vue'
     export default {
     data() {
         return {
