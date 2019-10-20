@@ -1,25 +1,15 @@
 package com.cn.ncvt.filter;
 
 
-import com.cn.ncvt.entity.Hr;
-import com.cn.ncvt.result.Result;
-import com.cn.ncvt.result.ResultFactory;
-import com.cn.ncvt.util.SpringContextUtils;
-import com.cn.ncvt.util.Token;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cn.ncvt.entity.User;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.util.Set;
 
 import static com.cn.ncvt.util.Token.verifyToken;
 
@@ -49,9 +39,9 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         //Subject subject = new Subject.Builder().sessionId(sessionId).buildSubject();
         Subject subject = SecurityUtils.getSubject();
         System.out.println("当前用户:" + subject.getPrincipal());
-        Hr hr = (Hr) SecurityUtils.getSubject().getPrincipal();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
 
-        System.out.println(hr.getUsername());
+        System.out.println(user.getUsername());
 
 
         if (!subject.isAuthenticated()){

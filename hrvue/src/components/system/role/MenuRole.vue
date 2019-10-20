@@ -77,7 +77,7 @@
         methods: {
             initRoles(){
                 this.spinShow = true;
-                this.getRequest("/system/basic/roles").then(resp=> {
+                this.getRequest("/system/role/roles").then(resp=> {
                     this.spinShow = false;
                     if (resp.status == 200 && resp.data.data != null) {
                         this.roles = resp.data.data;
@@ -94,7 +94,7 @@
                     return;
                 }
                 var Roleid = this.roles[activeName].id;
-                this.getRequest("/system/basic/menuTree/" + Roleid).then(resp=> {
+                this.getRequest("/system/role/menuTree/" + Roleid).then(resp=> {
                     if (resp && resp.status == 200) {
                         this.treeData = resp.data.data;
                     }
@@ -104,7 +104,7 @@
                 var check = /\s/;
                 if(!check.test(this.newRole.role) && !check.test(this.newRole.roleZh) && isNotNullORBlank(this.newRole.role,this.newRole.roleZh)){
                     this.spinShow = true;
-                    this.postRequest("/system/basic/role", {
+                    this.postRequest("/system/role/role", {
                         name: this.newRole.role,
                         nameZh: this.newRole.roleZh
                     }).then(resp=> {
@@ -132,7 +132,7 @@
                     }
                 });
                 var Roleid = this.roles[index].id;
-                this.putRequest("/system/basic/updateMenuTree", {
+                this.putRequest("/system/role/updateMenuTree", {
                     rid: Roleid,
                     checkedKeys: checkedKeys
                 }).then(resp=> {
@@ -152,7 +152,7 @@
                     title: '你正在进行删除操作',
                     content: '<p>删除后相关账号的权限将更改为"普通员工"</p><p>你确定要删除该角色吗?</p>',
                     onOk: () => {
-                        this.deleteRequest("/system/basic/role/" + Roleid).then(resp=> {
+                        this.deleteRequest("/system/role/role/" + Roleid).then(resp=> {
                             this.$Message.success(resp.data.data);
                             this.spinShow = false;
                             this.initRoles();

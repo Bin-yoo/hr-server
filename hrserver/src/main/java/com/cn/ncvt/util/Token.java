@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.cn.ncvt.entity.Hr;
+import com.cn.ncvt.entity.User;
 import org.apache.shiro.SecurityUtils;
 
 import java.util.*;
@@ -59,8 +59,8 @@ public class Token {
             Claim claimUserId = claims.get("userId");    //负载内容
             Claim claimUserName = claims.get("userName");    //负载内容
 
-            Hr hr= (Hr) SecurityUtils.getSubject().getPrincipal();
-            if(hr.getId() == claimUserId.asInt() && hr.getUsername().equals(claimUserName.asString())){
+            User user= (User) SecurityUtils.getSubject().getPrincipal();
+            if(user.getId() == claimUserId.asInt() && user.getUsername().equals(claimUserName.asString())){
                 return true;
             } else {
                 return false;
