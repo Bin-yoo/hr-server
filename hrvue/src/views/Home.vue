@@ -22,9 +22,18 @@
         </Header>
         <Layout>
             <Sider hide-trigger width="250">
-                <Menu width="auto" accordion>
+                <Menu width="auto">
                     <template v-for="(item,index) in this.routes">
-                        <Submenu :name="index+1" :key="index">
+                        <MenuItem
+                            :key="item.path"
+                            :name="item.path"
+                            :to="item.children[0].path"
+                            v-if="item.name=='员工档案'"
+                        >
+                            <Icon :type="item.children[0].iconCls" />
+                            {{item.children[0].name}}
+                        </MenuItem>
+                        <Submenu :name="index+1" :key="index" v-else>
                             <template slot="title">
                                 <Icon :type="item.iconCls"/>
                                 {{item.name}}
