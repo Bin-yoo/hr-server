@@ -26,6 +26,6 @@ public class UtilController {
     @GetMapping("/sysmenu")
     @ApiOperation(value = "获取菜单", notes = "根据登录用户的角色权限,获取相应菜单")
     public Result sysmenu() {
-        return menuBiz.getMenusByHrId();
+        return menuBiz.getMenusByUserId();
     }
 }

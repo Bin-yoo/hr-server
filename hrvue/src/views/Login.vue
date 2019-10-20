@@ -2,14 +2,15 @@
     <div>
         <Form
             ref="formInline"
-            :model="hr"
+            :model="user"
             class="login-container"
+            :rules="rules"
         >
             <h2 class="login_title">人事系统登录</h2>
-            <FormItem prop="user">
+            <FormItem prop="username">
                 <Input
                     type="text"
-                    v-model="hr.username"
+                    v-model="user.username"
                     placeholder="用户名"
                     @on-enter="Login"
                 >
@@ -22,7 +23,7 @@
             <FormItem prop="password">
                 <Input
                     type="password"
-                    v-model="hr.password"
+                    v-model="user.password"
                     placeholder="密码"
                     @on-enter="Login"
                 >
@@ -52,9 +53,17 @@ export default {
     name: "login",
     data () {
         return {
-            hr: {
+            user: {
                 username: "",
                 password: ""
+            },
+            rules: {
+                username: [
+                    {required: true, message: '用户名不能为空', trigger: 'blur' }
+                ],
+                password: [
+                    {required: true, message: '密码不能为空', trigger: 'blur' }
+                ]
             },
             spinShow:false,
         };
@@ -63,11 +72,12 @@ export default {
         Login : function() {
             this.spinShow = true;
             this.postRequest("/login",{
-                username:this.hr.username,
-                password:this.hr.password,
+                username:this.user.username,
+                password:this.user.password,
             }).then(resp =>{
+                // console.log(resp)
                 if (resp.data.code == 200 && resp.data.error ==false){
-                    this.$store.commit("login", resp.data.data.hr);
+                    this.$store.commit("login", resp.data.data.user);
                     this.$store.commit("token", resp.data.data.token);
                     this.$store.commit("sessionId", resp.data.data.sessionId);
                     this.$Message.success("登陆成功");
@@ -80,6 +90,7 @@ export default {
             }).catch(error => {
                 this.spinShow = false;
                 this.$Message.error("登陆失败,出现错误");
+                // console.log(error)
             });
         },
     }

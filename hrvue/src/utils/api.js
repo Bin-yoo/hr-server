@@ -9,13 +9,13 @@ axios.interceptors.request.use(config => {
   // return Promise.resolve(err);
 })
 axios.interceptors.response.use(data => {
-  if (data.status && data.status == 200 && data.data.code == 401) {
-    Message.error({message: data.data.message});
-    return;
-  }
-  if (data.data.msg) {
-    Message.success({message: data.data.message});
-  }
+//   if (data.status && data.status == 200) {
+//     Message.success({message: data.data.message});
+//     // return;
+//   }
+//   if (data.data.msg) {
+//     Message.success({message: data.data.message});
+//   }
   return data;
 }, err => {
   if (err.response.status == 504 || err.response.status == 404) {
@@ -23,7 +23,7 @@ axios.interceptors.response.use(data => {
   } else if (err.response.status == 403) {
     Message.error({message: '权限不足,请联系管理员!'});
   } else if (err.response.status == 401) {
-    Message.error({message: err.response.data.message});
+    Message.error({message: 'err.response.data.message'});
   } else {
     if (err.response.data.msg) {
       Message.error({message: err.response.data.message});

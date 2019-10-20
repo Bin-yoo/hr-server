@@ -41,17 +41,15 @@ export const formatRoutes = (routes)=> {
     let fmRouter = {
       path: path,
       component(resolve){
-        if (component.startsWith("Home")) {
+        if (path.startsWith("/home")) {
           require(['../views/' + component + '.vue'], resolve)
-        } else if (component.startsWith("Emp")) {
-          require(['../components/emp/' + component + '.vue'], resolve)
-        } else if (component.startsWith("Per")) {
+        } else if (path.startsWith("/employee")) {
+          require(['../components/' + component + '.vue'], resolve)
+        } else if (path.startsWith("/per")) {
           require(['../components/personnel/' + component + '.vue'], resolve)
-        } else if (component.startsWith("Sal")) {
-          require(['../components/salary/' + component + '.vue'], resolve)
-        } else if (component.startsWith("Sta")) {
+        } else if (path.startsWith("/statistics")) {
           require(['../components/statistics/' + component + '.vue'], resolve)
-        } else if (component.startsWith("Sys")) {
+        } else if (path.startsWith("/system")) {
           require(['../components/system/' + component + '.vue'], resolve)
         }
       },

@@ -14,7 +14,7 @@ public class ResultFactory {
     }
 
     public static Result buildPermissionFailResult(String message) {
-        return buildResult(ResultCode.UNAUTHORIZED,true, message, null);
+        return buildResult(ResultCode.UNAUTHORIZED, true, message, null);
     }
 
     public static Result buildResult(ResultCode resultCode, boolean error, String message, Object data) {

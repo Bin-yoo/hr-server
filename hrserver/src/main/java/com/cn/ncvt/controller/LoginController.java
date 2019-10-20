@@ -1,12 +1,11 @@
 package com.cn.ncvt.controller;
 
-import com.cn.ncvt.biz.HrBiz;
-import com.cn.ncvt.entity.Hr;
+import com.cn.ncvt.biz.UserBiz;
+import com.cn.ncvt.entity.User;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +21,12 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
 
     @Autowired
-    HrBiz hrBiz;
+    UserBiz userBiz;
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "由于axios是json方式传输数据,所以传到后台的是一个json用户对象,对象里包含用户名(userName)和密码(password)即可")
-    public Result login(@RequestBody Hr hr){
-        return hrBiz.userLogin(hr);
+    public Result login(@RequestBody User user){
+        return userBiz.userLogin(user);
     }
 
     @GetMapping("/logout")

@@ -26,14 +26,14 @@
                     <template v-for="(item,index) in this.routes">
                         <Submenu :name="index+1" :key="index">
                             <template slot="title">
-                                <Icon type="ios-paper"/>
+                                <Icon :type="item.iconCls"/>
                                 {{item.name}}
                             </template>
                             <MenuItem
-                                    v-for="child in item.children"
-                                    :key="child.path"
-                                    :name="child.path"
-                                    :to="child.path">{{child.name}}
+                                v-for="child in item.children"
+                                :key="child.path"
+                                :name="child.path"
+                                :to="child.path">{{child.name}}
                             </MenuItem>
                         </Submenu>
                     </template>

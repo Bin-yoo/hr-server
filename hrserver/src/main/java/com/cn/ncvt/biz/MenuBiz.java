@@ -1,6 +1,6 @@
 package com.cn.ncvt.biz;
 
-import com.cn.ncvt.entity.Hr;
+import com.cn.ncvt.entity.User;
 import com.cn.ncvt.entity.Menu;
 import com.cn.ncvt.mapper.MenuMapper;
 import com.cn.ncvt.result.Result;
@@ -25,9 +25,9 @@ public class MenuBiz {
     @Autowired
     MenuMapper menuMapper;
 
-    public Result getMenusByHrId() {
-        Hr hr = (Hr) SecurityUtils.getSubject().getPrincipal();
-        return ResultFactory.buildSuccessResult(menuMapper.selectMenusByHrId(hr.getId()));
+    public Result getMenusByUserId() {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return ResultFactory.buildSuccessResult(menuMapper.selectMenusByUserId(user.getId()));
     }
 
     public Result getMenuTreeByRoleId(int rid) {
