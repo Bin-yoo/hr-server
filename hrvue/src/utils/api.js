@@ -33,7 +33,7 @@ axios.interceptors.response.use(data => {
   }
   // return Promise.resolve(err);
 })
-let base = 'http://localhost:8082/hrserver';
+let base = 'http://111.230.141.100:8080/hrserver';
 export const postRequest = (url, params) => {
   return axios({
     method: 'post',
