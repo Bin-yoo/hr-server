@@ -1,6 +1,5 @@
 package com.cn.ncvt.controller.system;
 
-import com.alibaba.fastjson.JSON;
 import com.cn.ncvt.biz.MenuBiz;
 import com.cn.ncvt.biz.MenuRoleBiz;
 import com.cn.ncvt.biz.RoleBiz;
