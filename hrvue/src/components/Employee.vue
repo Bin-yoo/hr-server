@@ -2,11 +2,47 @@
     <div>
         <Row><Col span="2"><h1>员工资料</h1></Col></Row>
         <Row :style="{margin: '15px 0 0 0'}">
-            <Col span="3"><Input suffix="ios-search" placeholder="请输入..." style="width: auto" /></Col>
-            <Col span="1"><Button icon="ios-search">搜索</Button></Col>
-            <Col span="1" offset="18"><Button type="primary" @click="modal1 = true">添加</Button></Col>
+            <Form :model="souformItem">
+                <Col span="2" :style="{margin: '0 10px 0 0'}">
+                    <FormItem>
+                        <Select v-model="formItem.departmentID" placeholder="部门">
+                            <Option value="0">财务部</Option>
+                            <Option value="1">人事部</Option>
+                            <Option value="2">技术部</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="2" :style="{margin: '0 10px 0 0'}">
+                    <FormItem>
+                        <Select v-model="formItem.posID" placeholder="职位">
+                            <Option value="0">财务经理</Option>
+                            <Option value="1">人事经理</Option>
+                            <Option value="2">出纳</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="2">
+                    <FormItem>
+                        <Select v-model="formItem.jobLevelID" placeholder="职称">
+                            <Option value="0">高级工程师</Option>
+                            <Option value="1">高级教师</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem>
+                        <Input v-model="formItem.input" suffix="ios-search" placeholder="请输入..." style="width: auto" />
+                    </FormItem>
+                </Col>
+                <Col span="1" :style="{margin: '0 10px 0 0'}">
+                    <FormItem>
+                        <Button icon="ios-search">搜索</Button>
+                    </FormItem>
+                </Col>
+            </Form>
+            <Col span="1" ><Button type="primary" @click="addModal = true">添加</Button></Col>
             <Modal
-                v-model="modal1"
+                v-model="addModal"
                 title="添加员工"
                 width=50%
                 @on-ok="ok"
@@ -15,22 +51,82 @@
                 <Form :model="formItem" :label-width="80">
                     <Row>
                         <Col span="8">
-                            <FormItem label="姓名：">
-                                <Input v-model="formItem.name" placeholder="请输入"></Input>
-                            </FormItem>
+                            <Row>
+                                <FormItem label="姓名：">
+                                    <Input v-model="formItem.name" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="性别：">
+                                    <RadioGroup v-model="formItem.gender">
+                                        <Radio label="1">男</Radio>
+                                        <Radio label="0">女</Radio>
+                                    </RadioGroup>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="身份证号：">
+                                    <Input v-model="formItem.idCard" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="政治面貌：">
+                                    <Select v-model="formItem.politicID">
+                                        <Option value="1">群众</Option>
+                                        <Option value="2">共青团员</Option>
+                                        <Option value="3">中共党员</Option>
+                                    </Select>
+                                </FormItem>
+                            </Row>
                         </Col>
                         <Col span="8">
-                            <FormItem label="民族：">
-                                <Input v-model="formItem.nationID" placeholder="请输入"></Input>
-                            </FormItem>
+                            <Row>
+                                <FormItem label="民族：">
+                                    <Input v-model="formItem.nationID" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="婚姻状态：">
+                                    <RadioGroup v-model="formItem.wedlock">
+                                        <Radio label="0">未婚</Radio>
+                                        <Radio label="1">已婚</Radio>
+                                    </RadioGroup>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="出生日期：">
+                                    <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="联系方式：">
+                                    <Input v-model="formItem.phone" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
                         </Col>
-                        <Col span="8">
-                            <FormItem label="性别：">
-                                <RadioGroup v-model="formItem.gender">
-                                    <Radio label="1">男</Radio>
-                                    <Radio label="0">女</Radio>
-                                </RadioGroup>
-                            </FormItem>
+                        <Col span="4" offset="2">
+                            <Row>
+                                <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
+                            </Row>
+                            <Row>
+                                <Upload
+                                    ref="upload"
+                                    :show-upload-list="false"
+                                    :default-file-list="defaultList"
+                                    :on-success="handleSuccess"
+                                    :format="['jpg','jpeg','png']"
+                                    :max-size="2048"
+                                    :on-format-error="handleFormatError"
+                                    :on-exceeded-size="handleMaxSize"
+                                    :before-upload="handleBeforeUpload"
+                                    multiple
+                                    type="drag"
+                                    action="//jsonplaceholder.typicode.com/posts/"
+                                    style="display: inline-block;width:128px;">
+
+                                    <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传图片</Button>
+                                </Upload>
+                            </Row>
                         </Col>
                     </Row>
                     <Row>
@@ -39,42 +135,6 @@
                                 <Input v-model="formItem.nativePlace" placeholder="请输入"></Input>
                             </FormItem>
                         </Col>
-                        <Col span="8">
-                            <FormItem label="身份证号：">
-                                <Input v-model="formItem.idCard" placeholder="请输入"></Input>
-                            </FormItem>
-                        </Col>
-                        <Col span="8">
-                            <FormItem label="出生日期：">
-                                <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span="8">
-                            <FormItem label="政治面貌：">
-                                <Select v-model="formItem.politicID">
-                                    <Option value="1">群众</Option>
-                                    <Option value="2">共青团员</Option>
-                                    <Option value="3">中共党员</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="8">
-                            <FormItem label="联系方式：">
-                                <Input v-model="formItem.phone" placeholder="请输入"></Input>
-                            </FormItem>
-                        </Col>
-                        <Col span="8">
-                            <FormItem label="婚姻状态：">
-                                <RadioGroup v-model="formItem.wedlock">
-                                    <Radio label="0">未婚</Radio>
-                                    <Radio label="1">已婚</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="邮箱：">
                                 <Input v-model="formItem.email" placeholder="请输入"></Input>
@@ -85,6 +145,8 @@
                                 <Input v-model="formItem.adress" placeholder="请输入"></Input>
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row>
                         <Col span="8">
                             <FormItem label="所属部门：">
                                 <Select v-model="formItem.departmentID">
@@ -94,8 +156,6 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="职称：">
                                 <Select v-model="formItem.departmentID">
@@ -117,6 +177,8 @@
                                 </Select>
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row>
                         <Col span="8">
                             <FormItem label="学历：">
                                 <Select v-model="formItem.titopDegree">
@@ -132,8 +194,6 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="毕业院校：">
                                 <Input v-model="formItem.school" placeholder="请输入"></Input>
@@ -143,14 +203,14 @@
                             <FormItem label="专业：">
                                 <Input v-model="formItem.specialty" placeholder="请输入"></Input>
                             </FormItem>
-                        </Col>
+                        </Col> 
+                    </Row>
+                    <Row>
                         <Col span="8">
                             <FormItem label="就职日期：">
                                 <DatePicker type="date" placeholder="请选择就职日期" v-model="formItem.beginDate"></DatePicker>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="就职状态：">
                                 <RadioGroup v-model="formItem.workState">
@@ -169,7 +229,7 @@
             </Modal>
             <Modal
                 v-model="updateModal"
-                title="添加员工"
+                title="编辑员工资料"
                 width=50%
                 @on-ok="ok"
                 @on-cancel="cancel">
@@ -177,22 +237,82 @@
                 <Form :model="formItem" :label-width="80">
                     <Row>
                         <Col span="8">
-                            <FormItem label="姓名：">
-                                <Input v-model="formItem.name" placeholder="请输入"></Input>
-                            </FormItem>
+                            <Row>
+                                <FormItem label="姓名：">
+                                    <Input v-model="formItem.name" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="性别：">
+                                    <RadioGroup v-model="formItem.gender">
+                                        <Radio label="1">男</Radio>
+                                        <Radio label="0">女</Radio>
+                                    </RadioGroup>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="身份证号：">
+                                    <Input v-model="formItem.idCard" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="政治面貌：">
+                                    <Select v-model="formItem.politicID">
+                                        <Option value="1">群众</Option>
+                                        <Option value="2">共青团员</Option>
+                                        <Option value="3">中共党员</Option>
+                                    </Select>
+                                </FormItem>
+                            </Row>
                         </Col>
                         <Col span="8">
-                            <FormItem label="民族：">
-                                <Input v-model="formItem.nationID" placeholder="请输入"></Input>
-                            </FormItem>
+                            <Row>
+                                <FormItem label="民族：">
+                                    <Input v-model="formItem.nationID" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="婚姻状态：">
+                                    <RadioGroup v-model="formItem.wedlock">
+                                        <Radio label="0">未婚</Radio>
+                                        <Radio label="1">已婚</Radio>
+                                    </RadioGroup>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="出生日期：">
+                                    <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
+                                </FormItem>
+                            </Row>
+                            <Row>
+                                <FormItem label="联系方式：">
+                                    <Input v-model="formItem.phone" placeholder="请输入"></Input>
+                                </FormItem>
+                            </Row>
                         </Col>
-                        <Col span="8">
-                            <FormItem label="性别：">
-                                <RadioGroup v-model="formItem.gender">
-                                    <Radio label="1">男</Radio>
-                                    <Radio label="0">女</Radio>
-                                </RadioGroup>
-                            </FormItem>
+                        <Col span="4" offset="2">
+                            <Row>
+                                <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
+                            </Row>
+                            <Row>
+                                <Upload
+                                    ref="upload"
+                                    :show-upload-list="false"
+                                    :default-file-list="defaultList"
+                                    :on-success="handleSuccess"
+                                    :format="['jpg','jpeg','png']"
+                                    :max-size="2048"
+                                    :on-format-error="handleFormatError"
+                                    :on-exceeded-size="handleMaxSize"
+                                    :before-upload="handleBeforeUpload"
+                                    multiple
+                                    type="drag"
+                                    action="//jsonplaceholder.typicode.com/posts/"
+                                    style="display: inline-block;width:128px;">
+
+                                    <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传图片</Button>
+                                </Upload>
+                            </Row>
                         </Col>
                     </Row>
                     <Row>
@@ -201,42 +321,6 @@
                                 <Input v-model="formItem.nativePlace" placeholder="请输入"></Input>
                             </FormItem>
                         </Col>
-                        <Col span="8">
-                            <FormItem label="身份证号：">
-                                <Input v-model="formItem.idCard" placeholder="请输入"></Input>
-                            </FormItem>
-                        </Col>
-                        <Col span="8">
-                            <FormItem label="出生日期：">
-                                <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span="8">
-                            <FormItem label="政治面貌：">
-                                <Select v-model="formItem.politicID">
-                                    <Option value="1">群众</Option>
-                                    <Option value="2">共青团员</Option>
-                                    <Option value="3">中共党员</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="8">
-                            <FormItem label="联系方式：">
-                                <Input v-model="formItem.phone" placeholder="请输入"></Input>
-                            </FormItem>
-                        </Col>
-                        <Col span="8">
-                            <FormItem label="婚姻状态：">
-                                <RadioGroup v-model="formItem.wedlock">
-                                    <Radio label="0">未婚</Radio>
-                                    <Radio label="1">已婚</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="邮箱：">
                                 <Input v-model="formItem.email" placeholder="请输入"></Input>
@@ -247,6 +331,8 @@
                                 <Input v-model="formItem.adress" placeholder="请输入"></Input>
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row>
                         <Col span="8">
                             <FormItem label="所属部门：">
                                 <Select v-model="formItem.departmentID">
@@ -256,8 +342,6 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="职称：">
                                 <Select v-model="formItem.departmentID">
@@ -279,6 +363,8 @@
                                 </Select>
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row>
                         <Col span="8">
                             <FormItem label="学历：">
                                 <Select v-model="formItem.titopDegree">
@@ -294,8 +380,6 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="毕业院校：">
                                 <Input v-model="formItem.school" placeholder="请输入"></Input>
@@ -305,14 +389,14 @@
                             <FormItem label="专业：">
                                 <Input v-model="formItem.specialty" placeholder="请输入"></Input>
                             </FormItem>
-                        </Col>
+                        </Col> 
+                    </Row>
+                    <Row>
                         <Col span="8">
                             <FormItem label="就职日期：">
                                 <DatePicker type="date" placeholder="请选择就职日期" v-model="formItem.beginDate"></DatePicker>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span="8">
                             <FormItem label="就职状态：">
                                 <RadioGroup v-model="formItem.workState">
@@ -333,14 +417,150 @@
                 v-model="showModal"
                 title="员工资料"
                 @on-ok="ok"
+                width=40%
                 @on-cancel="cancel">
                 <Row>
-                    <Col span="12"><p>姓名：{{showData.name}}</p></Col>
-                    <Col span="12"><p>性别：{{showData.gender}}</p></Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>姓名：</p></Col>
+                            <Col span="12"><p>宇哥</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>性别：</p></Col>
+                            <Col span="12"><p>男</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>身份证号码：</p></Col>
+                            <Col span="12"><p>45088119984564716X</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>政治面貌：</p></Col>
+                            <Col span="12"><p>群众</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>籍贯：</p></Col>
+                            <Col span="12"><p>广西南宁市</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>民族：</p></Col>
+                            <Col span="12"><p>汉族</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>婚姻状态：</p></Col>
+                            <Col span="12"><p>未婚</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>出生日期：</p></Col>
+                            <Col span="12"><p>2019年10月16日</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>联系方式：</p></Col>
+                            <Col span="12"><p>12345678910</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>邮箱：</p></Col>
+                            <Col span="12"><p>12345678910@qq.com</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="5">
+                        <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>居住地址：</p></Col>
+                            <Col span="12"><p>广西省南宁市西乡塘区大学西路169号</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>所属部门：</p></Col>
+                            <Col span="12"><p>财务部</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>职称：</p></Col>
+                            <Col span="12"><p>高级工程师</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>职位：</p></Col>
+                            <Col span="12"><p>财政经理</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>学历：</p></Col>
+                            <Col span="12"><p>大专</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>毕业院校：</p></Col>
+                            <Col span="12"><p>南宁职业技术学院</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>专业：</p></Col>
+                            <Col span="12"><p>软件技术</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>就职日期：</p></Col>
+                            <Col span="12"><p>2019年10月16日</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>就职状态：</p></Col>
+                            <Col span="12"><p>在职</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="8"><p>转正日期：</p></Col>
+                            <Col span="12"><p>2019年10月16日</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Tabs type="card">
+                        <TabPane label="奖惩资料">
+                            <Table :columns="rewPunColumns" :data="rewPunData"></Table>
+                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
+                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane label="考核资料">
+                            <Table :columns="assColumns" :data="assData"></Table>
+                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
+                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane label="调动资料">
+                            <Table :columns="transferColumns" :data="transferdata"></Table>
+                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
+                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            </Row>
+                        </TabPane>
+                    </Tabs>
                 </Row>
             </Modal>
         </Row>
-        <Row :style="{margin: '20px 0 0 0'}">
+        <Row>
             <Table border ref="selection" :columns="columns" :data="data1">
                 <template slot-scope="{ row, index }" slot="action">
                     <Button style="margin-right: 5px" @click="show(index)">查看</Button>
@@ -361,10 +581,18 @@ export default {
     name: 'PerEmp',
     data() {
         return {
-            modal1: false,
+            addModal: false,
             updateModal: false,
             showModal: false,
-            showData:[],
+            pictureItem:{
+                name: '',
+                url: 'C:\Users\wei\Pictures\Camera Roll\84353b61ly1g80i5t5dn8j21910u0k1z.jpg',
+            },
+            souformItem:{
+                departmentID: '',
+                posID: '',
+                jobLevelID: '',
+            },
             formItem:{
                 name: '',       //名字
                 nationID:'',    //民族
@@ -432,7 +660,7 @@ export default {
                 {
                     title: '操作',
                     slot: 'action',
-                    width: 150,
+                    width: 230,
                     align: 'center'
                 }
             ],
@@ -548,6 +776,104 @@ export default {
                     email: "12345678@qq.com",
                 },
             ],
+            rewPunColumns: [
+                {
+                    title: '奖惩日期',
+                    key: 'date'
+                },
+                {
+                    title: '奖惩类型',
+                    key: 'type'
+                },
+                {
+                    title: '奖惩分数',
+                    key: 'grade'
+                },
+                {
+                    title: '奖惩原因',
+                    key: 'reason'
+                },
+                {
+                    title: '备注',
+                    key: 'remark'
+                },
+            ],
+            rewPunData: [
+                {
+                    date: "2019年10月21日",
+                    type: "惩罚",
+                    grade: "-1",
+                    reason: "迟到",
+                    remark: "迟到",
+                },
+            ],
+            assColumns: [
+                {
+                    title: '考核日期',
+                    key: 'date'
+                },
+                {
+                    title: '考核内容',
+                    key: 'content'
+                },
+                {
+                    title: '考核结果',
+                    key: 'result'
+                },
+                {
+                    title: '备注',
+                    key: 'remark'
+                },
+            ],
+            assData: [
+                {
+                    date: "2019年10月21日",
+                    content: "带薪拉屎",
+                    result: "完成",
+                    remark: "完成",
+                },
+            ],
+            transferColumns: [
+                {
+                    title: '调动日期',
+                    key: 'date'
+                },
+                {
+                    title: '调前部门',
+                    key: 'beforeDepar'
+                },
+                {
+                    title: '调前职位',
+                    key: 'beforePos'
+                },
+                {
+                    title: '调动原因',
+                    key: 'reason'
+                },
+                {
+                    title: '调后部门',
+                    key: 'afterDepar'
+                },
+                {
+                    title: '调后职位',
+                    key: 'afterPos'
+                },
+                {
+                    title: '备注',
+                    key: 'remark'
+                },
+            ],
+            transferdata: [
+                {
+                    date: "2019年10月21日",
+                    beforeDepar: "财务部",
+                    beforePos: "财务经理",
+                    reason: "工作需要",
+                    afterDepar: "技术部",
+                    afterPos: "项目经理",
+                    remark: "项目需要",
+                },
+            ],
         }
     },
     methods: {
@@ -563,9 +889,13 @@ export default {
         },
         show(index) {
             this.showModal = true;
-            this.showData = this.data1[index];
             console.log(index);
         }
     }
 }
 </script>
+
+
+<style>
+.a{border:1px solid black; }
+</style>
