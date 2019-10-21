@@ -22,8 +22,8 @@ public class EmployeeController {
     EmployeeBiz employeeBiz;
 
     @GetMapping("/allEmp")
-    public Result allEmployeeFile(){
-        return employeeBiz.getAllEmployeeFile();
+    public Result allEmployeeFile(int page, int limit){
+        return employeeBiz.getAllEmployeeFile(page, limit);
     }
 
 }

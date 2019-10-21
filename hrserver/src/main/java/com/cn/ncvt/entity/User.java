@@ -15,15 +15,14 @@ public class User {
     private int id;
     private String name;
     private String phone;
-    private String telephone;
     private String address;
-    private boolean enabled;
     private String username;
     private String password;
+    private String salt;
+    private String userface;
+    private boolean enabled;
     private String remark;
     private List<Role> roles;
-    private String userface;
-    private String salt;
 
     public int getId() {
         return id;
@@ -49,28 +48,12 @@ public class User {
         this.phone = phone;
     }
 
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public String getUsername() {
@@ -89,6 +72,30 @@ public class User {
         this.password = password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getUserface() {
+        return userface;
+    }
+
+    public void setUserface(String userface) {
+        this.userface = userface;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -103,21 +110,5 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public String getUserface() {
-        return userface;
-    }
-
-    public void setUserface(String userface) {
-        this.userface = userface;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 }
