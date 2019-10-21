@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 20/10/2019 23:04:51
+ Date: 21/10/2019 16:33:44
 */
 
 SET NAMES utf8mb4;
@@ -25,12 +25,12 @@ CREATE TABLE `assessment`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '考核id',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '考核名称',
   `remarks` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '说明',
-  `state` int(11) NULL DEFAULT NULL COMMENT '考核状态',
+  `state` enum('未开始','已开始','已结束') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '未开始' COMMENT '考核状态',
   `beginDate` date NULL DEFAULT NULL COMMENT '开始日期',
   `endDate` date NULL DEFAULT NULL COMMENT '结束日期',
   `createDate` datetime(0) NULL DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for department
@@ -39,10 +39,10 @@ DROP TABLE IF EXISTS `department`;
 CREATE TABLE `department`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '部门id',
   `name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门名称',
-  `parentID` int(11) NULL DEFAULT NULL COMMENT '父亲节点id',
+  `parentId` int(11) NULL DEFAULT NULL COMMENT '父亲节点id',
   `depPath` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for employee
@@ -50,20 +50,20 @@ CREATE TABLE `department`  (
 DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '员工id',
-  `workID` int(11) NOT NULL COMMENT '员工工号',
+  `workId` int(11) NOT NULL COMMENT '员工工号',
   `name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '员工名称',
   `sex` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '性别',
-  `nationID` int(11) NOT NULL COMMENT '民族',
+  `nationId` int(11) NOT NULL COMMENT '民族',
   `birthday` date NOT NULL COMMENT '出生日期',
-  `politiclID` int(11) NOT NULL COMMENT '政治面貌',
+  `politiclId` int(11) NOT NULL COMMENT '政治面貌',
   `wedlock` enum('已婚','未婚','离异') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '婚姻状态',
   `nativePlace` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '籍贯',
   `idCard` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '身份证',
   `email` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
   `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系电话',
   `address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '联系地址',
-  `departmentID` int(11) NOT NULL COMMENT '所属部门',
-  `jobLevelID` int(11) NOT NULL COMMENT '职位id',
+  `departmentId` int(11) NOT NULL COMMENT '所属部门',
+  `jobLevelId` int(11) NOT NULL COMMENT '职位id',
   `titopDegree` enum('博士','硕士','本科','大专','高中','初中','小学','其他') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最高学历',
   `specialty` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所属专业',
   `school` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '毕业院校',
@@ -74,15 +74,15 @@ CREATE TABLE `employee`  (
   `beginContract` date NOT NULL COMMENT '合同起始日期',
   `endContract` date NOT NULL COMMENT '合同结束日期',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `FK_Reference_1`(`politiclID`) USING BTREE,
-  INDEX `FK_Reference_2`(`nationID`) USING BTREE,
-  INDEX `FK_Reference_3`(`departmentID`) USING BTREE,
-  INDEX `jobLevelID`(`jobLevelID`) USING BTREE,
-  CONSTRAINT `FK_Reference_1` FOREIGN KEY (`politiclID`) REFERENCES `political_status` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `FK_Reference_2` FOREIGN KEY (`nationID`) REFERENCES `nation` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`departmentID`) REFERENCES `department` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`jobLevelID`) REFERENCES `job_level` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `FK_Reference_1`(`politiclId`) USING BTREE,
+  INDEX `FK_Reference_2`(`nationId`) USING BTREE,
+  INDEX `FK_Reference_3`(`departmentId`) USING BTREE,
+  INDEX `jobLevelID`(`jobLevelId`) USING BTREE,
+  CONSTRAINT `FK_Reference_1` FOREIGN KEY (`politiclId`) REFERENCES `political_status` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_Reference_2` FOREIGN KEY (`nationId`) REFERENCES `nation` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_Reference_3` FOREIGN KEY (`departmentId`) REFERENCES `department` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`jobLevelId`) REFERENCES `job_level` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for employee_assessment
@@ -90,18 +90,18 @@ CREATE TABLE `employee`  (
 DROP TABLE IF EXISTS `employee_assessment`;
 CREATE TABLE `employee_assessment`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '员工考核表id',
-  `emp_id` int(11) NULL DEFAULT NULL COMMENT '员工id',
-  `ass_id` int(11) NULL DEFAULT NULL COMMENT '考核项目id',
-  `data` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '附件',
+  `eId` int(11) NULL DEFAULT NULL COMMENT '员工id',
+  `aId` int(11) NULL DEFAULT NULL COMMENT '考核项目id',
+  `date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '附件',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '说明',
   `result` enum('未通过','已通过','修改后提交') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审批结果',
   `isCheck` int(1) NULL DEFAULT NULL COMMENT '是否查阅',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `emp_id`(`emp_id`) USING BTREE,
-  INDEX `ass_id`(`ass_id`) USING BTREE,
-  CONSTRAINT `employee_assessment_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `employee_assessment_ibfk_2` FOREIGN KEY (`ass_id`) REFERENCES `assessment` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `emp_id`(`eId`) USING BTREE,
+  INDEX `ass_id`(`aId`) USING BTREE,
+  CONSTRAINT `employee_assessment_ibfk_1` FOREIGN KEY (`eId`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `employee_assessment_ibfk_2` FOREIGN KEY (`aId`) REFERENCES `assessment` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for employee_salary
@@ -115,7 +115,7 @@ CREATE TABLE `employee_salary`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `eid`(`eid`) USING BTREE,
   CONSTRAINT `employee_salary_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for employee_transfer
@@ -145,7 +145,7 @@ CREATE TABLE `integral`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `eid`(`eid`) USING BTREE,
   CONSTRAINT `integral_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for job_level
@@ -155,7 +155,7 @@ CREATE TABLE `job_level`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '职称id',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '职称名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for menu
@@ -173,17 +173,17 @@ CREATE TABLE `menu`  (
   `parentId` tinyint(2) NULL DEFAULT NULL COMMENT '父节点id',
   `enabled` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
 INSERT INTO `menu` VALUES (1, '/', NULL, NULL, '所有', NULL, NULL, NULL, NULL, 1);
-INSERT INTO `menu` VALUES (2, '/', '/home', 'Home', '员工档案', 'ios-folder', NULL, 1, 1, 1);
+INSERT INTO `menu` VALUES (2, '/', '/home', 'Home', '员工档案', NULL, NULL, 1, 1, 1);
 INSERT INTO `menu` VALUES (3, '/', '/home', 'Home', '人事管理', 'ios-contacts\r\n\r\nios-contacts', NULL, 1, 1, 1);
 INSERT INTO `menu` VALUES (4, '/', '/home', 'Home', '综合统计', 'ios-pie', NULL, 1, 1, 1);
 INSERT INTO `menu` VALUES (5, '/', '/home', 'Home', '系统设置', 'ios-settings', NULL, 1, 1, 1);
-INSERT INTO `menu` VALUES (6, '/employee/**', '/employee', 'Employee', '员工档案', NULL, NULL, 1, 2, 1);
+INSERT INTO `menu` VALUES (6, '/employee/**', '/employee', 'Employee', '员工档案', 'ios-folder', NULL, 1, 2, 1);
 INSERT INTO `menu` VALUES (7, '/personnel/salary', '/personnel/salary', 'Salary', '工资管理', NULL, NULL, 1, 3, 1);
 INSERT INTO `menu` VALUES (8, '/personnel/assessment', '/personnel/assessment', 'Assessment', '考核管理', NULL, NULL, 1, 3, 1);
 INSERT INTO `menu` VALUES (9, '/personnel/rp', '/personnel/rp', 'Rp', '奖惩管理', NULL, NULL, 1, 3, 1);
@@ -207,21 +207,21 @@ CREATE TABLE `menu_role`  (
   INDEX `rid`(`rid`) USING BTREE,
   CONSTRAINT `menu_role_ibfk_1` FOREIGN KEY (`mid`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `menu_role_ibfk_2` FOREIGN KEY (`rid`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu_role
 -- ----------------------------
-INSERT INTO `menu_role` VALUES (1, 2, 1);
-INSERT INTO `menu_role` VALUES (2, 6, 1);
-INSERT INTO `menu_role` VALUES (3, 7, 1);
-INSERT INTO `menu_role` VALUES (5, 8, 1);
-INSERT INTO `menu_role` VALUES (6, 9, 1);
-INSERT INTO `menu_role` VALUES (7, 10, 1);
-INSERT INTO `menu_role` VALUES (8, 11, 1);
-INSERT INTO `menu_role` VALUES (9, 12, 1);
-INSERT INTO `menu_role` VALUES (10, 13, 1);
-INSERT INTO `menu_role` VALUES (11, 14, 1);
+INSERT INTO `menu_role` VALUES (1, 6, 1);
+INSERT INTO `menu_role` VALUES (2, 7, 1);
+INSERT INTO `menu_role` VALUES (3, 8, 1);
+INSERT INTO `menu_role` VALUES (5, 9, 1);
+INSERT INTO `menu_role` VALUES (6, 10, 1);
+INSERT INTO `menu_role` VALUES (7, 11, 1);
+INSERT INTO `menu_role` VALUES (8, 12, 1);
+INSERT INTO `menu_role` VALUES (9, 13, 1);
+INSERT INTO `menu_role` VALUES (10, 14, 1);
+INSERT INTO `menu_role` VALUES (11, 15, 1);
 
 -- ----------------------------
 -- Table structure for nation
@@ -231,7 +231,7 @@ CREATE TABLE `nation`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '民族id',
   `name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '民族名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for political_status
@@ -251,7 +251,7 @@ CREATE TABLE `position`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '职位id',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '职位名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for role
@@ -262,7 +262,7 @@ CREATE TABLE `role`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色英文名称',
   `nameZh` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色中文名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role
@@ -277,10 +277,10 @@ CREATE TABLE `rp`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '奖惩id',
   `eid` int(11) NULL DEFAULT NULL COMMENT '员工id',
   `date` date NULL DEFAULT NULL COMMENT '日期',
-  `category` enum('奖励','惩罚') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '奖惩分类',
+  `type` enum('奖励','惩罚') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '奖惩分类',
   `reason` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '奖惩理由',
-  `integral` int(11) NULL DEFAULT NULL COMMENT '奖惩分数',
-  `remarks` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+  `point` int(11) NULL DEFAULT NULL COMMENT '奖惩分数',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK_Reference_13`(`eid`) USING BTREE,
   CONSTRAINT `FK_Reference_13` FOREIGN KEY (`eid`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -302,7 +302,7 @@ CREATE TABLE `user`  (
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `enable` tinyint(1) NULL DEFAULT NULL COMMENT '是否禁用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
@@ -323,7 +323,7 @@ CREATE TABLE `user_role`  (
   INDEX `uid`(`uid`) USING BTREE,
   CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`rid`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_role
