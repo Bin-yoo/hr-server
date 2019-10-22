@@ -7,5 +7,105 @@
 	    <select id="selectAllEmployee"  parameterType="string" resultType="Employee">
 			select * from employee
 	    </select>
+		<insert id="insertFun" parameterType="employee">
+	  insert into employee (workId, name,
+      sex, nationId, birthday,
+      politiclId, wedlock, nativePlace,
+      idCard, email, phone,
+      address, departmentId, jobLevelId,
+      titopDegree, specialty, school,
+      beginDate, workState, conversionTime,
+      quitTime, beginContract, endContract
+      )
+    values (#{workId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+      #{sex,jdbcType=VARCHAR}, #{nationId,jdbcType=INTEGER}, #{birthday,jdbcType=DATE},
+      #{politiclId,jdbcType=INTEGER}, #{wedlock,jdbcType=CHAR}, #{nativePlace,jdbcType=VARCHAR},
+      #{idCard,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{jobLevelId,jdbcType=INTEGER},
+      #{titopDegree,jdbcType=CHAR}, #{specialty,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},
+      #{beginDate,jdbcType=DATE}, #{workState,jdbcType=CHAR}, #{conversionTime,jdbcType=DATE},
+      #{quitTime,jdbcType=DATE}, #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE}
+      )
+		</insert>
+  <update id="updateFun" parameterType="employee">
+    update employee
+    <set>
+      <if test="workId != null">
+        workId = #{workId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="nationId != null">
+        nationId = #{nationId,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="politiclId != null">
+        politiclId = #{politiclId,jdbcType=INTEGER},
+      </if>
+      <if test="wedlock != null">
+        wedlock = #{wedlock,jdbcType=CHAR},
+      </if>
+      <if test="nativePlace != null">
+        nativePlace = #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        idCard = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        departmentId = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="jobLevelId != null">
+        jobLevelId = #{jobLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="titopDegree != null">
+        titopDegree = #{titopDegree,jdbcType=CHAR},
+      </if>
+      <if test="specialty != null">
+        specialty = #{specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null">
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null">
+        beginDate = #{beginDate,jdbcType=DATE},
+      </if>
+      <if test="workState != null">
+        workState = #{workState,jdbcType=CHAR},
+      </if>
+      <if test="conversionTime != null">
+        conversionTime = #{conversionTime,jdbcType=DATE},
+      </if>
+      <if test="quitTime != null">
+        quitTime = #{quitTime,jdbcType=DATE},
+      </if>
+      <if test="beginContract != null">
+        beginContract = #{beginContract,jdbcType=DATE},
+      </if>
+      <if test="endContract != null">
+        endContract = #{endContract,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByIdFun" parameterType="Integer">
+    delete from employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
 	</mapper>
 
