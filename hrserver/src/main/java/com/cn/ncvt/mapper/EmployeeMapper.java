@@ -15,4 +15,10 @@ import java.util.List;
 @Mapper
 public interface EmployeeMapper {
     List<Employee> selectAllEmployee();
+
+    void insertFun(Employee employee);
+
+    void updateFun(Employee employee);
+
+    void deleteByIdFun(Integer id);
 }
