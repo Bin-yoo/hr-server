@@ -34,12 +34,9 @@ public class RoleBiz {
             return ResultFactory.buildFailResult("获取失败");
     }
 
-    public Result addNewRole(String role, String roleZh) {
-        if (!role.startsWith("ROLE_")) {
-            role = "ROLE_" + role;
-        }
+    public Result addNewRole(Role role) {
         try {
-            roleMapper.addNewRole(role,roleZh);
+            roleMapper.addNewRole(role);
             return ResultFactory.buildSuccessResult("添加成功");
         } catch (Exception e){
             return ResultFactory.buildFailResult("添加失败");
