@@ -45,9 +45,9 @@ public class SystemRoleController {
     }
 
     @PostMapping("/role")
-    @ApiOperation(value = "添加新角色", notes = "通过rid来获取相应角色的权限")
+    @ApiOperation(value = "添加新角色", notes = "通过role对象添加新角色")
     public Result addRole(@RequestBody Role role) {
-        return roleBiz.addNewRole(role.getName(),role.getNameZh());
+        return roleBiz.addNewRole(role);
     }
 
     @PutMapping("/updateMenuTree")

@@ -49,4 +49,35 @@ public class EmployeeBiz {
         }
 
     }
+
+
+    public Result addEmployeeFile(Employee employee) {
+        try{
+            employeeMapper.insertFun(employee);
+            return ResultFactory.buildSuccessResult("添加成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("添加失败，请检查您输入的资料");
+        }
+    }
+
+    public Result updateEmployeeFile(Employee employee) {
+        try{
+            employeeMapper.updateFun(employee);
+            return ResultFactory.buildSuccessResult("编辑成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("编辑失败，请检查您输入的资料");
+        }
+    }
+
+    public Result deleteByIdEmployeeFile(Integer id) {
+        try{
+            employeeMapper.deleteByIdFun(id);
+            return ResultFactory.buildSuccessResult("删除成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("删除失败");
+        }
+    }
 }

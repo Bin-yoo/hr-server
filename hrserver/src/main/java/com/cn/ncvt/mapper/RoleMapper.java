@@ -13,7 +13,7 @@ import java.util.List;
 public interface RoleMapper {
     List<Role> roles();
 
-    int addNewRole(@Param("role") String role, @Param("roleZh") String roleZh);
+    int addNewRole(Role role);
 
     int deleteRoleById(int rid);
 }

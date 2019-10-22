@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cn.ncvt.mapper.RoleMapper">
     <select id="roles" resultType="role">
-        SELECT * FROM role where id!=6;
+        SELECT * FROM role where id!=1;
     </select>
-    <insert id="addNewRole" parameterType="String">
-        INSERT INTO role set name=#{role},nameZh=#{roleZh}
+    <insert id="addNewRole" parameterType="role">
+        INSERT INTO role set name=#{name},remark=#{remark}
     </insert>
     <delete id="deleteRoleById" parameterType="int">
         DELETE FROM role WHERE id=#{rid}
