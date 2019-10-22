@@ -1,12 +1,48 @@
 <template>
     <div>
-    <Row><Col span="2"><h1>员工调动</h1></Col></Row>
-    <Row :style="{margin: '15px 0 0 0'}">
-            <Col span="3"><Input suffix="ios-search" placeholder="请输入..." style="width: auto" /></Col>
-            <Col span="1"><Button icon="ios-search">搜索</Button></Col>
-            <Col span="1" offset="18"><Button type="primary" @click="modal1 = true">添加</Button></Col>
+        <Row><Col span="3"><h1>员工奖惩管理</h1></Col></Row>
+        <Row :style="{margin: '15px 0 0 0'}">
+            <Form :model="souformItem">
+                <Col span="2" :style="{margin: '0 10px 0 0'}">
+                    <FormItem>
+                        <Select v-model="formItem.departmentID" placeholder="部门">
+                            <Option value="0">财务部</Option>
+                            <Option value="1">人事部</Option>
+                            <Option value="2">技术部</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="2" :style="{margin: '0 10px 0 0'}">
+                    <FormItem>
+                        <Select v-model="formItem.posID" placeholder="职位">
+                            <Option value="0">财务经理</Option>
+                            <Option value="1">人事经理</Option>
+                            <Option value="2">出纳</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="2">
+                    <FormItem>
+                        <Select v-model="formItem.jobLevelID" placeholder="职称">
+                            <Option value="0">高级工程师</Option>
+                            <Option value="1">高级教师</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="3">
+                    <FormItem>
+                        <Input v-model="formItem.input" suffix="ios-search" placeholder="请输入..." style="width: auto" />
+                    </FormItem>
+                </Col>
+                <Col span="1" :style="{margin: '0 10px 0 0'}">
+                    <FormItem>
+                        <Button icon="ios-search">搜索</Button>
+                    </FormItem>
+                </Col>
+            </Form>
+            <Col span="1"><Button type="primary" @click="addModal = true">添加</Button></Col>
             <Modal
-                v-model="modal1"
+                v-model="addModal"
                 title="添加员工调动"
                 width=30%
                 @on-ok="ok"
@@ -15,22 +51,7 @@
                 <Form :model="formItem" :label-width="80">
                     <Row>
                         <Col span="12">
-                            <FormItem label="姓名：">
-                                <Input v-model="formItem.name" placeholder="请输入"></Input>
-                            </FormItem>
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="性别：">
-                                <RadioGroup v-model="formItem.gender">
-                                    <Radio label="1">男</Radio>
-                                    <Radio label="0">女</Radio>
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span="12">
-                            <FormItem label="部门：">
+                            <FormItem label="部门："><!-- 级联菜单1 -->
                                 <Select v-model="formItem.department">
                                     <Option value="0">人事部</Option>
                                     <Option value="1">财务部</Option>
@@ -39,7 +60,7 @@
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="职位：">
+                            <FormItem label="职位："><!-- 级联菜单2 -->
                                 <Select v-model="formItem.position">
                                     <Option value="0">教授</Option>
                                     <Option value="1">教师</Option>
@@ -51,8 +72,63 @@
                     </Row>
                     <Row>
                         <Col span="12">
-                            <FormItem label="调前部门：">
-                                <Select v-model="formItem.beforeDepartment">
+                            <FormItem label="姓名："><!-- 级联菜单3 -->
+                                <Select v-model="formItem.name">
+                                    <Option value="0">张三</Option>
+                                    <Option value="1">李四</Option>
+                                    <Option value="2">王五</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="12">
+                            <FormItem label="奖惩日期：">
+                                <DatePicker type="date" placeholder="选择奖惩日期" v-model="formItem.date"></DatePicker>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="12">
+                            <FormItem label="奖惩类型："><!-- 级联菜单1 -->
+                                <RadioGroup v-model="formItem.type">
+                                        <Radio label="0">奖励</Radio>
+                                        <Radio label="1">惩罚</Radio>
+                                    </RadioGroup>
+                            </FormItem>
+                        </Col>
+                        <Col span="12">
+                            <FormItem label="奖惩原因：">
+                                <Input v-model="formItem.season" placeholder="请输入..."></Input>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="12">
+                            <FormItem label="奖惩分数：">
+                                <Input v-model="formItem.grade" placeholder="请输入..."></Input>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="24">
+                            <FormItem label="备注：">
+                                <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal>
+            <Modal
+                v-model="updateModal"
+                title="添加员工调动"
+                width=30%
+                @on-ok="ok"
+                @on-cancel="cancel">
+                
+                <Form :model="formItem" :label-width="80">
+                    <Row>
+                        <Col span="12">
+                            <FormItem label="部门："><!-- 级联菜单1 -->
+                                <Select v-model="formItem.department">
                                     <Option value="0">人事部</Option>
                                     <Option value="1">财务部</Option>
                                     <Option value="2">技术部</Option>
@@ -60,8 +136,8 @@
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="调前职位：">
-                                <Select v-model="formItem.beforePosition">
+                            <FormItem label="职位："><!-- 级联菜单2 -->
+                                <Select v-model="formItem.position">
                                     <Option value="0">教授</Option>
                                     <Option value="1">教师</Option>
                                     <Option value="2">教务管理人员</Option>
@@ -72,49 +148,57 @@
                     </Row>
                     <Row>
                         <Col span="12">
-                            <FormItem label="调后部门：">
-                                <Select v-model="formItem.laterDepartment">
-                                    <Option value="0">人事部</Option>
-                                    <Option value="1">财务部</Option>
-                                    <Option value="2">技术部</Option>
+                            <FormItem label="姓名："><!-- 级联菜单3 -->
+                                <Select v-model="formItem.name">
+                                    <Option value="0">张三</Option>
+                                    <Option value="1">李四</Option>
+                                    <Option value="2">王五</Option>
                                 </Select>
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="调后职位：">
-                                <Select v-model="formItem.laterPosition">
-                                    <Option value="0">教授</Option>
-                                    <Option value="1">教师</Option>
-                                    <Option value="2">教务管理人员</Option>
-                                    <Option value="3">其他</Option>
-                                </Select>
+                            <FormItem label="奖惩日期：">
+                                <DatePicker type="date" placeholder="选择奖惩日期" v-model="formItem.date"></DatePicker>
                             </FormItem>
                         </Col>
                     </Row>
                     <Row>
                         <Col span="12">
-                            <FormItem label="调动日期：">
-                                <Select v-model="formItem.transferDate">
-                                    <Option value="0">人事部</Option>
-                                    <Option value="1">财务部</Option>
-                                    <Option value="2">技术部</Option>
-                                </Select>
+                            <FormItem label="奖惩类型："><!-- 级联菜单1 -->
+                                <RadioGroup v-model="formItem.type">
+                                        <Radio label="0">奖励</Radio>
+                                        <Radio label="1">惩罚</Radio>
+                                    </RadioGroup>
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="调动原因：">
-                                <Input v-model="formItem.transferReason" placeholder="请输入..."></Input>
+                            <FormItem label="奖惩原因：">
+                                <Input v-model="formItem.season" placeholder="请输入..."></Input>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="12">
+                            <FormItem label="奖惩分数：">
+                                <Input v-model="formItem.grade" placeholder="请输入..."></Input>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="24">
+                            <FormItem label="备注：">
+                                <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
                             </FormItem>
                         </Col>
                     </Row>
                 </Form>
             </Modal>
         </Row>
-        <Row :style="{margin: '20px 0 0 0'}">
+        <Row>
             <Table border ref="selection" :columns="columns" :data="data1">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">编辑</Button>
-                    <Button type="error" size="small" @click="remove(index)">删除</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="update(index)">编辑</Button>
+                    <Button type="error" @click="remove(index)">删除</Button>
                 </template>
           </Table>
         </Row>
@@ -130,19 +214,17 @@ export default {
     name: 'PerMv',
     data() {
         return {
-            modal1: false,
+            addModal: false,
             updateModal: false,
             formItem:{
                 name: '',       //名字
                 gender:'',      //性别
                 department:'',  //部门
-                position:'',    //职位
-                beforeDepartment:'',//调前部门
-                beforePosition:'',//调前职位
-                laterDepartment:'',//调后部门
-                laterPosition:'',//调后职位
-                transferDate:'',//调动日期
-                transferReason:'',//调动原因
+                date:'',    //奖惩日期
+                type:'',    //奖惩类型
+                season:'',    //奖惩原因
+                grade:'',    //奖惩分数
+                remark:'',    //备注
             },
             columns: [
                     {
@@ -159,10 +241,6 @@ export default {
                         key: 'jobNum'
                     },
                     {
-                        title: '性别',
-                        key: 'sex'
-                    },
-                    {
                         title: '部门',
                         key: 'department'
                     },
@@ -171,33 +249,29 @@ export default {
                         key: 'position'
                     },
                     {
-                        title: '调前部门',
-                        key: 'beforeDepartment'
+                        title: '日期',
+                        key: 'date'
                     },
                     {
-                        title: '调前职位',
-                        key: 'beforePosition'
+                        title: '奖惩类别',
+                        key: 'category'
                     },
                     {
-                        title: '调后部门',
-                        key: 'laterDepartment'
+                        title: '奖惩原因',
+                        key: 'reason'
                     },
                     {
-                        title: '调后职位',
-                        key: 'laterPosition'
+                        title: '奖惩分数',
+                        key: 'fraction'
                     },
                     {
-                        title: '调动日期',
-                        key: 'transferDate'
-                    },
-                    {
-                        title: '调动原因',
-                        key: 'transferReason'
+                        title: '备注',
+                        key: 'remarks'
                     },
                     {
                         title: '操作',
                         slot: 'action',
-                        width: 150,
+                        width: 175,
                         align: 'center'
                     }
                 ],
@@ -205,132 +279,112 @@ export default {
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
                     {
                         name: '宇哥',
                         jobNum: 20191016001,
-                        sex: "男",
                         department: "人事部",
-                        position: "人事经理",
-                        beforeDepartment: "行政部",
-                        beforePosition: "行政经理",
-                        laterDepartment: "人事部",
-                        laterPosition: "人事经理",
-                        transferDate: "调动日期",
-                        transferReason: "调动原因",
+                        position: "人事部经理",
+                        date: "2019年10月16日",
+                        category: "惩罚",
+                        reason: "迟到",
+                        fraction: "-2",
+                        remarks: "无",
                     },
             ]
         }
@@ -342,6 +396,10 @@ export default {
         cancel () {
             this.$Message.info('Clicked cancel');
         }, 
+        update (index) {
+            this.updateModal = true;
+            console.log(index);
+        },
     }
 }
 </script>
