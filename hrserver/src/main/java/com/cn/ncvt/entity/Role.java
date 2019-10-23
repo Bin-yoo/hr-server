@@ -1,6 +1,7 @@
 package com.cn.ncvt.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Created by sang on 2017/12/28.
@@ -8,15 +9,8 @@ import java.io.Serializable;
 public class Role implements Serializable {
     private int id;
     private String name;
-    private String nameZh;
-
-    public String getNameZh() {
-        return nameZh;
-    }
-
-    public void setNameZh(String nameZh) {
-        this.nameZh = nameZh;
-    }
+    private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
+    private String remark;
 
     public int getId() {
         return id;
@@ -32,5 +26,21 @@ public class Role implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
