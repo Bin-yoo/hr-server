@@ -13,6 +13,9 @@
   <sql id="Base_Column_List" >
     id, name, remarks, state, beginDate, endDate, createDate
   </sql>
+  <select id="selectAllEmployee"  parameterType="string" resultType="Assessment">
+      select * from assessment
+  </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
