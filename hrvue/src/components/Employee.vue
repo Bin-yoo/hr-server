@@ -571,7 +571,9 @@
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
             <Col span="1"><Button type="error">批量删除</Button></Col>
-            <Page :total="100" show-elevator />
+            <Row :style="{textAlign: 'center'}">
+                    <Page :total="100" show-elevator />
+                </Row>
         </Row>
     </div>
 </template>
