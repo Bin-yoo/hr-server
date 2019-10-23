@@ -5,10 +5,14 @@ import com.cn.ncvt.mapper.MenuRoleMapper;
 import com.cn.ncvt.mapper.RoleMapper;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @version : V1.0
@@ -26,17 +30,26 @@ public class RoleBiz {
     @Autowired
     MenuRoleMapper menuRoleMapper;
 
-    public Result roles() {
-        List<Role> roleList = roleMapper.roles();
-        if (roleList != null)
-            return ResultFactory.buildSuccessResult(roleList);
-        else
+    public Result roles(int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<Role> roleList = roleMapper.selectAllRoles();
+
+        if (roleList != null){
+            PageInfo pageInfo = new PageInfo(roleList);
+            Map map = new HashMap();
+            map.put("total", pageInfo.getTotal());
+            map.put("totalPage" , pageInfo.getPages());
+            map.put("page" , pageInfo.getPageNum());
+            map.put("list", roleList);
+            return ResultFactory.buildSuccessResult(map);
+        } else {
             return ResultFactory.buildFailResult("获取失败");
+        }
     }
 
     public Result addNewRole(Role role) {
         try {
-            roleMapper.addNewRole(role);
+            roleMapper.insertFun(role);
             return ResultFactory.buildSuccessResult("添加成功");
         } catch (Exception e){
             return ResultFactory.buildFailResult("添加失败");
@@ -50,6 +63,15 @@ public class RoleBiz {
             return ResultFactory.buildSuccessResult("删除成功");
         } catch (Exception e) {
             return ResultFactory.buildFailResult("删除失败");
+        }
+    }
+
+    public Result updateRole(Role role) {
+        try {
+            roleMapper.updateFun(role);
+            return ResultFactory.buildSuccessResult("更新成功");
+        } catch (Exception e){
+            return ResultFactory.buildFailResult("更新失败");
         }
     }
 }
