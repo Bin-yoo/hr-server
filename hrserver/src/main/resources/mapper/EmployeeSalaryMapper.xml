@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.ncvt.mapper.EmployeeSalaryMapper" >
+  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeSalary" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="baseSalary" property="basesalary" jdbcType="REAL" />
+    <result column="meritSalary" property="meritsalary" jdbcType="REAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, eid, baseSalary, meritSalary
+  </sql>
+  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from employee_salary
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByID" parameterType="java.lang.Integer" >
+    delete from employee_salary
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
+    insert into employee_salary (id, eid, baseSalary, 
+      meritSalary)
+    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{basesalary,jdbcType=REAL}, 
+      #{meritsalary,jdbcType=REAL})
+  </insert>
+  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
+    update employee_salary
+    <set >
+      <if test="eid != null" >
+        eid = #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="basesalary != null" >
+        baseSalary = #{basesalary,jdbcType=REAL},
+      </if>
+      <if test="meritsalary != null" >
+        meritSalary = #{meritsalary,jdbcType=REAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByID" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
+    update employee_salary
+    set eid = #{eid,jdbcType=INTEGER},
+      baseSalary = #{basesalary,jdbcType=REAL},
+      meritSalary = #{meritsalary,jdbcType=REAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
