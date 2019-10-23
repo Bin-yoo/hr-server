@@ -18,13 +18,13 @@
                     <template slot-scope="{ row, index }" slot="action">
                         <Row>
                             <Col span="8">
-                                <Button type="primary" size="small">编辑信息</Button>
+                                <Button type="primary" size="small" @click="beforeUpdate(index)">编辑信息</Button>
                             </Col>
                             <Col span="10">
                             <Button type="primary" size="small">编辑权限</Button>
                             </Col>
                             <Col span="4">
-                                <Button type="error" size="small" >删除</Button>
+                                <Button type="error" size="small" @click="deleteRole(row.id)">删除</Button>
                             </Col>
                         </Row>
                     </template>
@@ -53,8 +53,32 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="openAddNew=false">取消</Button>
+                <Button @click="cancel">取消</Button>
                 <Button type="primary" @click="addNewRole">保存</Button>
+            </div>
+            <Spin fix v-if="spinShow">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
+        </Modal>
+        <Modal
+            v-model="openUpdate"
+            title="编辑角色信息">
+            <Row>
+                <Col span="21">
+                    <Form :model="role" :rules="newRoleRules" :label-width="80" ref="role">
+                        <FormItem label="角色名" prop="name">
+                            <Input v-model="role.name" placeholder="请输入角色名"></Input>
+                        </FormItem>
+                        <FormItem label="备注" prop="remark">
+                            <Input v-model="role.remark" type="textarea" placeholder="备注"></Input>
+                        </FormItem>
+                    </Form>
+                </Col>
+            </Row>
+            <div slot="footer">
+                <Button @click="cancel">取消</Button>
+                <Button type="primary" @click="updateRole">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -103,7 +127,9 @@
                         align: 'center'
                     }
                 ],
-                roles: [],
+                roles: [
+                    {id: 1, name: 'didi', remark: 'sss'}
+                ],
                 keyword: '',
                 page:1,
                 total: 100,
@@ -111,6 +137,7 @@
                 loading: false,
                 spinShow: false,
                 openAddNew : false,
+                openUpdate: false,
                 newRole: {
                     name: '',
                     remark: ''
@@ -123,13 +150,19 @@
                         { type: 'string', max: 50, message: '备注长度不能超过50个字符', trigger: 'change' }
                     ]
                 },
+                role: {
+                    id: 0,
+                    name: '',
+                    remark: ''
+                },
             }
         },
         mounted: function () {
-            this.getRoleList();
+            // this.getRoleList();
         },
         watch: {
             page: "getRoleList",
+            limit: "getRoleList",
         },
         methods: {
             onPageSizeChange(index){
@@ -140,7 +173,10 @@
             },
             getRoleList(){
                 this.loading = true;
-                this.getRequest("/system/role/roles").then(resp=> {
+                this.getRequest("/system/role/roles",{
+                    page: this.page,
+                    limit: this.limit,
+                }).then(resp=> {
                     this.loading = false;
                     this.roles = resp.data.data;
                 })
@@ -149,7 +185,7 @@
                 var check = /\s/;
                 if(!check.test(this.newRole.name) && isNotNullORBlank(this.newRole.name)){
                     this.spinShow = true;
-                    this.postRequest("/system/role/role", {
+                    this.postRequest("/system/role/addRole", {
                         name: this.newRole.name,
                         remark: this.newRole.remark
                     }).then(resp=> {
@@ -166,9 +202,62 @@
                         }
                     })
                 } else {
-                    this.$Message.error("角色中英文名称不能为空");
+                    this.$Message.error("角色名称不能为空");
                 }
             },
+            beforeUpdate(index){
+                this.openUpdate = true;
+                this.role = this.roles[index];
+            },
+            updateRole(){
+                var check = /\s/;
+                if(!check.test(this.newRole.name) && isNotNullORBlank(this.newRole.name)){
+                    this.spinShow = true;
+                    this.postRequest("/system/role/updateRole", {
+                        id: this.role.id,
+                        name: this.role.name,
+                        remark: this.role.remark
+                    }).then(resp=> {
+                        if (resp.data.error == false && resp.data.code == 200) {
+                            this.getRoleList();
+                            this.role.id = 0;
+                            this.role.name = '';
+                            this.role.remark = '';
+                            this.$Message.success(resp.data.data);
+                            this.spinShow = false;
+                            this.openUpdate = false;
+                        } else {
+                            this.$Message.error(resp.data.message);
+                            this.spinShow = false;
+                        }
+                    })
+                } else {
+                    this.$Message.error("角色名称不能为空");
+                }
+            },
+            cancel(){
+                this.openAddNew = false;
+                this.openUpdate = false;
+                this.newRole.name = '';
+                this.newRole.remark = '';
+            },
+            deleteRole(id){
+                console.log(id);
+                this.$Modal.confirm({
+                    title: '你正在进行删除操作',
+                    content: '<p>删除后相关账号的权限将更改为"普通员工"</p><p>你确定要删除该角色吗?</p>',
+                    onOk: () => {
+                        this.deleteRequest("/system/role/role/" + id).then(resp=> {
+                            this.$Message.success(resp.data.data);
+                            this.spinShow = false;
+                            this.initRoles();
+                        }).catch(error => {
+                            this.spinShow = false;
+                            this.$Message.error(error);
+                        });
+                    },
+                });
+            }
         }
     }
 </script>

@@ -12,7 +12,10 @@ const router = new Router({
         {
             path: '/',
             name: 'login',
-            component: Login
+            component: Login,
+            meta: {
+                title: '人事管理系统'
+            },
         },
         {
             path: '/home',
@@ -27,6 +30,9 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
     if (to.name == 'login') {
         next();
         return;
