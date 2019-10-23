@@ -11,9 +11,11 @@ import java.util.List;
  */
 @Mapper
 public interface RoleMapper {
-    List<Role> roles();
+    List<Role> selectAllRoles();
 
-    int addNewRole(@Param("role") String role, @Param("roleZh") String roleZh);
+    int insertFun(Role role);
 
     int deleteRoleById(int rid);
+
+    void updateFun(Role role);
 }

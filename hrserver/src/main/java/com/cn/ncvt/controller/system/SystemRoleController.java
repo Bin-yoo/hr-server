@@ -33,9 +33,9 @@ public class SystemRoleController {
     MenuRoleBiz menuRoleBiz;
 
     @GetMapping("/roles")
-    @ApiOperation(value = "角色列表", notes = "返回全部角色列表")
-    public Result allRoles() {
-        return roleBiz.roles();
+    @ApiOperation(value = "角色列表", notes = "返回全部角色列表,page为当前页,limit为记录每页数量")
+    public Result allRoles(int page, int limit) {
+        return roleBiz.roles(page, limit);
     }
 
     @GetMapping("/menuTree/{rid}")
@@ -44,10 +44,16 @@ public class SystemRoleController {
         return menuBiz.getMenuTreeByRoleId(rid);
     }
 
-    @PostMapping("/role")
-    @ApiOperation(value = "添加新角色", notes = "通过rid来获取相应角色的权限")
+    @PostMapping("/addRole")
+    @ApiOperation(value = "添加新角色", notes = "通过role对象添加新角色")
     public Result addRole(@RequestBody Role role) {
-        return roleBiz.addNewRole(role.getName(),role.getNameZh());
+        return roleBiz.addNewRole(role);
+    }
+
+    @PutMapping("/updateRole")
+    @ApiOperation(value = "更新角色信息", notes = "通过role对象修改角色信息")
+    public Result updateRole(@RequestBody Role role) {
+        return roleBiz.updateRole(role);
     }
 
     @PutMapping("/updateMenuTree")
