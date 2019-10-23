@@ -1,7 +1,6 @@
 <template>
     <div>
         <Form
-            ref="formInline"
             :model="user"
             class="login-container"
             :rules="rules"
@@ -111,5 +110,18 @@ export default {
         margin: 10px auto 25px auto;
         text-align: center;
         color: #505458;
+    }
+    .demo-spin-icon-load{
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+    .demo-spin-col{
+        height: 100px;
+        position: relative;
+        border: 1px solid #eee;
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout :style="{height: '100vh'}">
         <Header>
             <Row>
                 <Col span="2">
@@ -22,7 +22,7 @@
         </Header>
         <Layout>
             <Sider hide-trigger width="250">
-                <Menu width="auto">
+                <Menu width="auto" :style="{height: '100%'}">
                     <template v-for="(item,index) in this.routes">
                         <MenuItem
                             :key="item.path"
@@ -48,18 +48,16 @@
                     </template>
                 </Menu>
             </Sider>
-            <Layout :style="{padding: '0 24px 24px'}">
+            <Content :style="{padding: '0 24px 24px'}">
                 <Breadcrumb :style="{margin: '24px 0', textAlign: 'left'}">
                     <BreadcrumbItem to="/home">首页</BreadcrumbItem>
                     <BreadcrumbItem v-text="this.$router.currentRoute.name">Components</BreadcrumbItem>
                 </Breadcrumb>
-                <Content>
-                    <keep-alive>
-                        <router-view v-if="this.$route.meta.keepAlive"></router-view>
-                    </keep-alive>
-                    <router-view v-if="!this.$route.meta.keepAlive"></router-view>
-                </Content>
-            </Layout>
+                <keep-alive>
+                    <router-view v-if="this.$route.meta.keepAlive"></router-view>
+                </keep-alive>
+                <router-view v-if="!this.$route.meta.keepAlive"></router-view>
+            </Content>
         </Layout>
         <Footer>Footer</Footer>
     </Layout>

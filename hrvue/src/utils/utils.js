@@ -1,13 +1,13 @@
 ﻿import {getRequest} from './api'
 
 export const isNotNullORBlank = (...args)=> {
-  for (var i = 0; i < args.length; i++) {
-    var argument = args[i];
-    if (argument == null || argument == '' || argument == undefined) {
+//   for (var i = 0; i < args.length; i++) {
+    // var argument = args[i];
+    if (args == null || args == '' || args == undefined) {
     //   Message.warning({message: '数据不能为空!'})
       return false;
     }
-  }
+//   }
   return true;
 }
 

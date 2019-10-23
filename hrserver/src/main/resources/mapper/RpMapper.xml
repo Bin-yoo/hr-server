@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.ncvt.mapper.RpMapper" >
+  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.Rp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, eid, date, type, reason, point, remark
+  </sql>
+  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from rp
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByID" parameterType="java.lang.Integer" >
+    delete from rp
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cn.ncvt.entity.Rp" >
+    insert into rp (id, eid, date, type, 
+      reason, point, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{type,jdbcType=CHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{point,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cn.ncvt.entity.Rp" >
+    insert into rp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="eid != null" >
+        eid,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="eid != null" >
+        #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.Rp" >
+    update rp
+    <set >
+      <if test="eid != null" >
+        eid = #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByID" parameterType="com.cn.ncvt.entity.Rp" >
+    update rp
+    set eid = #{eid,jdbcType=INTEGER},
+      date = #{date,jdbcType=DATE},
+      type = #{type,jdbcType=CHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      point = #{point,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
