@@ -34,8 +34,8 @@ public class SystemRoleController {
 
     @GetMapping("/roles")
     @ApiOperation(value = "角色列表", notes = "返回全部角色列表,page为当前页,limit为记录每页数量")
-    public Result allRoles(int page, int limit) {
-        return roleBiz.roles(page, limit);
+    public Result allRoles(Integer page, Integer limit, String name) {
+        return roleBiz.roles(page, limit, name);
     }
 
     @GetMapping("/menuTree/{rid}")

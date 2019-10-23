@@ -18,4 +18,6 @@ public interface RoleMapper {
     int deleteRoleById(int rid);
 
     void updateFun(Role role);
+
+    List<Role> selectRolesByName(@Param("name") String name);
 }
