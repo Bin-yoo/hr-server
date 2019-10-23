@@ -6,6 +6,12 @@
     <select id="selectAllRoles" resultType="role">
         SELECT * FROM role where id!=1
     </select>
+    <select id="selectRolesByName" resultType="role" parameterType="String">
+        SELECT * FROM role where id!=1
+        <if test="name != null and name != '' " >
+            and name like '%${name}%'
+        </if>
+    </select>
     <insert id="insertFun" parameterType="role">
         INSERT INTO role set name=#{name},createDate=#{createDate},remark=#{remark}
     </insert>

@@ -2,10 +2,10 @@
     <div>
         <Row>
             <Col span="4">
-                <Input v-model="keyword" placeholder="输入角色名进行查询" />
+                <Input v-model="keyword" placeholder="输入角色名进行查询" clearable @on-clear="getRoleList"/>
             </Col>
             <Col span="2">
-                <Button type="primary" icon="ios-search">查询</Button>
+                <Button type="primary" icon="ios-search" @click="getRoleList">查询</Button>
             </Col>
             <Col span="2" offset="16">
                 <Button type="primary" icon="ios-add" @click="openAddNew=true">添加新角色</Button>
@@ -16,17 +16,9 @@
             <Col span="24">
                 <Table  border  :columns="columns1" :data="roles" :loading="loading">
                     <template slot-scope="{ row, index }" slot="action">
-                        <Row>
-                            <Col span="8">
-                                <Button type="primary" size="small" @click="beforeUpdate(index)">编辑信息</Button>
-                            </Col>
-                            <Col span="10">
-                            <Button type="primary" size="small">编辑权限</Button>
-                            </Col>
-                            <Col span="4">
-                                <Button type="error" size="small" @click="deleteRole(row.id)">删除</Button>
-                            </Col>
-                        </Row>
+                            <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑信息</Button>
+                            <Button type="primary" style="margin-right: 5px" @click="getMenuTree(row.id)">编辑权限</Button>
+                            <Button type="error" style="margin-right: 5px" @click="deleteRole(row.id)">删除</Button>
                     </template>
                 </Table>
             </Col>
@@ -63,7 +55,8 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="编辑角色信息">
+            title="编辑角色信息"
+            @on-visible-change='updateCancel'>
             <Row>
                 <Col span="21">
                     <Form :model="role" :rules="newRoleRules" :label-width="80" ref="role">
@@ -85,16 +78,36 @@
                 <div>Loading</div>
             </Spin>
         </Modal>
+        <Modal
+            v-model="openRole"
+            title="编辑角色权限"
+            footer-hide
+            width="400">
+            <Tabs value="RoleMana">
+                <TabPane label="模块(菜单)访问权限" name="RoleMana">
+                    <Row>
+                        <Col>
+                            <Tree :data="treeData" ref="tree" show-checkbox multiple></Tree>
+                        </Col>
+                    </Row>
+                    <br>
+                    <Row type="flex" justify="center">
+                        <Col span="24">
+                            <Button type="primary" @click="updateTree" long>保存</Button>
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane label="操作权限" name="CharacterMana">
+                    <!-- <user-role></user-role> -->滴滴滴
+                </TabPane>
+            </Tabs>
+            <Spin fix v-if="spinShow">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
+        </Modal>
     </div>
-    <!-- <Tabs value="RoleMana">
-        <TabPane label="角色/权限管理" name="RoleMana">
-            <menu-role></menu-role>
-        </TabPane>
-        <TabPane label="用户角色管理" name="CharacterMana">
-            <user-role></user-role>
-        </TabPane>
-    </Tabs> -->
-</template>
+</template> 
 <script>
     import MenuRole from './role/MenuRole.vue'
     import UserRole from './role/UserRole.vue'
@@ -123,12 +136,12 @@
                     {
                         title: '操作',
                         slot: 'action',
-                        width: 250,
+                        width: 280,
                         align: 'center'
                     }
                 ],
                 roles: [
-                    {id: 1, name: 'didi', remark: 'sss'}
+                    // {id: 1, name: 'didi', remark: 'sss'}
                 ],
                 keyword: '',
                 page:1,
@@ -138,6 +151,7 @@
                 spinShow: false,
                 openAddNew : false,
                 openUpdate: false,
+                openRole: false,
                 newRole: {
                     name: '',
                     remark: ''
@@ -155,10 +169,12 @@
                     name: '',
                     remark: ''
                 },
+                treeData: [],
+                treeRid:'',
             }
         },
         mounted: function () {
-            // this.getRoleList();
+            this.getRoleList();
         },
         watch: {
             page: "getRoleList",
@@ -176,9 +192,11 @@
                 this.getRequest("/system/role/roles",{
                     page: this.page,
                     limit: this.limit,
+                    name: this.keyword,
                 }).then(resp=> {
                     this.loading = false;
-                    this.roles = resp.data.data;
+                    this.roles = resp.data.data.list;
+                    this.total = resp.data.data.total;
                 })
             },
             addNewRole(){
@@ -207,13 +225,16 @@
             },
             beforeUpdate(index){
                 this.openUpdate = true;
-                this.role = this.roles[index];
+                this.role.id = this.roles[index].id;
+                this.role.name = this.roles[index].name;
+                this.role.createDate = this.roles[index].createDate;
+                this.role.remark = this.roles[index].remark;
             },
             updateRole(){
                 var check = /\s/;
-                if(!check.test(this.newRole.name) && isNotNullORBlank(this.newRole.name)){
+                if(!check.test(this.role.name) && isNotNullORBlank(this.role.name)){
                     this.spinShow = true;
-                    this.postRequest("/system/role/updateRole", {
+                    this.putRequest("/system/role/updateRole", {
                         id: this.role.id,
                         name: this.role.name,
                         remark: this.role.remark
@@ -238,26 +259,58 @@
             cancel(){
                 this.openAddNew = false;
                 this.openUpdate = false;
+                this.openRole = false;
                 this.newRole.name = '';
                 this.newRole.remark = '';
             },
+            updateCancel(flag){
+                if(flag == false){
+                    this.role.name = '';
+                    this.role.remark = '';
+                }
+            },
             deleteRole(id){
-                console.log(id);
                 this.$Modal.confirm({
                     title: '你正在进行删除操作',
                     content: '<p>删除后相关账号的权限将更改为"普通员工"</p><p>你确定要删除该角色吗?</p>',
                     onOk: () => {
+                        var _this = this;
                         this.deleteRequest("/system/role/role/" + id).then(resp=> {
                             this.$Message.success(resp.data.data);
                             this.spinShow = false;
-                            this.initRoles();
-                        }).catch(error => {
-                            this.spinShow = false;
-                            this.$Message.error(error);
-                        });
+                            _this.getRoleList();
+                        })
                     },
                 });
-            }
+            },
+            getMenuTree(id){
+                this.openRole = true;
+                this.getRequest("/system/role/menuTree/" + id).then(resp=> {
+                    if (resp && resp.status == 200) {
+                        this.treeData = resp.data.data;
+                    }
+                })
+                this.treeRid = id;
+            },
+            updateTree(){
+                var treeCheckedData = this.$refs.tree.getCheckedNodes();
+                var checkedKeys = [];
+                treeCheckedData.forEach(item => {
+                    if(item.children == null){
+                        checkedKeys.push(item.id)
+                    }
+                });
+                this.putRequest("/system/role/updateMenuTree", {
+                    rid: this.treeRid,
+                    checkedKeys: checkedKeys
+                }).then(resp=> {
+                    this.$Message.success(resp.data.data);
+                    this.spinShow = false;
+                }).catch(error => {
+                    this.spinShow = false;
+                    this.$Message.error(error);
+                });
+            },
         }
     }
 </script>
