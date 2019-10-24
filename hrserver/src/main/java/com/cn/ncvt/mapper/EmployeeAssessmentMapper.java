@@ -3,6 +3,8 @@ package com.cn.ncvt.mapper;
 import com.cn.ncvt.entity.EmployeeAssessment;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface EmployeeAssessmentMapper {
     int deleteByID(Integer id);
@@ -14,4 +16,6 @@ public interface EmployeeAssessmentMapper {
     int updateByIDSelective(EmployeeAssessment employeeAssessment);
 
     int updateByID(EmployeeAssessment employeeAssessment);
+
+    List<EmployeeAssessment> selectAllAssessmentFile();
 }

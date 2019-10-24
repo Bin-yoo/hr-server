@@ -6,14 +6,14 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="remarks" property="remarks" jdbcType="VARCHAR" />
     <result column="state" property="state" jdbcType="CHAR" />
-    <result column="beginDate" property="begindate" jdbcType="DATE" />
-    <result column="endDate" property="enddate" jdbcType="DATE" />
-    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="beginDate" property="beginDate" jdbcType="DATE" />
+    <result column="endDate" property="endDate" jdbcType="DATE" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, remarks, state, beginDate, endDate, createDate
   </sql>
-  <select id="selectAllEmployee"  parameterType="string" resultType="Assessment">
+  <select id="selectAllAssessment"  parameterType="string" resultType="Assessment">
       select * from assessment
   </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -26,12 +26,12 @@
     delete from assessment
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="Assessment" >
-    insert into assessment (id, name, remarks, 
+  <insert id="insert" parameterType="assessment" >
+    insert into assessment ( name, remarks, 
       state, beginDate, endDate, createDate
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
-      #{state,jdbcType=CHAR}, #{begindate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{createdate,jdbcType=TIMESTAMP}
+    values ( #{name,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{state,jdbcType=CHAR}, #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
   <update id="updateByIDSelective" parameterType="Assessment" >
@@ -46,14 +46,14 @@
       <if test="state != null" >
         state = #{state,jdbcType=CHAR},
       </if>
-      <if test="begindate != null" >
-        beginDate = #{begindate,jdbcType=DATE},
+      <if test="beginDate != null" >
+        beginDate = #{beginDate,jdbcType=DATE},
       </if>
-      <if test="enddate != null" >
-        endDate = #{enddate,jdbcType=DATE},
+      <if test="endDate != null" >
+        endDate = #{endDate,jdbcType=DATE},
       </if>
-      <if test="createdate != null" >
-        createDate = #{createdate,jdbcType=TIMESTAMP},
+      <if test="createDate != null" >
+        createDate = #{createDate,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -63,9 +63,9 @@
     set name = #{name,jdbcType=VARCHAR},
       remarks = #{remarks,jdbcType=VARCHAR},
       state = #{state,jdbcType=CHAR},
-      beginDate = #{begindate,jdbcType=DATE},
-      endDate = #{enddate,jdbcType=DATE},
-      createDate = #{createdate,jdbcType=TIMESTAMP}
+      beginDate = #{beginDate,jdbcType=DATE},
+      endDate = #{endDate,jdbcType=DATE},
+      createDate = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
