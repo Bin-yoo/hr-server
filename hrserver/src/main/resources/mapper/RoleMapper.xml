@@ -6,7 +6,7 @@
     <select id="selectAllRoles" resultType="role">
         SELECT * FROM role where id!=1
     </select>
-    <select id="selectRolesByName" resultType="role" parameterType="String">
+    <select id="selectRolesByCondition" resultType="role" parameterType="String">
         SELECT * FROM role where id!=1
         <if test="name != null and name != '' " >
             and name like '%${name}%'
@@ -20,12 +20,12 @@
     </delete>
     <update id="updateFun" parameterType="role" >
         update role
-        <set >
-            <if test="name != null" >
-                name = #{name},
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="remark != null" >
-                remark = #{remark,jdbcType=VARCHAR},
+            <if test="remark != null and remark != ''">
+                name = #{remark,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

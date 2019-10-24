@@ -2,6 +2,9 @@ package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.Position;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface PositionMapper {
@@ -13,5 +16,6 @@ public interface PositionMapper {
 
     int updateByIDSelective(Position position);
 
-    int updateByID(Position position);
+    List<Position> selectPositionByCondition(@Param("name") String name);
+
 }

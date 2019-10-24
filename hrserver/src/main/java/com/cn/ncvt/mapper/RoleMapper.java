@@ -19,5 +19,5 @@ public interface RoleMapper {
 
     void updateFun(Role role);
 
-    List<Role> selectRolesByName(@Param("name") String name);
+    List<Role> selectRolesByCondition(@Param("name") String name);
 }

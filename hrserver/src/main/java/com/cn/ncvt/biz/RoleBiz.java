@@ -33,7 +33,7 @@ public class RoleBiz {
     public Result roles(Integer page, Integer limit, String name) {
         PageHelper.startPage(page, limit);
         //List<Role> roleList = roleMapper.selectAllRoles();
-        List<Role> roleList = roleMapper.selectRolesByName(name);
+        List<Role> roleList = roleMapper.selectRolesByCondition(name);
 
         if (roleList != null){
             PageInfo pageInfo = new PageInfo(roleList);
