@@ -1,4 +1,4 @@
-package com.cn.ncvt.controller;
+package com.cn.ncvt.controller.personnel;
 
 import com.cn.ncvt.biz.AssessmentBiz;
 import com.cn.ncvt.entity.Assessment;
@@ -32,7 +32,7 @@ public class AssessmentController {
      * @return
      */
     @PostMapping("/addAssesment")
-    @ApiOperation(value = "查看所有考核", notes = "返回全部考核")
+    @ApiOperation(value = "添加考核项目", notes = "添加考核项目")
     public Result addAssessmentFile(@RequestBody Assessment assessment){
         return assessmentBiz.addAssessmentFile(assessment);
     }

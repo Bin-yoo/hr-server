@@ -17,5 +17,5 @@ public interface AssessmentMapper {
 
     int updateByID(Assessment assessment);
 
-    List<Assessment> selectAllEmployee();
+    List<Assessment> selectAllAssessment();
 }

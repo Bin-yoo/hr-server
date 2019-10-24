@@ -14,7 +14,7 @@ public class EmployeeAssessment {
     private int id;
     private int eId;
     private int aId;
-    private Timestamp date;
+    private String data;
     private String remark;
     private String result;
     private Boolean isCheck;
@@ -43,12 +43,12 @@ public class EmployeeAssessment {
         this.aId = aId;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public String getData() {
+        return data;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setData(String data) {
+        this.data = data;
     }
 
     public String getRemark() {
