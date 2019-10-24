@@ -2,6 +2,9 @@ package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.JobLevel;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface JobLevelMapper {
@@ -13,5 +16,5 @@ public interface JobLevelMapper {
 
     int updateByIDSelective(JobLevel jobLevel);
 
-    int updateByID(JobLevel jobLevel);
+    List<JobLevel> selectJobLvlByCondition(@Param("name") String name);
 }
