@@ -48,31 +48,31 @@ public class SystemBasicController {
     }
 
     @DeleteMapping("/jobLvl/{id}")
-    @ApiOperation(value = "修改职称信息", notes = "传入jobLevel对象")
+    @ApiOperation(value = "修改职称信息", notes = "通过id删除")
     public Result deleteJobLvl(@PathVariable Integer id){
         return jobLevelBiz.deleteJobLvl(id);
     }
 
     @GetMapping("/positionList")
-    @ApiOperation(value = "获取职称列表", notes = "page为当前页码, limit为每页记录数量, name作为条件进行模糊查询")
+    @ApiOperation(value = "获取职位列表", notes = "page为当前页码, limit为每页记录数量, name作为条件进行模糊查询")
     public Result getPositionList(Integer page, Integer limit, String name){
         return positionBiz.getAllPosition(page, limit, name);
     }
 
     @PostMapping("/position")
-    @ApiOperation(value = "新增职称", notes = "传入jobLevel对象")
+    @ApiOperation(value = "新增职位", notes = "传入Position对象")
     public Result addNewPosition(@RequestBody Position position){
         return positionBiz.addNewPosition(position);
     }
 
     @PutMapping("/position")
-    @ApiOperation(value = "修改职称信息", notes = "传入jobLevel对象")
+    @ApiOperation(value = "修改职位信息", notes = "传入Position对象")
     public Result updatePosition(@RequestBody Position position){
         return positionBiz.updatePosition(position);
     }
 
     @DeleteMapping("/position/{id}")
-    @ApiOperation(value = "修改职称信息", notes = "传入jobLevel对象")
+    @ApiOperation(value = "修改职位信息", notes = "通过id删除")
     public Result deletePosition(@PathVariable Integer id){
         return positionBiz.deletePosition(id);
     }
