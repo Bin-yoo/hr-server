@@ -30,9 +30,10 @@ public class RoleBiz {
     @Autowired
     MenuRoleMapper menuRoleMapper;
 
-    public Result roles(int page, int limit) {
+    public Result roles(Integer page, Integer limit, String name) {
         PageHelper.startPage(page, limit);
-        List<Role> roleList = roleMapper.selectAllRoles();
+        //List<Role> roleList = roleMapper.selectAllRoles();
+        List<Role> roleList = roleMapper.selectRolesByName(name);
 
         if (roleList != null){
             PageInfo pageInfo = new PageInfo(roleList);
@@ -52,6 +53,7 @@ public class RoleBiz {
             roleMapper.insertFun(role);
             return ResultFactory.buildSuccessResult("添加成功");
         } catch (Exception e){
+            e.printStackTrace();
             return ResultFactory.buildFailResult("添加失败");
         }
     }
@@ -62,6 +64,7 @@ public class RoleBiz {
             roleMapper.deleteRoleById(rid);
             return ResultFactory.buildSuccessResult("删除成功");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResultFactory.buildFailResult("删除失败");
         }
     }
@@ -71,6 +74,7 @@ public class RoleBiz {
             roleMapper.updateFun(role);
             return ResultFactory.buildSuccessResult("更新成功");
         } catch (Exception e){
+            e.printStackTrace();
             return ResultFactory.buildFailResult("更新失败");
         }
     }
