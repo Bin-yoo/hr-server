@@ -1,69 +1,59 @@
 <template>
     <div>
-        <Row><Col span="3"><h1>员工积分统计</h1></Col></Row>
-        <Row :style="{margin: '15px 0 0 0'}">
-            <Form :model="souformItem">
-                <Col span="2" :style="{margin: '0 10px 0 0'}">
-                    <FormItem>
-                        <Select v-model="souFormItem.departmentID" placeholder="部门">
-                            <Option value="0">财务部</Option>
-                            <Option value="1">人事部</Option>
-                            <Option value="2">技术部</Option>
-                        </Select>
-                    </FormItem>
-                </Col>
-                <Col span="2" :style="{margin: '0 10px 0 0'}">
-                    <FormItem>
-                        <Select v-model="souFormItem.posID" placeholder="职位">
-                            <Option value="0">财务经理</Option>
-                            <Option value="1">人事经理</Option>
-                            <Option value="2">出纳</Option>
-                        </Select>
-                    </FormItem>
-                </Col>
-                <Col span="2" :style="{margin: '0 10px 0 0'}">
-                    <FormItem>
-                        <Select v-model="souFormItem.jobLevelID" placeholder="职称">
-                            <Option value="0">高级工程师</Option>
-                            <Option value="1">高级教师</Option>
-                        </Select>
-                    </FormItem>
-                </Col>
-                <Col span="2">
-                    <FormItem>
-                        <DatePicker type="date" placeholder="选择开始日期" v-model="souFormItem.beforeDate"></DatePicker>
-                    </FormItem>
-                </Col>
-                <Col span="1"><p style="line-height: 35px">至</p></Col>
-                <Col span="2">
-                    <FormItem>
-                        <DatePicker type="date" placeholder="选择结束日期" v-model="souFormItem.afterDate"></DatePicker>
-                    </FormItem>
-                </Col>
-                <Col span="3">
-                    <FormItem>
-                        <Input v-model="souFormItem.input" suffix="ios-search" placeholder="请输入..." style="width: auto" />
-                    </FormItem>
-                </Col>
-                <Col span="1">
-                    <FormItem>
-                        <Button icon="ios-search">搜索</Button>
-                    </FormItem>
-                </Col>
-            </Form>
-            <Modal
-                v-model="showModal"
-                title="查看"
-                width=55%
-                @on-ok="ok"
-                @on-cancel="cancel">
-                
-                <Table border ref="selection" :columns="showColumns" :data="showData"></Table>
-                <br>
-                <Row :style="{textAlign: 'center'}">
-                    <Page :total="100" show-elevator />
-                </Row>
-            </Modal>
+        <Row>
+            <Col>
+                <Form :model="souformItem">
+                    <Row :gutter="6">
+                        <Col span="2" :style="{margin: '0 10px 0 0'}">
+                            <FormItem>
+                                <Select v-model="souFormItem.departmentID" placeholder="部门">
+                                    <Option value="0">财务部</Option>
+                                    <Option value="1">人事部</Option>
+                                    <Option value="2">技术部</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="2" :style="{margin: '0 10px 0 0'}">
+                            <FormItem>
+                                <Select v-model="souFormItem.posID" placeholder="职位">
+                                    <Option value="0">财务经理</Option>
+                                    <Option value="1">人事经理</Option>
+                                    <Option value="2">出纳</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="2" :style="{margin: '0 10px 0 0'}">
+                            <FormItem>
+                                <Select v-model="souFormItem.jobLevelID" placeholder="职称">
+                                    <Option value="0">高级工程师</Option>
+                                    <Option value="1">高级教师</Option>
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col span="2">
+                            <FormItem>
+                                <DatePicker type="date" placeholder="选择开始日期" v-model="souFormItem.beforeDate"></DatePicker>
+                            </FormItem>
+                        </Col>
+                        <Col span="1"><p style="line-height: 35px">至</p></Col>
+                        <Col span="2">
+                            <FormItem>
+                                <DatePicker type="date" placeholder="选择结束日期" v-model="souFormItem.afterDate"></DatePicker>
+                            </FormItem>
+                        </Col>
+                        <Col span="3">
+                            <FormItem>
+                                <Input v-model="souFormItem.input" suffix="ios-search" placeholder="请输入..." style="width: auto" />
+                            </FormItem>
+                        </Col>
+                        <Col span="1">
+                            <FormItem>
+                                <Button icon="ios-search">搜索</Button>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                </Form>
+            </Col>
         </Row>
         <Row>
             <Table border ref="selection" :columns="columns" :data="data1">
@@ -75,6 +65,19 @@
         <Row :style="{margin: '20px 0 0 0'}">
             <Page :total="100" show-elevator />
         </Row>
+        <Modal
+            v-model="showModal"
+            title="查看详情"
+            width=55%
+            @on-ok="ok"
+            @on-cancel="cancel">
+            
+            <Table border ref="selection" :columns="showColumns" :data="showData"></Table>
+            <br>
+            <Row :style="{textAlign: 'center'}">
+                <Page :total="100" show-elevator />
+            </Row>
+        </Modal>
     </div>
 </template>
 <script>
@@ -84,12 +87,13 @@
                 showModal: false,
                 souFormItem:{
                     name: '',       //名字
-                    gender:'',      //性别
-                    department:'',  //部门
-                    date:'',    //考核日期
-                    result:'',    //考核结果
-                    content:'',    //考核内容
-                    remark:'',    //备注
+                    gender: '',      //性别
+                    department: '',  //部门
+                    position: '',    //职位
+                    jobLevelID: '',    //职称
+                    beforeDate: '',    //开始日期
+                    afterDate: '',    //结束日期
+                    input: '',          //模糊查询
                 },
                 columns: [
                     {
