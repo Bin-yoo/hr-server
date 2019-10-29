@@ -1,7 +1,10 @@
 package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.Integral;
+import com.cn.ncvt.entity.Rp;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface IntegralMapper {
@@ -14,4 +17,8 @@ public interface IntegralMapper {
     int updateByIDSelective(Integral integral);
 
     int updateByID(Integral integral);
+
+    List<Integral> selectAllIntegerFile();
+
+    List<Rp> selectAlRpFile();
 }

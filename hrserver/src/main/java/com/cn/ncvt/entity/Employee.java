@@ -1,6 +1,7 @@
 package com.cn.ncvt.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.sql.Timestamp;
 
@@ -11,8 +12,8 @@ import java.sql.Timestamp;
  * @Auther: Bin
  * @Date: 2019/10/21 15:52
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 public class Employee {
-
     private int id;
     private Long workId;
     private String name;
@@ -31,6 +32,8 @@ public class Employee {
     private String address;
     private int departmentId;
     private String departmentName;
+    private int positionId;
+    private String positionName;
     private int jobLevelId;
     private String jobLevelName;
     private String titopDegree;
@@ -47,6 +50,22 @@ public class Employee {
     private Timestamp beginContract;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp endContract;
+
+    public int getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(int positionId) {
+        this.positionId = positionId;
+    }
+
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
 
     public int getId() {
         return id;

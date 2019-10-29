@@ -9,12 +9,21 @@
     <result column="reason" property="reason" jdbcType="VARCHAR" />
     <result column="point" property="point" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <association property="employee" javaType="Employee">
+      <result column="departmentName" property="departmentName"/>
+      <result column="positionName" property="positionName"/>
+      <result column="jobLevelName" property="jobLevelName"/>
+    </association>
   </resultMap>
   <sql id="Base_Column_List" >
     id, eid, date, type, reason, point, remark
   </sql>
+  <select id="selectAllRpByID" parameterType="Integer" resultMap="BaseResultMap" >
+    select r.*,e.name,e.workId,d.name as departmentName,p.name as positionName from rp r,employee e,department d,position p
+    where r.eid=#{eid} and r.eid=e.id and e.departmentId=d.id and e.positionId=p.id
+  </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from rp
     where id = #{id,jdbcType=INTEGER}
