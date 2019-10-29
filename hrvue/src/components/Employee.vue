@@ -62,7 +62,7 @@
         </Row>
         <Modal
             v-model="addModal"
-            title="添加员工"
+            title="添加员工档案"
             width=50%
             @on-ok="ok"
             @on-cancel="cancel">
@@ -248,7 +248,7 @@
         </Modal>
         <Modal
             v-model="updateModal"
-            title="编辑员工资料"
+            title="编辑员工档案"
             width=50%
             @on-ok="ok"
             @on-cancel="cancel">
@@ -434,7 +434,7 @@
         </Modal>
         <Modal
             v-model="showModal"
-            title="员工资料"
+            title="员工档案详情"
             @on-ok="ok"
             width=40%
             @on-cancel="cancel">
@@ -628,7 +628,8 @@ export default {
                 },
                 {
                     title: '姓名',
-                    key: 'name'
+                    key: 'name',
+                    width: 90
                 },
                 {
                     title: '工号',
@@ -643,8 +644,13 @@ export default {
                     key: 'position'
                 },
                 {
+                    title: '职称',
+                    key: 'jobLevelID'
+                },
+                {
                     title: '性别',
-                    key: 'gender'
+                    key: 'gender',
+                    width: 65
                 },
                 {
                     title: '出生日期',
@@ -675,6 +681,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -686,6 +693,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -697,6 +705,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -708,6 +717,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -719,28 +729,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },{
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -752,6 +741,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -763,6 +753,7 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
@@ -774,12 +765,38 @@ export default {
                     jobNum: 20191016001,
                     department: "人事部",
                     position: "人事部经理",
+                    jobLevelID: "无职称",
                     gender: "男",
                     date: "2019年10月16日",
                     nativePlace: "广西",
                     phone: "12345678910",
                     email: "12345678@qq.com",
                 },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    jobLevelID: "无职称",
+                    gender: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                {
+                    name: '宇哥',
+                    jobNum: 20191016001,
+                    department: "人事部",
+                    position: "人事部经理",
+                    jobLevelID: "无职称",
+                    gender: "男",
+                    date: "2019年10月16日",
+                    nativePlace: "广西",
+                    phone: "12345678910",
+                    email: "12345678@qq.com",
+                },
+                
             ],
             rewPunColumns: [
                 {
