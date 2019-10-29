@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cn.ncvt.mapper.JobLevelMapper" >
-  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.JobLevel" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, name
-  </sql>
-  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from job_level
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByID" parameterType="java.lang.Integer" >
+<mapper namespace="com.cn.ncvt.mapper.JobLevelMapper">
+    <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.JobLevel">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name
+    </sql>
+    <select id="selectJobLvlByCondition" resultType="JobLevel" parameterType="String">
+        SELECT * FROM job_level
+        <if test="name != null and name != '' ">
+            where name like '%${name}%'
+        </if>
+    </select>
+    <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from job_level
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByID" parameterType="java.lang.Integer">
     delete from job_level
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.cn.ncvt.entity.JobLevel" >
-    insert into job_level (id, name)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
+    <insert id="insert" parameterType="com.cn.ncvt.entity.JobLevel">
+    insert into job_level (id, name, createDate, remark)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.JobLevel" >
-    update job_level
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByID" parameterType="com.cn.ncvt.entity.JobLevel" >
-    update job_level
-    set name = #{name,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.JobLevel">
+        update job_level
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
