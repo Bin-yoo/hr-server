@@ -48,7 +48,7 @@ public class SystemBasicController {
     }
 
     @DeleteMapping("/jobLvl/{id}")
-    @ApiOperation(value = "修改职称信息", notes = "通过id删除")
+    @ApiOperation(value = "删除职称信息", notes = "通过id删除")
     public Result deleteJobLvl(@PathVariable Integer id){
         return jobLevelBiz.deleteJobLvl(id);
     }
@@ -72,7 +72,7 @@ public class SystemBasicController {
     }
 
     @DeleteMapping("/position/{id}")
-    @ApiOperation(value = "修改职位信息", notes = "通过id删除")
+    @ApiOperation(value = "删除职位信息", notes = "通过id删除")
     public Result deletePosition(@PathVariable Integer id){
         return positionBiz.deletePosition(id);
     }
