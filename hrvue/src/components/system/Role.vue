@@ -2,7 +2,7 @@
     <div>
         <Row>
             <Col span="4">
-                <Input v-model="keyword" placeholder="输入角色名进行查询" clearable @on-clear="getRoleList"/>
+                <Input v-model="keyword" placeholder="输入角色名进行查询" @on-change="check" clearable/>
             </Col>
             <Col span="2">
                 <Button type="primary" icon="ios-search" @click="getRoleList">查询</Button>
@@ -109,14 +109,8 @@
     </div>
 </template> 
 <script>
-    import MenuRole from './role/MenuRole.vue'
-    import UserRole from './role/UserRole.vue'
     import {isNotNullORBlank} from '../../utils/utils'
     export default{
-        components: {
-            'menu-role': MenuRole,
-            'user-role': UserRole,
-        },
         data(){
             return {
                 date: new Date(),
@@ -158,7 +152,7 @@
                 },
                 newRoleRules: {
                     name: [
-                        {required: true, message: '用户名不能为空', trigger: 'blur' }
+                        {required: true, message: '角色名不能为空', trigger: 'blur' }
                     ],
                     remark: [
                         { type: 'string', max: 50, message: '备注长度不能超过50个字符', trigger: 'change' }
@@ -186,6 +180,11 @@
             },
             pageChange(index){
                 this.page = index;
+            },
+            check(){
+                if(!isNotNullORBlank(this.keyword)){
+                    this.getRoleList();
+                }
             },
             getRoleList(){
                 this.loading = true;
@@ -227,7 +226,6 @@
                 this.openUpdate = true;
                 this.role.id = this.roles[index].id;
                 this.role.name = this.roles[index].name;
-                this.role.createDate = this.roles[index].createDate;
                 this.role.remark = this.roles[index].remark;
             },
             updateRole(){
