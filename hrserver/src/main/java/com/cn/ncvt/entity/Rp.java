@@ -18,6 +18,15 @@ public class Rp {
     private String reason;
     private int point;
     private String remark;
+    private Employee employee;
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     public int getId() {
         return id;

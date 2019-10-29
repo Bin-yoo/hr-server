@@ -12,7 +12,7 @@
       sex, nationId, birthday,
       politiclId, wedlock, nativePlace,
       idCard, email, phone,
-      address, departmentId, jobLevelId,
+      address, departmentId, jobLevelId,positionId,
       titopDegree, specialty, school,
       beginDate, workState, conversionTime,
       quitTime, beginContract, endContract
@@ -21,7 +21,7 @@
       #{sex,jdbcType=VARCHAR}, #{nationId,jdbcType=INTEGER}, #{birthday,jdbcType=DATE},
       #{politiclId,jdbcType=INTEGER}, #{wedlock,jdbcType=CHAR}, #{nativePlace,jdbcType=VARCHAR},
       #{idCard,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-      #{address,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{jobLevelId,jdbcType=INTEGER},
+      #{address,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{jobLevelId,jdbcType=INTEGER},#{positionId,jdbcType=INTEGER},
       #{titopDegree,jdbcType=CHAR}, #{specialty,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},
       #{beginDate,jdbcType=DATE}, #{workState,jdbcType=CHAR}, #{conversionTime,jdbcType=DATE},
       #{quitTime,jdbcType=DATE}, #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE}
@@ -71,6 +71,9 @@
       </if>
       <if test="jobLevelId != null">
         jobLevelId = #{jobLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="positionId != null">
+        positionId = #{positionId,jdbcType=INTEGER},
       </if>
       <if test="titopDegree != null">
         titopDegree = #{titopDegree,jdbcType=CHAR},
