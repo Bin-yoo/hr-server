@@ -25,7 +25,7 @@
                 name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="remark != null and remark != ''">
-                name = #{remark,jdbcType=VARCHAR},
+                remark = #{remark,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
