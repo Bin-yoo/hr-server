@@ -24,7 +24,6 @@ public class IntegralController {
 
     @GetMapping("/allIntegral")
     @ApiOperation(value = "查看所有员工的积分", notes = "")
-
     public Result allIntegralFile(int page, int limit){
         return integralBiz.getAllIntegralFile(page, limit);
     }
