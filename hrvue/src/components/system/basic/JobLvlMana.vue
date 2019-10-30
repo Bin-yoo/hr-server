@@ -2,22 +2,22 @@
     <div>
         <Row>
             <Col span="4">
-                <Input v-model="keyword" placeholder="输入职位名进行查询" @on-change="check" clearable/>
+                <Input v-model="keyword" placeholder="输入职称名进行查询" @on-change="check" clearable/>
             </Col>
             <Col span="2">
-                <Button type="primary" icon="ios-search" @click="getPositionList">查询</Button>
+                <Button type="primary" icon="ios-search" @click="getjoblvlList">查询</Button>
             </Col>
             <Col span="2" offset="16">
-                <Button type="primary" icon="ios-add" @click="openAddNew=true">添加新职位</Button>
+                <Button type="primary" icon="ios-add" @click="openAddNew=true">添加新职称</Button>
             </Col>
         </Row>
         <br>
         <Row>
             <Col span="24">
-                <Table  border  :columns="columns1" :data="positionList" :loading="loading">
+                <Table  border  :columns="columns1" :data="joblvls" :loading="loading">
                     <template slot-scope="{ row, index }" slot="action">
                             <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑</Button>
-                            <Button type="error" style="margin-right: 5px" @click="deletePosition(row.id)">删除</Button>
+                            <Button type="error" style="margin-right: 5px" @click="deleteJobLvl(row.id)">删除</Button>
                     </template>
                 </Table>
             </Col>
@@ -30,22 +30,22 @@
         </Row>
         <Modal
             v-model="openAddNew"
-            title="添加新职位">
+            title="添加新职称">
             <Row>
                 <Col span="21">
-                    <Form :model="newPosition" :rules="newPositionRules" :label-width="80" ref="newPosition">
-                        <FormItem label="职位名称" prop="name">
-                            <Input v-model="newPosition.name" placeholder="请输入职位名称"></Input>
+                    <Form :model="newJobLvl" :rules="newJobLvlRules" :label-width="80" ref="newJobLvl">
+                        <FormItem label="职称名称" prop="name">
+                            <Input v-model="newJobLvl.name" placeholder="请输入职称名称"></Input>
                         </FormItem>
                         <FormItem label="备注" prop="remark">
-                            <Input v-model="newPosition.remark" type="textarea" placeholder="备注"></Input>
+                            <Input v-model="newJobLvl.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
                     </Form>
                 </Col>
             </Row>
             <div slot="footer">
                 <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="addNewPosition">保存</Button>
+                <Button type="primary" @click="addNewJobLvl">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -58,19 +58,19 @@
             @on-visible-change='updateCancel'>
             <Row>
                 <Col span="21">
-                    <Form :model="position" :rules="newPositionRules" :label-width="80" ref="position">
+                    <Form :model="joblvl" :rules="newJobLvlRules" :label-width="80" ref="joblvl">
                         <FormItem label="角色名" prop="name">
-                            <Input v-model="position.name" placeholder="请输入角色名"></Input>
+                            <Input v-model="joblvl.name" placeholder="请输入角色名"></Input>
                         </FormItem>
                         <FormItem label="备注" prop="remark">
-                            <Input v-model="position.remark" type="textarea" placeholder="备注"></Input>
+                            <Input v-model="joblvl.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
                     </Form>
                 </Col>
             </Row>
             <div slot="footer">
                 <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="updatePosition">保存</Button>
+                <Button type="primary" @click="updateJobLvl">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -87,7 +87,7 @@
                 date: new Date(),
                 columns1: [
                     {
-                        title: '职位名称',
+                        title: '职称名称',
                         key: 'name'
                     },
                     {
@@ -105,7 +105,7 @@
                         align: 'center'
                     }
                 ],
-                positionList: [],
+                joblvls: [],
                 keyword: '',
                 page:1,
                 total: 100,
@@ -114,19 +114,19 @@
                 spinShow: false,
                 openAddNew : false,
                 openUpdate: false,
-                newPosition: {
+                newJobLvl: {
                     name: '',
                     remark: ''
                 },
-                newPositionRules: {
+                newJobLvlRules: {
                     name: [
-                        {required: true, message: '职位名称不能为空', trigger: 'blur' }
+                        {required: true, message: '职称名称不能为空', trigger: 'blur' }
                     ],
                     remark: [
                         { type: 'string', max: 50, message: '备注长度不能超过50个字符', trigger: 'change' }
                     ]
                 },
-                position: {
+                joblvl: {
                     id: 0,
                     name: '',
                     remark: ''
@@ -134,11 +134,11 @@
             }
         },
         mounted: function () {
-            this.getPositionList();
+            this.getjoblvlList();
         },
         watch: {
-            page: "getPositionList",
-            limit: "getPositionList",
+            page: "getjoblvlList",
+            limit: "getjoblvlList",
         },
         methods: {
             onPageSizeChange(index){
@@ -149,33 +149,33 @@
             },
             check(){
                 if(!isNotNullORBlank(this.keyword)){
-                    this.getPositionList();
+                    this.getjoblvlList();
                 }
             },
-            getPositionList(){
+            getjoblvlList(){
                 this.loading = true;
-                this.getRequest("/system/basic/positionList",{
+                this.getRequest("/system/basic/jobLvlList",{
                     page: this.page,
                     limit: this.limit,
                     name: this.keyword,
                 }).then(resp=> {
                     this.loading = false;
-                    this.positionList = resp.data.data.list;
+                    this.joblvls = resp.data.data.list;
                     this.total = resp.data.data.total;
                 })
             },
-            addNewPosition(){
+            addNewJobLvl(){
                 var check = /\s/;
-                if(!check.test(this.newPosition.name) && isNotNullORBlank(this.newPosition.name)){
+                if(!check.test(this.newJobLvl.name) && isNotNullORBlank(this.newJobLvl.name)){
                     this.spinShow = true;
-                    this.postRequest("/system/basic/position", {
-                        name: this.newPosition.name,
-                        remark: this.newPosition.remark
+                    this.postRequest("/system/basic/jobLvl", {
+                        name: this.newJobLvl.name,
+                        remark: this.newJobLvl.remark
                     }).then(resp=> {
                         if (resp.data.error == false && resp.data.code == 200) {
-                            this.getPositionList();
-                            this.newPosition.name = '';
-                            this.newPosition.remark = '';
+                            this.getjoblvlList();
+                            this.newJobLvl.name = '';
+                            this.newJobLvl.remark = '';
                             this.$Message.success(resp.data.data);
                             this.spinShow = false;
                             this.openAddNew = false;
@@ -185,30 +185,30 @@
                         }
                     })
                 } else {
-                    this.$Message.error("职位名称不能为空");
+                    this.$Message.error("职称名称不能为空");
                 }
             },
             beforeUpdate(index){
                 this.openUpdate = true;
-                this.position.id = this.positionList[index].id;
-                this.position.name = this.positionList[index].name;
-                this.position.createDate = this.positionList[index].createDate;
-                this.position.remark = this.positionList[index].remark;
+                this.joblvl.id = this.joblvls[index].id;
+                this.joblvl.name = this.joblvls[index].name;
+                this.joblvl.createDate = this.joblvls[index].createDate;
+                this.joblvl.remark = this.joblvls[index].remark;
             },
-            updatePosition(){
+            updateJobLvl(){
                 var check = /\s/;
-                if(!check.test(this.position.name) && isNotNullORBlank(this.position.name)){
+                if(!check.test(this.joblvl.name) && isNotNullORBlank(this.joblvl.name)){
                     this.spinShow = true;
-                    this.putRequest("/system/basic/position", {
-                        id: this.position.id,
-                        name: this.position.name,
-                        remark: this.position.remark
+                    this.putRequest("/system/basic/jobLvl", {
+                        id: this.joblvl.id,
+                        name: this.joblvl.name,
+                        remark: this.joblvl.remark
                     }).then(resp=> {
                         if (resp.data.error == false && resp.data.code == 200) {
-                            this.getPositionList();
-                            this.position.id = 0;
-                            this.position.name = '';
-                            this.position.remark = '';
+                            this.getjoblvlList();
+                            this.joblvl.id = 0;
+                            this.joblvl.name = '';
+                            this.joblvl.remark = '';
                             this.$Message.success(resp.data.data);
                             this.spinShow = false;
                             this.openUpdate = false;
@@ -218,31 +218,31 @@
                         }
                     })
                 } else {
-                    this.$Message.error("职位名称不能为空");
+                    this.$Message.error("职称名称不能为空");
                 }
             },
             cancel(){
                 this.openAddNew = false;
                 this.openUpdate = false;
-                this.newPosition.name = '';
-                this.newPosition.remark = '';
+                this.newJobLvl.name = '';
+                this.newJobLvl.remark = '';
             },
             updateCancel(flag){
                 if(flag == false){
-                    this.position.name = '';
-                    this.position.remark = '';
+                    this.joblvl.name = '';
+                    this.joblvl.remark = '';
                 }
             },
-            deletePosition(id){
+            deleteJobLvl(id){
                 this.$Modal.confirm({
                     title: '你正在进行删除操作',
-                    content: '<p>删除后相关账号的职位将更改为"普通员工"</p><p>你确定要删除该职位吗?</p>',
+                    content: '<p>删除后相关账号的职称将更改为"普通员工"</p><p>你确定要删除该职称吗?</p>',
                     onOk: () => {
                         var _this = this;
-                        this.deleteRequest("/system/basic/position/" + id).then(resp=> {
+                        this.deleteRequest("/system/basic/jobLvl/" + id).then(resp=> {
                             this.$Message.success(resp.data.data);
                             this.spinShow = false;
-                            _this.getPositionList();
+                            _this.getjoblvlList();
                         })
                     },
                 });
