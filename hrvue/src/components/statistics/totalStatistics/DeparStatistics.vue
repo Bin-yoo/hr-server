@@ -2,11 +2,11 @@
     <div>
         <Row>
             <Col>
-                <Form :model="formItem" :label-width="40">
-                    <Row>
-                        <Col span="3">
-                            <FormItem label="部门">
-                                <Select v-model="formItem.departmentID">
+                <Form :model="formItem">
+                    <Row :gutter="6">
+                        <Col span="2">
+                            <FormItem>
+                                <Select v-model="formItem.departmentID" placeholder="选择部门">
                                     <Option value="0">所有部门</Option>
                                     <Option value="1">财务部</Option>
                                     <Option value="2">技术部</Option>
@@ -14,7 +14,18 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                        <Col span="1" :style="{margin: '0 0 0 -2%'}">
+                        <Col span="2">
+                            <FormItem>
+                                <DatePicker type="date" placeholder="选择开始日期" v-model="formItem.beforeDate"></DatePicker>
+                            </FormItem>
+                        </Col>
+                        <Col span="1"><p style="line-height: 35px">至</p></Col>
+                        <Col span="2">
+                            <FormItem>
+                                <DatePicker type="date" placeholder="选择结束日期" v-model="formItem.afterDate"></DatePicker>
+                            </FormItem>
+                        </Col>
+                        <Col span="1">
                             <FormItem>
                                 <Button icon="ios-search">查看</Button>
                             </FormItem>
@@ -86,6 +97,8 @@
                 rpPie: null,                //奖惩统计
                 formItem: {
                     departmentID: '',
+                    beforeDate: '',
+                    afterDate: '',
                 }
             }
         },
