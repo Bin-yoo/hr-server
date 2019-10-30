@@ -4,7 +4,7 @@
             <Col>
                 <Form :model="souformItem">
                     <Row :gutter="6">
-                        <Col span="2" :style="{margin: '0 10px 0 0'}">
+                        <Col span="2">
                             <FormItem>
                                 <Select v-model="souFormItem.departmentID" placeholder="部门">
                                     <Option value="0">财务部</Option>
@@ -13,7 +13,7 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                        <Col span="2" :style="{margin: '0 10px 0 0'}">
+                        <Col span="2">
                             <FormItem>
                                 <Select v-model="souFormItem.posID" placeholder="职位">
                                     <Option value="0">财务经理</Option>
@@ -22,7 +22,7 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                        <Col span="2" :style="{margin: '0 10px 0 0'}">
+                        <Col span="2">
                             <FormItem>
                                 <Select v-model="souFormItem.jobLevelID" placeholder="职称">
                                     <Option value="0">高级工程师</Option>
