@@ -9,6 +9,18 @@
             from employee e,department d,position p,nation n,political_status ps,job_level j
             where e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id
             and e.nationId=n.id
+          <if test="name != null and name != '' " >
+            and e.name like '%${name}%'
+          </if>
+          <if test="departmentId != null and departmentId != '' " >
+            and e.departmentId=#{departmentId}
+          </if>
+          <if test="positionId != null and positionId != '' " >
+            and e.positionId=#{positionId}
+          </if>
+          <if test="jobLevelId != null and jobLevelId != '' " >
+            and e.jobLevelId=#{jobLevelId}
+          </if>
 	    </select>
 		<insert id="insertFun" parameterType="employee">
 	  insert into employee (workId, name,
