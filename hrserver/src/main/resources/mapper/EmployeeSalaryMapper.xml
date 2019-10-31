@@ -4,12 +4,22 @@
   <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeSalary" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="eid" property="eid" jdbcType="INTEGER" />
-    <result column="baseSalary" property="basesalary" jdbcType="REAL" />
-    <result column="meritSalary" property="meritsalary" jdbcType="REAL" />
+    <result column="baseSalary" property="baseSalary" jdbcType="FLOAT" />
+    <result column="meritSalary" property="meritSalary" jdbcType="FLOAT" />
+    <association property="employee" javaType="Employee">
+      <id column="workId" property="workId"/>
+      <result column="departmentName" property="departmentName"/>
+      <result column="positionName" property="positionName"/>
+    </association>
   </resultMap>
   <sql id="Base_Column_List" >
     id, eid, baseSalary, meritSalary
   </sql>
+  <select id="selectAllEmployeeSalary" parameterType="string" resultMap="BaseResultMap" >
+    SELECT es.*,e.name,e.workId,d.name departmentName,p.name positionName
+    from employee_salary es,employee e,department d,position p
+    where es.eid=e.id and e.departmentId=d.id and e.positionId=p.id
+  </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

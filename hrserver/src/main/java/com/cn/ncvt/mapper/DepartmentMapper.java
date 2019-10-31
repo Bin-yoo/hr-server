@@ -16,4 +16,6 @@ public interface DepartmentMapper {
     int updateByIDSelective(Department department);
 
     List<Department> selectByPID(int pid);
+
+    List<Department> selectAllDepartment();
 }

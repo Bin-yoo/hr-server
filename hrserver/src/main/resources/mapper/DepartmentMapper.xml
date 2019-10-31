@@ -31,9 +31,8 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByID" parameterType="java.lang.Integer">
-    delete from department
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+      delete from department where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" parameterType="com.cn.ncvt.entity.Department">
     insert into department (id, name, parentId,
       depPath)

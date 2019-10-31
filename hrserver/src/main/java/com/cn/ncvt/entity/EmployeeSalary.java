@@ -11,8 +11,9 @@ public class EmployeeSalary {
 
     private int id;
     private int eid;
-    private double baseSalary;
-    private double meritSalary;
+    private Float baseSalary;
+    private Float meritSalary;
+    private Employee employee;
 
     public int getId() {
         return id;
@@ -30,19 +31,27 @@ public class EmployeeSalary {
         this.eid = eid;
     }
 
-    public double getBaseSalary() {
+    public Float getBaseSalary() {
         return baseSalary;
     }
 
-    public void setBaseSalary(double baseSalary) {
+    public void setBaseSalary(Float baseSalary) {
         this.baseSalary = baseSalary;
     }
 
-    public double getMeritSalary() {
+    public Float getMeritSalary() {
         return meritSalary;
     }
 
-    public void setMeritSalary(double meritSalary) {
+    public void setMeritSalary(Float meritSalary) {
         this.meritSalary = meritSalary;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

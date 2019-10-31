@@ -31,8 +31,8 @@ public class EmployeeController {
      */
     @GetMapping("/allEmp")
     @ApiOperation(value = "获取全部员工档案", notes = "page为当前页,limit为记录每页数量")
-    public Result allEmployeeFile(int page, int limit){
-        return employeeBiz.getAllEmployeeFile(page, limit);
+    public Result allEmployeeFile(int page, int limit,int departmentId,int positionId, int jobLevelId,String name){
+        return employeeBiz.getAllEmployeeFile(page, limit,departmentId,positionId,jobLevelId,name);
     }
 
     /**
@@ -67,4 +67,17 @@ public class EmployeeController {
     public Result deleteByIdEmployeeFile(@PathVariable Integer id){
         return employeeBiz.deleteByIdEmployeeFile(id);
     }
+
+    @GetMapping("/checkEmp/{id}")
+    @ApiOperation(value = "查看某个员工的资料", notes = "")
+    public Result selectByIdEmployeeFile(@PathVariable Integer id){
+        return employeeBiz.selectByIdEmployeeFile(id);
+    }
+
+    @GetMapping("/init")
+    @ApiOperation(value = "初始化各种下拉菜单", notes = "")
+    public Result beforeAddEmployeeFile(){
+        return employeeBiz.getAllDownMenu();
+    }
+
 }
