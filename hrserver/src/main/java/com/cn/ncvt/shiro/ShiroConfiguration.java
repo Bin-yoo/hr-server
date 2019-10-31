@@ -76,12 +76,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/webjars/**", "anon");    //swagger静态资源所需路径
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");    //swagger静态资源所需路径
         filterChainDefinitionMap.put("/v2/**", "anon");    //swagger静态资源所需路径
-<<<<<<< HEAD
-//        filterChainDefinitionMap.put("/**", "url");
-
-=======
         //filterChainDefinitionMap.put("/**", "url");
->>>>>>> 79abafa2011b68217752968ecf5a697b38f870fb
         shiroFilterFactoryBean.setFilters(customisedFilter);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

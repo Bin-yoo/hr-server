@@ -67,4 +67,12 @@ public class EmployeeController {
     public Result deleteByIdEmployeeFile(@PathVariable Integer id){
         return employeeBiz.deleteByIdEmployeeFile(id);
     }
+
+    @GetMapping("/checkEmp/{id}")
+    @ApiOperation(value = "查看某个员工的资料", notes = "")
+    public Result selectByIdEmployeeFile(@PathVariable Integer id){
+        return employeeBiz.selectByIdEmployeeFile(id);
+    }
+
+
 }

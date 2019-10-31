@@ -18,4 +18,6 @@ public interface RpMapper {
     int updateByID(Rp rp);
 
     List<Rp> selectAllRpByID(Integer eid);
+
+    List<Rp> selectAllRp();
 }
