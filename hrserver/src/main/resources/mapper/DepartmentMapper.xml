@@ -14,8 +14,9 @@
         <id property="id" column="id"/>
         <result column="name" property="name"/>
         <result column="parentId" property="parentId"/>
-        <result column="isParent" property="isParent"/>
-        <collection property="children" ofType="org.sang.bean.Department" select="selectByPID" column="id">
+        <result column="name" property="title"/>
+        <result column="name" property="label"/>
+        <collection property="children" ofType="com.cn.ncvt.entity.Department" select="selectByPID" column="id">
         </collection>
     </resultMap>
     <select id="selectByPID" resultMap="DepTreeResultMap" parameterType="java.lang.Integer">

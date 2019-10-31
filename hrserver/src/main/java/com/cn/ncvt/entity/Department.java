@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,8 @@ import java.util.List;
  * @Auther: Bin
  * @Date: 2019/10/21 15:50
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
+
 public class Department {
 
     private int id;
@@ -16,6 +20,10 @@ public class Department {
     private int parentId;
     private String depPath;
     private List<Department> children;
+
+    private String title;
+    private String label;
+    private boolean expand = true;
 
     public int getId() {
         return id;
@@ -55,5 +63,29 @@ public class Department {
 
     public void setChildren(List<Department> children) {
         this.children = children;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public boolean isExpand() {
+        return expand;
+    }
+
+    public void setExpand(boolean expand) {
+        this.expand = expand;
     }
 }
