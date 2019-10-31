@@ -18,4 +18,5 @@ public interface PositionMapper {
 
     List<Position> selectPositionByCondition(@Param("name") String name);
 
+    List<Position> selectAllPosition();
 }

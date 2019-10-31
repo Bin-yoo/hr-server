@@ -8,6 +8,9 @@
   <sql id="Base_Column_List" >
     id, name
   </sql>
+  <select id="selectAllPosition"  parameterType="string" resultType="Position">
+			select * from position
+  </select>
   <select id="selectPositionByCondition" resultType="JobLevel" parameterType="String">
     SELECT * FROM position
     <if test="name != null and name != '' ">

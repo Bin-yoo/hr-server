@@ -10,6 +10,9 @@
   <sql id="Base_Column_List" >
     id, name, parentId, depPath
   </sql>
+  <select id="selectAllDepartment"  parameterType="string" resultType="Position">
+			select * from position
+  </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="Base_Column_List" />

@@ -17,4 +17,6 @@ public interface JobLevelMapper {
     int updateByIDSelective(JobLevel jobLevel);
 
     List<JobLevel> selectJobLvlByCondition(@Param("name") String name);
+
+    List<JobLevel> selectAllJobLevel();
 }
