@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import java.util.List;
+
 /**
  * @version : V1.0
  * @ClassName: Department
@@ -13,6 +15,7 @@ public class Department {
     private String name;
     private int parentId;
     private String depPath;
+    private List<Department> children;
 
     public int getId() {
         return id;
@@ -44,5 +47,13 @@ public class Department {
 
     public void setDepPath(String depPath) {
         this.depPath = depPath;
+    }
+
+    public List<Department> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Department> children) {
+        this.children = children;
     }
 }

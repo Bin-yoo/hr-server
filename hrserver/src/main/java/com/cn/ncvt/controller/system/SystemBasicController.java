@@ -1,7 +1,9 @@
 package com.cn.ncvt.controller.system;
 
+import com.cn.ncvt.biz.DepartmentBiz;
 import com.cn.ncvt.biz.JobLevelBiz;
 import com.cn.ncvt.biz.PositionBiz;
+import com.cn.ncvt.entity.Department;
 import com.cn.ncvt.entity.JobLevel;
 import com.cn.ncvt.entity.Position;
 import com.cn.ncvt.result.Result;
@@ -28,6 +30,9 @@ public class SystemBasicController {
 
     @Autowired
     PositionBiz positionBiz;
+
+    @Autowired
+    DepartmentBiz departmentBiz;
 
     @GetMapping("/jobLvlList")
     @ApiOperation(value = "获取职称列表", notes = "page为当前页码, limit为每页记录数量, name作为条件进行模糊查询")
@@ -77,4 +82,27 @@ public class SystemBasicController {
         return positionBiz.deletePosition(id);
     }
 
+    @GetMapping("/department/list")
+    @ApiOperation(value = "部门列表", notes = "获取部门列表")
+    public Result getDepList(){
+        return departmentBiz.getDepTree();
+    }
+
+    @PostMapping("/department")
+    @ApiOperation(value = "添加部门", notes = "传入部门对象,parentId为主要值")
+    public Result addDepartment(@RequestBody Department department){
+        return departmentBiz.addDepartment(department);
+    }
+
+    @PutMapping("/department")
+    @ApiOperation(value = "修改部门信息", notes = "传入部门对象,parentId为主要值")
+    public Result updateDepartment(@RequestBody Department department){
+        return departmentBiz.updateDepartment(department);
+    }
+
+    @DeleteMapping("/department/{id}")
+    @ApiOperation(value = "删除部门信息", notes = "传入部门ID")
+    public Result deleteDepartment(@PathVariable Integer id){
+        return departmentBiz.deleteDepartment(id);
+    }
 }
