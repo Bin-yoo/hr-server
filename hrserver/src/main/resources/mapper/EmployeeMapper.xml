@@ -5,14 +5,29 @@
 
 	<mapper namespace="com.cn.ncvt.mapper.EmployeeMapper">
 	    <select id="selectAllEmployee"  parameterType="string" resultType="Employee">
-			select * from employee
+			select e.*,d.name as departmentName,p.name as positionName,n.name as nationName,ps.name as politiclName,j.name as jobLevelName
+            from employee e,department d,position p,nation n,political_status ps,job_level j
+            where e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id
+            and e.nationId=n.id
+          <if test="name != null and name != '' " >
+            and e.name like '%${name}%'
+          </if>
+          <if test="departmentId != null and departmentId != '' " >
+            and e.departmentId=#{departmentId}
+          </if>
+          <if test="positionId != null and positionId != '' " >
+            and e.positionId=#{positionId}
+          </if>
+          <if test="jobLevelId != null and jobLevelId != '' " >
+            and e.jobLevelId=#{jobLevelId}
+          </if>
 	    </select>
 		<insert id="insertFun" parameterType="employee">
 	  insert into employee (workId, name,
       sex, nationId, birthday,
       politiclId, wedlock, nativePlace,
       idCard, email, phone,
-      address, departmentId, jobLevelId,
+      address, departmentId, jobLevelId,positionId,
       titopDegree, specialty, school,
       beginDate, workState, conversionTime,
       quitTime, beginContract, endContract
@@ -21,7 +36,7 @@
       #{sex,jdbcType=VARCHAR}, #{nationId,jdbcType=INTEGER}, #{birthday,jdbcType=DATE},
       #{politiclId,jdbcType=INTEGER}, #{wedlock,jdbcType=CHAR}, #{nativePlace,jdbcType=VARCHAR},
       #{idCard,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-      #{address,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{jobLevelId,jdbcType=INTEGER},
+      #{address,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{jobLevelId,jdbcType=INTEGER},#{positionId,jdbcType=INTEGER},
       #{titopDegree,jdbcType=CHAR}, #{specialty,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},
       #{beginDate,jdbcType=DATE}, #{workState,jdbcType=CHAR}, #{conversionTime,jdbcType=DATE},
       #{quitTime,jdbcType=DATE}, #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE}
@@ -72,6 +87,9 @@
       <if test="jobLevelId != null">
         jobLevelId = #{jobLevelId,jdbcType=INTEGER},
       </if>
+      <if test="positionId != null">
+        positionId = #{positionId,jdbcType=INTEGER},
+      </if>
       <if test="titopDegree != null">
         titopDegree = #{titopDegree,jdbcType=CHAR},
       </if>
@@ -106,6 +124,10 @@
     delete from employee
     where id = #{id,jdbcType=INTEGER}
   </delete>
-
+  <select id="selectByIdFun" parameterType="Integer" resultType="Employee">
+      select e.*,d.name as departmentName,p.name as positionName,n.name as nationName,ps.name as politiclName,j.name as jobLevelName
+      from employee e,department d,position p,nation n,political_status ps,job_level j
+      where e.id=#{id} and e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id and e.nationId=n.id
+  </select>
 	</mapper>
 

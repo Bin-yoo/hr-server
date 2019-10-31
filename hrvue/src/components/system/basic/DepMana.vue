@@ -2,20 +2,20 @@
   
 </template>
 <script>
-  export default {
-    data() {
-      return {
+    export default {
+        data() {
+            return {
+                
+            }
+        },
+        mounted: function () {
         
-      }
-    },
-    mounted: function () {
-      
-    },
-    watch: {
-      
-    },
-    methods: {
+        },
+        watch: {
         
-    }
-  };
+        },
+        methods: {
+            
+        }
+    };
 </script>

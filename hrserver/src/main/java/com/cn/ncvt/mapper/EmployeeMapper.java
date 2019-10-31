@@ -14,11 +14,14 @@ import java.util.List;
  **/
 @Mapper
 public interface EmployeeMapper {
-    List<Employee> selectAllEmployee();
-
+    
     void insertFun(Employee employee);
 
     void updateFun(Employee employee);
 
     void deleteByIdFun(Integer id);
+
+    List<Employee> selectByIdFun(Integer id);
+
+    List<Employee> selectAllEmployee(int departmentId, int positionId, int jobLevelId, String name);
 }

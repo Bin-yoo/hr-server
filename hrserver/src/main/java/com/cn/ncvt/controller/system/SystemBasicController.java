@@ -101,7 +101,7 @@ public class SystemBasicController {
     }
 
     @DeleteMapping("/department/{id}")
-    @ApiOperation(value = "删除部门信息", notes = "传入部门ID")
+    @ApiOperation(value = "删除部门", notes = "传入部门ID")
     public Result deleteDepartment(@PathVariable Integer id){
         return departmentBiz.deleteDepartment(id);
     }
