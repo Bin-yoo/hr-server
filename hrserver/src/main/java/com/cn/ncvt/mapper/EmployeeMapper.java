@@ -21,4 +21,6 @@ public interface EmployeeMapper {
     void updateFun(Employee employee);
 
     void deleteByIdFun(Integer id);
+
+    List<Employee> selectByIdFun(Integer id);
 }

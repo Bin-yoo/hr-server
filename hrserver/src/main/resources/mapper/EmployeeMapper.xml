@@ -5,7 +5,10 @@
 
 	<mapper namespace="com.cn.ncvt.mapper.EmployeeMapper">
 	    <select id="selectAllEmployee"  parameterType="string" resultType="Employee">
-			select * from employee
+			select e.*,d.name as departmentName,p.name as positionName,n.name as nationName,ps.name as politiclName,j.name as jobLevelName
+            from employee e,department d,position p,nation n,political_status ps,job_level j
+            where e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id
+            and e.nationId=n.id
 	    </select>
 		<insert id="insertFun" parameterType="employee">
 	  insert into employee (workId, name,
@@ -109,6 +112,10 @@
     delete from employee
     where id = #{id,jdbcType=INTEGER}
   </delete>
-
+  <select id="selectByIdFun" parameterType="Integer" resultType="Employee">
+      select e.*,d.name as departmentName,p.name as positionName,n.name as nationName,ps.name as politiclName,j.name as jobLevelName
+      from employee e,department d,position p,nation n,political_status ps,job_level j
+      where e.id=#{id} and e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id and e.nationId=n.id
+  </select>
 	</mapper>
 

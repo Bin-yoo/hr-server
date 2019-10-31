@@ -1,7 +1,10 @@
 package com.cn.ncvt.mapper;
 
+import com.cn.ncvt.entity.Employee;
 import com.cn.ncvt.entity.EmployeeSalary;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface EmployeeSalaryMapper {
@@ -14,4 +17,6 @@ public interface EmployeeSalaryMapper {
     int updateByIDSelective(EmployeeSalary employeeSalary);
 
     int updateByID(EmployeeSalary employeeSalary);
+
+    List<EmployeeSalary> selectAllEmployeeSalary();
 }

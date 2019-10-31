@@ -80,4 +80,16 @@ public class EmployeeBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public Result selectByIdEmployeeFile(Integer id) {
+        List<Employee> fileList =employeeMapper.selectByIdFun(id);
+        if (fileList != null){
+            //包装map返回前端
+            Map map = new HashMap();
+            map.put("list", fileList);
+            return ResultFactory.buildSuccessResult(map);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
 }
