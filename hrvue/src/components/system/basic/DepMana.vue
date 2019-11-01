@@ -11,12 +11,17 @@
         <br>
         <Row>
             <Col span="8" style="textAlign:left">
-                <Tree :data="data5" :render="renderContent"></Tree>
+                <Tree :data="depTree" :render="renderContent"></Tree>
+                <Spin fix v-if="spinShow">
+                    <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                    <div>Loading</div>
+                </Spin>
             </Col>
         </Row>
         <Modal
             v-model="openAdd"
-            title="新增部门">
+            title="新增部门"
+            @on-visible-change='cancel'>
             <Row>
                 <Col span="21">
                     <Form :model="department" :rules="newDepRules" :label-width="80" ref="department">
@@ -24,15 +29,15 @@
                             <Input v-model="department.name" placeholder="请输入角色名"></Input>
                         </FormItem>
                         <FormItem label="上级部门" prop="parent">
-                            <treeselect v-model="department.parentId" :options="options" />
+                            <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1"/>
                         </FormItem>
                     </Form>
                 </Col>
             </Row>
-            <!-- <div slot="footer">
-                <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="updateJobLvl">保存</Button>
-            </div> -->
+            <div slot="footer">
+                <Button @click="openAdd=false">取消</Button>
+                <Button type="primary" @click="addDep">保存</Button>
+            </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
                 <div>Loading</div>
@@ -44,17 +49,12 @@
     //导入树形选择器组件
     import Treeselect from '@riophae/vue-treeselect'
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+    import {isNotNullORBlank} from '../../../utils/utils'
     export default {
         components: { Treeselect },
         data() {
             return {
-                data5: [
-                    {
-                        title: '铁憨憨',
-                        expand: true,
-                        children: []
-                    }
-                ],
+                depTree: [],
                 buttonProps: {
                     type: 'primary',
                     size: 'small',
@@ -70,34 +70,22 @@
                         {required: true, message: '职称名称不能为空', trigger: 'blur' }
                     ],
                 },
-                options: [ {
-                    id: '1',
-                    label: 'a',
-                    children: [ {
-                        id: '11',
-                        label: 'aa',
-                    },
-                    {
-                        id: '12',
-                        label: 'ab',
-                    } ],
-                    }, {
-                        id: '2',
-                        label: 'b',
-                    }, {
-                        id: '3',
-                        label: 'c',
-                    }
-                ],
             }
         },
         mounted: function () {
-        
+            this.getDeps();
         },
         watch: {
         
         },
         methods: {
+            getDeps(){
+                this.spinShow = true;
+                this.getRequest("/system/basic/department/list").then(resp=> {
+                    this.spinShow = false;
+                    this.depTree = resp.data.data;
+                })
+            },
             renderContent (h, { root, node, data }) {
                 return h('span', {
                     style: {
@@ -105,24 +93,15 @@
                         width: '100%'
                     }
                 }, [
-                    h('span', [
-                        h('Icon', {
-                            props: {
-                                type: 'ios-paper-outline'
-                            },
-                            style: {
-                                marginRight: '8px'
-                            }
-                        }),
-                        h('span', data.title)
-                    ]),
+                    h('span',data.title),
                     h('span', {
                         style: {
                             display: 'inline-block',
                             float: 'right',
                             marginRight: '32px'
                         }
-                    }, [
+                    }, 
+                    [
                         h('Button', {
                             props: Object.assign({}, this.buttonProps, {
                                 icon: 'ios-add'
@@ -146,18 +125,45 @@
                 ]);
             },
             append (data) {
-                const children = data.children || [];
-                children.push({
-                    title: 'appended node',
-                    expand: true
-                });
-                this.$set(data, 'children', children);
+                this.openAdd = true;
+                this.department.parentId = data.id;
+            },
+            addDep(){
+                this.spinShow = true;
+                this.postRequest("/system/basic/department",{
+                    name: this.department.name,
+                    parentId: this.department.parentId
+                }).then(resp=> {
+                    this.$Message.success(resp.data.data);
+                    this.spinShow = false;
+                    this.openAdd = false;
+                    this.getDeps();
+                })
             },
             remove (root, node, data) {
-                const parentKey = root.find(el => el === node).parent;
-                const parent = root.find(el => el.nodeKey === parentKey).node;
-                const index = parent.children.indexOf(data);
-                parent.children.splice(index, 1);
+                console.log(node.node.children)
+                if(isNotNullORBlank(node.node.children)){
+                    this.$Message.error("此部门还有下属部门,无法删除");
+                } else {
+                    this.$Modal.confirm({
+                        title: '你正在进行删除操作',
+                        content: '<p>你确定要删除该部门吗?</p>',
+                        onOk: () => {
+                            var _this = this;
+                            this.deleteRequest("/system/basic/department/" + node.node.id).then(resp=> {
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getDeps();
+                            })
+                        },
+                    });
+                }
+            },
+            cancel(flag){
+                if(flag == false){
+                    this.department.name = '';
+                    this.department.parentId = null;
+                }
             }
         }
     };
