@@ -31,7 +31,7 @@ public class EmployeeController {
      */
     @GetMapping("/allEmp")
     @ApiOperation(value = "获取全部员工档案", notes = "page为当前页,limit为记录每页数量")
-    public Result allEmployeeFile(int page, int limit,int departmentId,int positionId, int jobLevelId,String name){
+    public Result allEmployeeFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name){
         return employeeBiz.getAllEmployeeFile(page, limit,departmentId,positionId,jobLevelId,name);
     }
 
@@ -80,4 +80,9 @@ public class EmployeeController {
         return employeeBiz.getAllDownMenu();
     }
 
+    @GetMapping("/initUpdate/{id}")
+    @ApiOperation(value = "初始化修改信息", notes = "")
+    public Result beforeUpdateEmployeeFile(@PathVariable Integer id){
+        return employeeBiz.beforeUpdateEmployeeFile(id);
+    }
 }
