@@ -38,7 +38,7 @@ public class EmployeeBiz {
     @Autowired
     NationMapper nationMapper;
 
-    public Result getAllEmployeeFile(int page, int limit,int departmentId,int positionId, int jobLevelId,String name) {
+    public Result getAllEmployeeFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
         List<Employee> fileList = employeeMapper.selectAllEmployee(departmentId,positionId,jobLevelId,name);
@@ -46,7 +46,6 @@ public class EmployeeBiz {
         if (fileList != null){
             //用PageInfo对结果进行包装,获取分页信息
             PageInfo pageInfo = new PageInfo(fileList);
-
             //包装map返回前端
             Map map = new HashMap();
             map.put("total", pageInfo.getTotal());
@@ -122,6 +121,18 @@ public class EmployeeBiz {
 
             return ResultFactory.buildSuccessResult(map);
         } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
+
+    public Result beforeUpdateEmployeeFile(Integer id) {
+        try{
+            List<Employee> fileList=employeeMapper.selectByIdFun(id);
+            Map map = new HashMap();
+            map.put("list", fileList);
+            return ResultFactory.buildSuccessResult(map);
+        }catch (Exception e){
+            e.printStackTrace();
             return ResultFactory.buildFailResult("获取失败");
         }
     }

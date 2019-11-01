@@ -2,6 +2,7 @@ package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.Employee;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,5 +24,5 @@ public interface EmployeeMapper {
 
     List<Employee> selectByIdFun(Integer id);
 
-    List<Employee> selectAllEmployee(int departmentId, int positionId, int jobLevelId, String name);
+    List<Employee> selectAllEmployee(@Param("departmentId") Integer departmentId,@Param("positionId") Integer positionId,@Param("jobLevelId")  Integer jobLevelId,@Param("name")String name);
 }
