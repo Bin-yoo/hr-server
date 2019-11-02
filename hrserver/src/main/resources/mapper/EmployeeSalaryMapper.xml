@@ -33,8 +33,8 @@
   <insert id="insert" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
     insert into employee_salary (id, eid, baseSalary, 
       meritSalary)
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{basesalary,jdbcType=REAL}, 
-      #{meritsalary,jdbcType=REAL})
+    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{basesalary,jdbcType=DOUBLE},
+      #{meritsalary,jdbcType=DOUBLE})
   </insert>
   <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
     update employee_salary
@@ -43,10 +43,10 @@
         eid = #{eid,jdbcType=INTEGER},
       </if>
       <if test="basesalary != null" >
-        baseSalary = #{basesalary,jdbcType=REAL},
+        baseSalary = #{basesalary,jdbcType=DOUBLE},
       </if>
       <if test="meritsalary != null" >
-        meritSalary = #{meritsalary,jdbcType=REAL},
+        meritSalary = #{meritsalary,jdbcType=DOUBLE},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -54,8 +54,8 @@
   <update id="updateByID" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
     update employee_salary
     set eid = #{eid,jdbcType=INTEGER},
-      baseSalary = #{basesalary,jdbcType=REAL},
-      meritSalary = #{meritsalary,jdbcType=REAL}
+      baseSalary = #{basesalary,jdbcType=DOUBLE},
+      meritSalary = #{meritsalary,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -3,15 +3,15 @@
 <mapper namespace="com.cn.ncvt.mapper.EmployeeAssessmentMapper" >
   <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeAssessment" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="eId" property="eId" jdbcType="INTEGER" />
-    <result column="aId" property="aId" jdbcType="INTEGER" />
+    <result column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="aid" property="aid" jdbcType="INTEGER" />
     <result column="data" property="data" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="result" property="result" jdbcType="CHAR" />
     <result column="isCheck" property="isCheck" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, eId, aId, data, remark, result, isCheck
+    id, eid, aid, data, remark, result, isCheck
   </sql>
   <select id="selectAllAssessmentFile"  parameterType="string" resultType="EmployeeAssessment">
       select * from employee_assessment
@@ -27,21 +27,21 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="employeeAssessment" >
-    insert into employee_assessment (id, eId, aId, 
+    insert into employee_assessment (id, eid, aid,
       data, remark, result,
       isCheck)
-    values (#{id,jdbcType=INTEGER}, #{eId,jdbcType=INTEGER}, #{aId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER},
       #{data,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{result,jdbcType=CHAR},
       #{isCheck,jdbcType=INTEGER})
   </insert>
   <update id="updateByIDSelective" parameterType="employeeAssessment" >
     update employee_assessment
     <set >
-      <if test="eId != null" >
-        eId = #{eId,jdbcType=INTEGER},
+      <if test="eid != null" >
+        eid = #{eid,jdbcType=INTEGER},
       </if>
-      <if test="aId != null" >
-        aId = #{aId,jdbcType=INTEGER},
+      <if test="aid != null" >
+        aid = #{aid,jdbcType=INTEGER},
       </if>
       <if test="data != null" >
         data = #{data,jdbcType=VARCHAR},
@@ -60,8 +60,8 @@
   </update>
   <update id="updateByID" parameterType="employeeAssessment" >
     update employee_assessment
-    set eId = #{eId,jdbcType=INTEGER},
-      aId = #{aId,jdbcType=INTEGER},
+    set eid = #{eid,jdbcType=INTEGER},
+      aid = #{aid,jdbcType=INTEGER},
       data = #{data,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       result = #{result,jdbcType=CHAR},
