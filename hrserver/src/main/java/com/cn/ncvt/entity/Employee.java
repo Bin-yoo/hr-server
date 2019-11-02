@@ -50,6 +50,9 @@ public class Employee {
     private Timestamp beginContract;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp endContract;
+    private String picture;
+    private double baseSalary;
+
 
     public int getPositionId() {
         return positionId;
@@ -289,5 +292,21 @@ public class Employee {
 
     public void setEndContract(Timestamp endContract) {
         this.endContract = endContract;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public double getBaseSalary() {
+        return baseSalary;
+    }
+
+    public void setBaseSalary(double baseSalary) {
+        this.baseSalary = baseSalary;
     }
 }

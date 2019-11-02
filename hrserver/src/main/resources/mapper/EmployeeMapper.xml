@@ -30,7 +30,7 @@
       address, departmentId, jobLevelId,positionId,
       titopDegree, specialty, school,
       beginDate, workState, conversionTime,
-      quitTime, beginContract, endContract
+      quitTime, beginContract, endContract, picture, baseSalary
       )
     values (#{workId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
       #{sex,jdbcType=VARCHAR}, #{nationId,jdbcType=INTEGER}, #{birthday,jdbcType=DATE},
@@ -39,7 +39,8 @@
       #{address,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{jobLevelId,jdbcType=INTEGER},#{positionId,jdbcType=INTEGER},
       #{titopDegree,jdbcType=CHAR}, #{specialty,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},
       #{beginDate,jdbcType=DATE}, #{workState,jdbcType=CHAR}, #{conversionTime,jdbcType=DATE},
-      #{quitTime,jdbcType=DATE}, #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE}
+      #{quitTime,jdbcType=DATE}, #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE},
+      #{picture,jdbcType=VARCHAR}, #{baseSalary,jdbcType=DOUBLE}
       )
 		</insert>
   <update id="updateFun" parameterType="employee">
@@ -116,6 +117,12 @@
       </if>
       <if test="endContract != null">
         endContract = #{endContract,jdbcType=DATE},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="baseSalary != null">
+        baseSalary = #{baseSalary,jdbcType=DOUBLE},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
