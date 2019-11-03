@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 public class EmployeeAssessment {
 
     private int id;
-    private int eId;
-    private int aId;
+    private int eid;
+    private int aid;
     private String data;
     private String remark;
     private String result;
@@ -27,20 +27,20 @@ public class EmployeeAssessment {
         this.id = id;
     }
 
-    public int geteId() {
-        return eId;
+    public int getEid() {
+        return eid;
     }
 
-    public void seteId(int eId) {
-        this.eId = eId;
+    public void setEid(int eid) {
+        this.eid = eid;
     }
 
-    public int getaId() {
-        return aId;
+    public int getAid() {
+        return aid;
     }
 
-    public void setaId(int aId) {
-        this.aId = aId;
+    public void setAid(int aid) {
+        this.aid = aid;
     }
 
     public String getData() {
