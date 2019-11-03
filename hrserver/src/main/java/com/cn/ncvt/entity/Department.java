@@ -16,6 +16,8 @@ import java.util.List;
 public class Department {
 
     private Integer id;
+    private Integer depNum;
+    private Integer orderNum;
     private String name;
     private Integer parentId;
     private String depPath;
@@ -31,6 +33,22 @@ public class Department {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getDepNum() {
+        return depNum;
+    }
+
+    public void setDepNum(Integer depNum) {
+        this.depNum = depNum;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
     }
 
     public String getName() {
