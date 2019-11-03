@@ -35,6 +35,10 @@ public class DepartmentBiz {
         if (department.getParentId() == null || department.getParentId() == 0){
             department.setParentId(-1);
         }
+        Department checkDepId = departmentMapper.selectByDepNum(department.getDepNum());
+        if (checkDepId != null)
+            return ResultFactory.buildFailResult("部门编号已存在");
+
         try {
             departmentMapper.insert(department);
             return ResultFactory.buildSuccessResult("添加成功");
@@ -44,6 +48,18 @@ public class DepartmentBiz {
     }
 
     public Result updateDepartment(Department department) {
+        if (department.getParentId() == null || department.getParentId() == 0){
+            department.setParentId(-1);
+        } else {
+            Department checkParentId = departmentMapper.selectByID(department.getParentId());
+            if (checkParentId.getParentId() == department.getId()){
+                return ResultFactory.buildFailResult("上级部门不能设置为你所编辑部门的子级部门");
+            }
+        }
+        Department checkDepId = departmentMapper.selectByDepNum(department.getDepNum());
+        if (checkDepId != null && checkDepId.getId() != department.getId())
+            return ResultFactory.buildFailResult("部门编号已存在");
+
         try {
             departmentMapper.updateByIDSelective(department);
             return ResultFactory.buildSuccessResult("修改成功");
