@@ -1,22 +1,5 @@
 <template>
     <div>
-
-        <Select style="width:200px">
-            <Option value="New York" label="New York">
-                <span>New York</span>
-                <span style="float:right;color:#ccc">America</span>
-                <span style="float:right;color:#ccc">America</span>
-            </Option>
-            <Option value="London" label="London">
-                <span>London</span>
-                <span style="float:right;color:#ccc">U.K.</span>
-            </Option>
-            <Option value="Sydney" label="Sydney">
-                <span>Sydney</span>
-                <span style="float:right;color:#ccc">Australian</span>
-            </Option>
-        </Select>
-
         <Row>
             <Col span="22">
                 <Row :gutter="6">
@@ -460,172 +443,174 @@
                 </Row>
             </Form>
         </Modal>
-        <Modal
-            v-model="showModal"
-            title="员工档案详情"
-            @on-ok="ok"
-            width=40%
-            @on-cancel="cancel">
-            <Row>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>姓名：</p></Col>
-                        <Col span="12"><p>{{employees[index].name}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>性别：</p></Col>
-                        <Col span="12"><p>{{employees[index].sex}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>身份证号码：</p></Col>
-                        <Col span="12"><p>{{employees[index].idCard}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>政治面貌：</p></Col>
-                        <Col span="12"><p>{{employees[index].politiclName}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>籍贯：</p></Col>
-                        <Col span="12"><p>{{employees[index].nativePlace}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>民族：</p></Col>
-                        <Col span="12"><p>{{employees[index].nationName}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>婚姻状态：</p></Col>
-                        <Col span="12"><p>{{employees[index].wedlock}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>出生日期：</p></Col>
-                        <Col span="12"><p>{{employees[index].birthday}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>联系方式：</p></Col>
-                        <Col span="12"><p>{{employees[index].phone}}</p></Col>
-                    </Row>
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>邮箱：</p></Col>
-                        <Col span="12"><p>{{employees[index].email}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="5">
-                    <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
-                </Col>
-            </Row>
-            <Row>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>居住地址：</p></Col>
-                        <Col span="12"><p>{{employees[index].address}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>所属部门：</p></Col>
-                        <Col span="12"><p>{{employees[index].departmentName}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>职称：</p></Col>
-                        <Col span="12"><p>{{employees[index].jobLevelName}}</p></Col>
-                    </Row>
-                </Col>
-            </Row>
-            <Row>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>职位：</p></Col>
-                        <Col span="12"><p>{{employees[index].positionName}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>学历：</p></Col>
-                        <Col span="12"><p>{{employees[index].titopDegree}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>毕业院校：</p></Col>
-                        <Col span="12"><p>{{employees[index].school}}</p></Col>
-                    </Row>
-                </Col>
-            </Row>
-            <Row>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>专业：</p></Col>
-                        <Col span="12"><p>{{employees[index].specialty}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>就职日期：</p></Col>
-                        <Col span="12"><p>{{employees[index].beginDate}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>就职状态：</p></Col>
-                        <Col span="12"><p>{{employees[index].workState}}</p></Col>
-                    </Row>
-                </Col>
-            </Row>
-            <Row>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>转正日期：</p></Col>
-                        <Col span="12"><p>{{employees[index].conversionTime}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>离职日期：</p></Col>
-                        <Col span="12"><p>{{employees[index].quitTime}}</p></Col>
-                    </Row>
-                </Col>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>合同起始日期：</p></Col>
-                        <Col span="12"><p>{{employees[index].beginContract}}</p></Col>
-                    </Row>
-                </Col>
-            </Row>
-            <Row>
-                <Col span="8">
-                    <Row :style="{margin: '0 0 15px 0'}">
-                        <Col span="8"><p>合同结束日期：</p></Col>
-                        <Col span="12"><p>{{employees[index].endContract}}</p></Col>
-                    </Row>
-                </Col>
-            </Row>
-            <Row>
-                <Tabs type="card">
-                    <TabPane label="奖惩资料">
-                        <Table :columns="rewPunColumns" :data="rewPunData"></Table>
-                        <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
-                            <Col  offset="5"><Page :total="100" show-elevator /></Col>
+        <div v-if="showModal">
+            <Modal
+                v-model="showModal"
+                title="员工档案详情"
+                @on-ok="ok"
+                width=40%
+                @on-cancel="cancel">
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>姓名：</p></Col>
+                            <Col span="11"><p>{{employees[index].name}}</p></Col>
                         </Row>
-                    </TabPane>
-                    <TabPane label="考核资料">
-                        <Table :columns="assColumns" :data="assData"></Table>
-                        <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
-                            <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>性别：</p></Col>
+                            <Col span="11"><p>{{employees[index].sex}}</p></Col>
                         </Row>
-                    </TabPane>
-                    <TabPane label="调动资料">
-                        <Table :columns="transferColumns" :data="transferdata"></Table>
-                        <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
-                            <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>身份证号码：</p></Col>
+                            <Col span="11"><p>{{employees[index].idCard}}</p></Col>
                         </Row>
-                    </TabPane>
-                </Tabs>
-            </Row>
-        </Modal>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>政治面貌：</p></Col>
+                            <Col span="11"><p>{{employees[index].politiclName}}</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>籍贯：</p></Col>
+                            <Col span="11"><p>{{employees[index].nativePlace}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>民族：</p></Col>
+                            <Col span="11"><p>{{employees[index].nationName}}</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>婚姻状态：</p></Col>
+                            <Col span="11"><p>{{employees[index].wedlock}}</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>出生日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].birthday}}</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>联系方式：</p></Col>
+                            <Col span="11"><p>{{employees[index].phone}}</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>邮箱：</p></Col>
+                            <Col span="11"><p>{{employees[index].email}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="5">
+                        <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>居住地址：</p></Col>
+                            <Col span="11"><p>{{employees[index].address}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>所属部门：</p></Col>
+                            <Col span="11"><p>{{employees[index].departmentName}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>职称：</p></Col>
+                            <Col span="11"><p>{{employees[index].jobLevelName}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>职位：</p></Col>
+                            <Col span="11"><p>{{employees[index].positionName}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>学历：</p></Col>
+                            <Col span="11"><p>{{employees[index].titopDegree}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>毕业院校：</p></Col>
+                            <Col span="11"><p>{{employees[index].school}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>专业：</p></Col>
+                            <Col span="11"><p>{{employees[index].specialty}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>就职日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].beginDate}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>就职状态：</p></Col>
+                            <Col span="11"><p>{{employees[index].workState}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>转正日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].conversionTime}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>离职日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].quitTime}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>合同起始日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].beginContract}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>合同结束日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].endContract}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Tabs type="card">
+                        <TabPane label="奖惩资料">
+                            <Table :columns="rewPunColumns" :data="rewPunData"></Table>
+                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
+                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane label="考核资料">
+                            <Table :columns="assColumns" :data="assData"></Table>
+                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
+                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane label="调动资料">
+                            <Table :columns="transferColumns" :data="transferdata"></Table>
+                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
+                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            </Row>
+                        </TabPane>
+                    </Tabs>
+                </Row>
+            </Modal>
+        </div>
     </div>
 </template>
 
