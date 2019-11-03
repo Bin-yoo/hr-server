@@ -23,6 +23,7 @@ import java.util.Map;
 public class SalaryBiz {
     @Autowired
     EmployeeSalaryMapper employeeSalaryMapper;
+
     public Result getAllSalaryFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
@@ -43,9 +44,5 @@ public class SalaryBiz {
         } else {
             return ResultFactory.buildFailResult("获取失败");
         }
-    }
-
-    public Result addSalaryFile(EmployeeSalary employeeSalary) {
-
     }
 }

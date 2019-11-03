@@ -14,15 +14,15 @@ import java.sql.Timestamp;
  **/
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 public class Employee {
-    private int id;
+    private Integer id;
     private Long workId;
     private String name;
     private String sex;
-    private int nationId;
+    private Integer nationId;
     private String nationName;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp birthday;
-    private int politiclId;
+    private Integer politiclId;
     private String politiclName;
     private String wedlock;
     private String nativePlace;
@@ -30,11 +30,11 @@ public class Employee {
     private String email;
     private String phone;
     private String address;
-    private int departmentId;
+    private Integer departmentId;
     private String departmentName;
-    private int positionId;
+    private Integer positionId;
     private String positionName;
-    private int jobLevelId;
+    private Integer jobLevelId;
     private String jobLevelName;
     private String titopDegree;
     private String specialty;
@@ -54,11 +54,11 @@ public class Employee {
     private double baseSalary;
 
 
-    public int getPositionId() {
+    public Integer getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(int positionId) {
+    public void setPositionId(Integer positionId) {
         this.positionId = positionId;
     }
 
@@ -70,11 +70,11 @@ public class Employee {
         this.positionName = positionName;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -102,11 +102,11 @@ public class Employee {
         this.sex = sex;
     }
 
-    public int getNationId() {
+    public Integer getNationId() {
         return nationId;
     }
 
-    public void setNationId(int nationId) {
+    public void setNationId(Integer nationId) {
         this.nationId = nationId;
     }
 
@@ -126,11 +126,11 @@ public class Employee {
         this.birthday = birthday;
     }
 
-    public int getPoliticlId() {
+    public Integer getPoliticlId() {
         return politiclId;
     }
 
-    public void setPoliticlId(int politiclId) {
+    public void setPoliticlId(Integer politiclId) {
         this.politiclId = politiclId;
     }
 
@@ -190,11 +190,11 @@ public class Employee {
         this.address = address;
     }
 
-    public int getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(int departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
 
@@ -206,11 +206,11 @@ public class Employee {
         this.departmentName = departmentName;
     }
 
-    public int getJobLevelId() {
+    public Integer getJobLevelId() {
         return jobLevelId;
     }
 
-    public void setJobLevelId(int jobLevelId) {
+    public void setJobLevelId(Integer jobLevelId) {
         this.jobLevelId = jobLevelId;
     }
 

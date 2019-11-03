@@ -32,6 +32,9 @@ public class DepartmentBiz {
     }
 
     public Result addDepartment(Department department) {
+        if (department.getParentId() == null || department.getParentId() == 0){
+            department.setParentId(-1);
+        }
         try {
             departmentMapper.insert(department);
             return ResultFactory.buildSuccessResult("添加成功");
