@@ -20,7 +20,7 @@ public class Employee {
     private String sex;
     private int nationId;
     private String nationName;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp birthday;
     private int politiclId;
     private String politiclName;

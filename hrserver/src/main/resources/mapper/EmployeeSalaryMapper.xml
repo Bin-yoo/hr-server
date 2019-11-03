@@ -19,6 +19,18 @@
     SELECT es.*,e.name,e.workId,d.name departmentName,p.name positionName
     from employee_salary es,employee e,department d,position p
     where es.eid=e.id and e.departmentId=d.id and e.positionId=p.id
+    <if test="name != null and name != '' " >
+      and e.name like '%${name}%'
+    </if>
+    <if test="departmentId != null and departmentId != '' " >
+      and e.departmentId=#{departmentId}
+    </if>
+    <if test="positionId != null and positionId != '' " >
+      and e.positionId=#{positionId}
+    </if>
+    <if test="jobLevelId != null and jobLevelId != '' " >
+      and e.jobLevelId=#{jobLevelId}
+    </if>
   </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

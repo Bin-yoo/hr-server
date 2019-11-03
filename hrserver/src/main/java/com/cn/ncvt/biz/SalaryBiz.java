@@ -23,10 +23,10 @@ import java.util.Map;
 public class SalaryBiz {
     @Autowired
     EmployeeSalaryMapper employeeSalaryMapper;
-    public Result getAllSalaryFile(int page, int limit) {
+    public Result getAllSalaryFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
-        List<EmployeeSalary> fileList = employeeSalaryMapper.selectAllEmployeeSalary();
+        List<EmployeeSalary> fileList = employeeSalaryMapper.selectAllEmployeeSalary(departmentId,positionId,jobLevelId,name);
 
         if (fileList != null){
             //用PageInfo对结果进行包装,获取分页信息
@@ -43,5 +43,9 @@ public class SalaryBiz {
         } else {
             return ResultFactory.buildFailResult("获取失败");
         }
+    }
+
+    public Result addSalaryFile(EmployeeSalary employeeSalary) {
+
     }
 }
