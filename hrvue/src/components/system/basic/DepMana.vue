@@ -43,6 +43,31 @@
                 <div>Loading</div>
             </Spin>
         </Modal>
+        <Modal
+            v-model="openUpdate"
+            title="修改部门"
+            @on-visible-change='cancel'>
+            <Row>
+                <Col span="21">
+                    <Form :model="department" :rules="newDepRules" :label-width="80" ref="department">
+                        <FormItem label="部门名称" prop="name">
+                            <Input v-model="department.name" placeholder="请输入角色名"></Input>
+                        </FormItem>
+                        <FormItem label="上级部门" prop="parent">
+                            <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1"/>
+                        </FormItem>
+                    </Form>
+                </Col>
+            </Row>
+            <div slot="footer">
+                <Button @click="openUpdate=false">取消</Button>
+                <Button type="primary" @click="updateDep">保存</Button>
+            </div>
+            <Spin fix v-if="spinShow">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
+        </Modal>
     </div>
 </template>
 <script>
@@ -61,13 +86,15 @@
                 },
                 spinShow: false,
                 openAdd: false,
+                openUpdate: false,
                 department:{
+                    id: null,
                     name: '',
                     parentId: null
                 },
                 newDepRules: {
                     name: [
-                        {required: true, message: '职称名称不能为空', trigger: 'blur' }
+                        {required: true, message: '部门名称不能为空', trigger: 'blur' }
                     ],
                 },
             }
@@ -102,21 +129,40 @@
                         }
                     }, 
                     [
-                        h('Button', {
+                        h('Icon', {
                             props: Object.assign({}, this.buttonProps, {
-                                icon: 'ios-add'
+                                type: 'ios-add'
                             }),
                             style: {
-                                marginRight: '8px'
+                                marginRight: '8px',
+                                fontSize: '16px',
+                                cursor: 'pointer'
                             },
                             on: {
                                 click: () => { this.append(data) }
                             }
                         }),
-                        h('Button', {
+                        h('Icon', {
                             props: Object.assign({}, this.buttonProps, {
-                                icon: 'ios-remove'
+                                type: 'ios-create-outline'
                             }),
+                            style: {
+                                marginRight: '8px',
+                                fontSize: '16px',
+                                cursor: 'pointer'
+                            },
+                            on: {
+                                click: () => { this.befUpdate(data) }
+                            }
+                        }),
+                        h('Icon', {
+                            props: Object.assign({}, this.buttonProps, {
+                                type: 'ios-trash-outline'
+                            }),
+                            style: {
+                                fontSize: '16px',
+                                cursor: 'pointer'
+                            },
                             on: {
                                 click: () => { this.remove(root, node, data) }
                             }
@@ -130,15 +176,45 @@
             },
             addDep(){
                 this.spinShow = true;
-                this.postRequest("/system/basic/department",{
-                    name: this.department.name,
-                    parentId: this.department.parentId
-                }).then(resp=> {
-                    this.$Message.success(resp.data.data);
-                    this.spinShow = false;
-                    this.openAdd = false;
-                    this.getDeps();
-                })
+                if(isNotNullORBlank(this.department.name)){
+                    this.postRequest("/system/basic/department",{
+                        name: this.department.name,
+                        parentId: this.department.parentId
+                    }).then(resp=> {
+                        this.$Message.success(resp.data.data);
+                        this.spinShow = false;
+                        this.openAdd = false;
+                        this.getDeps();
+                    })
+                } else {
+                    this.$Message.error("部门名不能为空");
+                }
+            },
+            befUpdate(data){
+                this.openUpdate = true;
+                this.department.id = data.id;
+                this.department.name = data.name;
+                if (data.parentId === -1) {
+                    this.department.parentId = null;
+                } else {
+                    this.department.parentId = data.parentId;
+                }
+            },
+            updateDep(){
+                if(isNotNullORBlank(this.department.name)){
+                    this.putRequest("/system/basic/department",{
+                        id: this.department.id,
+                        name: this.department.name,
+                        parentId: this.department.parentId
+                    }).then(resp=> {
+                        this.$Message.success(resp.data.data);
+                        this.spinShow = false;
+                        this.openAdd = false;
+                        this.getDeps();
+                    })
+                } else {
+                    this.$Message.error("部门名不能为空");
+                }
             },
             remove (root, node, data) {
                 console.log(node.node.children)
@@ -161,6 +237,7 @@
             },
             cancel(flag){
                 if(flag == false){
+                    this.department.id = null;
                     this.department.name = '';
                     this.department.parentId = null;
                 }
