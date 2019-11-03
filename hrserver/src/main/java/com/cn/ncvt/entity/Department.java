@@ -15,9 +15,9 @@ import java.util.List;
 
 public class Department {
 
-    private int id;
+    private Integer id;
     private String name;
-    private int parentId;
+    private Integer parentId;
     private String depPath;
     private List<Department> children;
 
@@ -25,11 +25,11 @@ public class Department {
     private String label;
     private boolean expand = true;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -41,11 +41,11 @@ public class Department {
         this.name = name;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 

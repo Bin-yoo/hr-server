@@ -9,17 +9,17 @@ import java.sql.Timestamp;
  * Created by sang on 2017/12/28.
  */
 public class Role implements Serializable {
-    private int id;
+    private Integer id;
     private String name;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
     private String remark;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

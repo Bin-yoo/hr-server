@@ -28,11 +28,4 @@ public class SalaryController {
         return salaryBiz.getAllSalaryFile(page, limit,departmentId,positionId,jobLevelId,name);
     }
 
-    @GetMapping("/addSalary")
-    @ApiOperation(value = "查看所有员工的工资", notes = "")
-    public Result addAssessmentFile(@RequestBody EmployeeSalary employeeSalary){
-        return salaryBiz.addSalaryFile(employeeSalary);
-    }
-
-
 }

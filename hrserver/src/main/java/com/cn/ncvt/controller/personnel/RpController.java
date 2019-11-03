@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @ClassName: Rp
+ * @ClassName: RpController
  * @Auther: Ashe
  * @Date: 2019/10/31
  **/
 @RestController
 @RequestMapping("/rp")
 @Api(tags = "奖惩管理")
-public class Rp {
+public class RpController {
     @Autowired
     RpBiz rpBiz;
 
