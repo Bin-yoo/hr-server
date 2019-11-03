@@ -1,52 +1,58 @@
 <template>
     <div>
+
+        <Select style="width:200px">
+            <Option value="New York" label="New York">
+                <span>New York</span>
+                <span style="float:right;color:#ccc">America</span>
+                <span style="float:right;color:#ccc">America</span>
+            </Option>
+            <Option value="London" label="London">
+                <span>London</span>
+                <span style="float:right;color:#ccc">U.K.</span>
+            </Option>
+            <Option value="Sydney" label="Sydney">
+                <span>Sydney</span>
+                <span style="float:right;color:#ccc">Australian</span>
+            </Option>
+        </Select>
+
         <Row>
             <Col span="22">
-                <Form :model="souformItem">
-                    <Row :gutter="6">
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="formItem.departmentID" placeholder="部门">
-                                    <Option value="0">财务部</Option>
-                                    <Option value="1">人事部</Option>
-                                    <Option value="2">技术部</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="formItem.posID" placeholder="职位">
-                                    <Option value="0">财务经理</Option>
-                                    <Option value="1">人事经理</Option>
-                                    <Option value="2">出纳</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="formItem.jobLevelID" placeholder="职称">
-                                    <Option value="0">高级工程师</Option>
-                                    <Option value="1">高级教师</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="5">
-                            <FormItem>
-                                <Input v-model="formItem.input" clearable placeholder="请输入..." />
-                            </FormItem>
-                        </Col>
-                        <Col span="1">
-                            <FormItem>
-                                <Button icon="ios-search">搜索</Button>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                </Form>
+                <Row :gutter="6">
+                    <Col span="2">
+                        <Select v-model="souformItem.departmentId" placeholder="部门">
+                            <Option value="0">财务部</Option>
+                            <Option value="1">人事部</Option>
+                            <Option value="2">技术部</Option>
+                        </Select>
+                    </Col>
+                    <Col span="2">
+                        <Select v-model="souformItem.positionId" placeholder="职位">
+                            <Option value="0">财务经理</Option>
+                            <Option value="1">人事经理</Option>
+                            <Option value="2">出纳</Option>
+                        </Select>
+                    </Col>
+                    <Col span="2">
+                        <Select v-model="souformItem.jobLevelId" placeholder="职称">
+                            <Option value="0">高级工程师</Option>
+                            <Option value="1">高级教师</Option>
+                        </Select>
+                    </Col>
+                    <Col span="5">
+                        <Input v-model="souformItem.name" clearable placeholder="请输入..." />
+                    </Col>
+                    <Col span="1">
+                        <Button icon="ios-search" @click="getEmployeeList">搜索</Button>
+                    </Col>
+                </Row>
             </Col>
             <Col span="2"><Button type="primary" @click="addModal = true">添加档案</Button></Col>
         </Row>
+        <br>
         <Row>
-            <Table border ref="selection" :columns="columns" :data="data1">
+            <Table border ref="selection" :columns="columns" :data="employees">
                 <template slot-scope="{ row, index }" slot="action">
                     <Button style="margin-right: 5px" @click="show(index)">查看</Button>
                     <Button type="primary" style="margin-right: 5px" @click="update(index)">编辑</Button>
@@ -57,27 +63,27 @@
         <Row :style="{margin: '20px 0 0 0'}">
             <Col span="1"><Button type="error">批量删除</Button></Col>
             <Row :style="{textAlign: 'center'}">
-                <Page :total="100" show-elevator />
+                <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="onPageSizeChange"/>
             </Row>
         </Row>
         <Modal
             v-model="addModal"
             title="添加员工档案"
-            width=50%
+            width=55%
             @on-ok="ok"
             @on-cancel="cancel">
 
-            <Form :model="formItem" :label-width="80">
+            <Form :model="newEmployee" :label-width="100" :rules="newEmployeeRules" ref="newEmployee">
                 <Row>
                     <Col span="8">
                         <Row>
-                            <FormItem label="姓名：">
-                                <Input v-model="formItem.name" placeholder="请输入"></Input>
+                            <FormItem label="姓名：" prop="name">
+                                <Input v-model="newEmployee.name" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                         <Row>
                             <FormItem label="性别：">
-                                <RadioGroup v-model="formItem.gender">
+                                <RadioGroup v-model="newEmployee.sex">
                                     <Radio label="1">男</Radio>
                                     <Radio label="0">女</Radio>
                                 </RadioGroup>
@@ -85,12 +91,12 @@
                         </Row>
                         <Row>
                             <FormItem label="身份证号：">
-                                <Input v-model="formItem.idCard" placeholder="请输入"></Input>
+                                <Input v-model="newEmployee.idCard" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                         <Row>
                             <FormItem label="政治面貌：">
-                                <Select v-model="formItem.politicID">
+                                <Select v-model="newEmployee.politiclId">
                                     <Option value="1">群众</Option>
                                     <Option value="2">共青团员</Option>
                                     <Option value="3">中共党员</Option>
@@ -101,12 +107,12 @@
                     <Col span="8">
                         <Row>
                             <FormItem label="民族：">
-                                <Input v-model="formItem.nationID" placeholder="请输入"></Input>
+                                <Input v-model="newEmployee.nationId" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                         <Row>
                             <FormItem label="婚姻状态：">
-                                <RadioGroup v-model="formItem.wedlock">
+                                <RadioGroup v-model="newEmployee.wedlock">
                                     <Radio label="0">未婚</Radio>
                                     <Radio label="1">已婚</Radio>
                                 </RadioGroup>
@@ -114,12 +120,12 @@
                         </Row>
                         <Row>
                             <FormItem label="出生日期：">
-                                <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
+                                <DatePicker type="date" placeholder="选择出生日期" v-model="newEmployee.birthday"></DatePicker>
                             </FormItem>
                         </Row>
                         <Row>
                             <FormItem label="联系方式：">
-                                <Input v-model="formItem.phone" placeholder="请输入"></Input>
+                                <Input v-model="newEmployee.phone" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                     </Col>
@@ -128,16 +134,18 @@
                             <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
                         </Row>
                         <Row>
+                                <!-- 上传组件相关方法
+                                :default-file-list="defaultList"
+                                :on-success="handleSuccess"
+                                :on-format-error="handleFormatError"
+                                :on-exceeded-size="handleMaxSize"
+                                :before-upload="handleBeforeUpload" -->
                             <Upload
                                 ref="upload"
                                 :show-upload-list="false"
-                                :default-file-list="defaultList"
-                                :on-success="handleSuccess"
+                                
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
-                                :on-format-error="handleFormatError"
-                                :on-exceeded-size="handleMaxSize"
-                                :before-upload="handleBeforeUpload"
                                 multiple
                                 type="drag"
                                 action="//jsonplaceholder.typicode.com/posts/"
@@ -151,24 +159,24 @@
                 <Row>
                     <Col span="8">
                         <FormItem label="籍贯：">
-                            <Input v-model="formItem.nativePlace" placeholder="请输入"></Input>
+                            <Input v-model="newEmployee.nativePlace" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
                         <FormItem label="邮箱：">
-                            <Input v-model="formItem.email" placeholder="请输入"></Input>
+                            <Input v-model="newEmployee.email" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
                         <FormItem label="居住地址：">
-                            <Input v-model="formItem.adress" placeholder="请输入"></Input>
+                            <Input v-model="newEmployee.address" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
                         <FormItem label="所属部门：">
-                            <Select v-model="formItem.departmentID">
+                            <Select v-model="newEmployee.departmentId">
                                 <Option value="0">人事部</Option>
                                 <Option value="1">财务部</Option>
                                 <Option value="2">技术部</Option>
@@ -177,7 +185,7 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="职称：">
-                            <Select v-model="formItem.departmentID">
+                            <Select v-model="newEmployee.jobLevelId">
                                 <Option value="0">正高级教师</Option>
                                 <Option value="1">高级教师</Option>
                                 <Option value="2">一级教师</Option>
@@ -188,7 +196,7 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="职位：">
-                            <Select v-model="formItem.posID">
+                            <Select v-model="newEmployee.positionId">
                                 <Option value="0">教授</Option>
                                 <Option value="1">教师</Option>
                                 <Option value="2">教务管理人员</Option>
@@ -200,7 +208,7 @@
                 <Row>
                     <Col span="8">
                         <FormItem label="学历：">
-                            <Select v-model="formItem.titopDegree">
+                            <Select v-model="newEmployee.titopDegree">
                                 <Option value="0">小学</Option>
                                 <Option value="1">初中</Option>
                                 <Option value="2">高中</Option>
@@ -215,24 +223,24 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="毕业院校：">
-                            <Input v-model="formItem.school" placeholder="请输入"></Input>
+                            <Input v-model="newEmployee.school" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
                         <FormItem label="专业：">
-                            <Input v-model="formItem.specialty" placeholder="请输入"></Input>
+                            <Input v-model="newEmployee.specialty" placeholder="请输入"></Input>
                         </FormItem>
                     </Col> 
                 </Row>
                 <Row>
                     <Col span="8">
                         <FormItem label="就职日期：">
-                            <DatePicker type="date" placeholder="请选择就职日期" v-model="formItem.beginDate"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择就职日期" v-model="newEmployee.beginDate"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
                         <FormItem label="就职状态：">
-                            <RadioGroup v-model="formItem.workState">
+                            <RadioGroup v-model="newEmployee.workState">
                                 <Radio label="0">在职</Radio>
                                 <Radio label="1">离职</Radio>
                             </RadioGroup>
@@ -240,7 +248,24 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="转正日期：">
-                            <DatePicker type="date" placeholder="请选择转正日期" v-model="formItem.conversionTime"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择转正日期" v-model="newEmployee.conversionTime"></DatePicker>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="离职日期：">
+                            <DatePicker type="date" placeholder="请选择离职日期" v-model="newEmployee.quitTime"></DatePicker>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="合同起始日期：">
+                            <DatePicker type="date" placeholder="请选择合同起始日期" v-model="newEmployee.beginContract"></DatePicker>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="合同结束日期：">
+                            <DatePicker type="date" placeholder="请选择合同结束日期" v-model="newEmployee.endContract"></DatePicker>
                         </FormItem>
                     </Col>
                 </Row>
@@ -314,16 +339,19 @@
                             <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
                         </Row>
                         <Row>
+
+                                <!-- 上传组件相关方法
+                                :default-file-list="defaultList"
+                                :on-success="handleSuccess"
+                                :on-format-error="handleFormatError"
+                                :on-exceeded-size="handleMaxSize"
+                                :before-upload="handleBeforeUpload" -->
+
                             <Upload
                                 ref="upload"
                                 :show-upload-list="false"
-                                :default-file-list="defaultList"
-                                :on-success="handleSuccess"
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
-                                :on-format-error="handleFormatError"
-                                :on-exceeded-size="handleMaxSize"
-                                :before-upload="handleBeforeUpload"
                                 multiple
                                 type="drag"
                                 action="//jsonplaceholder.typicode.com/posts/"
@@ -442,45 +470,45 @@
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>姓名：</p></Col>
-                        <Col span="12"><p>宇哥</p></Col>
+                        <Col span="12"><p>{{employees[index].name}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>性别：</p></Col>
-                        <Col span="12"><p>男</p></Col>
+                        <Col span="12"><p>{{employees[index].sex}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>身份证号码：</p></Col>
-                        <Col span="12"><p>45088119984564716X</p></Col>
+                        <Col span="12"><p>{{employees[index].idCard}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>政治面貌：</p></Col>
-                        <Col span="12"><p>群众</p></Col>
+                        <Col span="12"><p>{{employees[index].politiclName}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>籍贯：</p></Col>
-                        <Col span="12"><p>广西南宁市</p></Col>
+                        <Col span="12"><p>{{employees[index].nativePlace}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>民族：</p></Col>
-                        <Col span="12"><p>汉族</p></Col>
+                        <Col span="12"><p>{{employees[index].nationName}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>婚姻状态：</p></Col>
-                        <Col span="12"><p>未婚</p></Col>
+                        <Col span="12"><p>{{employees[index].wedlock}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>出生日期：</p></Col>
-                        <Col span="12"><p>2019年10月16日</p></Col>
+                        <Col span="12"><p>{{employees[index].birthday}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>联系方式：</p></Col>
-                        <Col span="12"><p>12345678910</p></Col>
+                        <Col span="12"><p>{{employees[index].phone}}</p></Col>
                     </Row>
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>邮箱：</p></Col>
-                        <Col span="12"><p>12345678910@qq.com</p></Col>
+                        <Col span="12"><p>{{employees[index].email}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="5">
@@ -491,19 +519,19 @@
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>居住地址：</p></Col>
-                        <Col span="12"><p>广西省南宁市西乡塘区大学西路169号</p></Col>
+                        <Col span="12"><p>{{employees[index].address}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>所属部门：</p></Col>
-                        <Col span="12"><p>财务部</p></Col>
+                        <Col span="12"><p>{{employees[index].departmentName}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>职称：</p></Col>
-                        <Col span="12"><p>高级工程师</p></Col>
+                        <Col span="12"><p>{{employees[index].jobLevelName}}</p></Col>
                     </Row>
                 </Col>
             </Row>
@@ -511,19 +539,19 @@
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>职位：</p></Col>
-                        <Col span="12"><p>财政经理</p></Col>
+                        <Col span="12"><p>{{employees[index].positionName}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>学历：</p></Col>
-                        <Col span="12"><p>大专</p></Col>
+                        <Col span="12"><p>{{employees[index].titopDegree}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>毕业院校：</p></Col>
-                        <Col span="12"><p>南宁职业技术学院</p></Col>
+                        <Col span="12"><p>{{employees[index].school}}</p></Col>
                     </Row>
                 </Col>
             </Row>
@@ -531,19 +559,19 @@
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>专业：</p></Col>
-                        <Col span="12"><p>软件技术</p></Col>
+                        <Col span="12"><p>{{employees[index].specialty}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>就职日期：</p></Col>
-                        <Col span="12"><p>2019年10月16日</p></Col>
+                        <Col span="12"><p>{{employees[index].beginDate}}</p></Col>
                     </Row>
                 </Col>
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>就职状态：</p></Col>
-                        <Col span="12"><p>在职</p></Col>
+                        <Col span="12"><p>{{employees[index].workState}}</p></Col>
                     </Row>
                 </Col>
             </Row>
@@ -551,7 +579,27 @@
                 <Col span="8">
                     <Row :style="{margin: '0 0 15px 0'}">
                         <Col span="8"><p>转正日期：</p></Col>
-                        <Col span="12"><p>2019年10月16日</p></Col>
+                        <Col span="12"><p>{{employees[index].conversionTime}}</p></Col>
+                    </Row>
+                </Col>
+                <Col span="8">
+                    <Row :style="{margin: '0 0 15px 0'}">
+                        <Col span="8"><p>离职日期：</p></Col>
+                        <Col span="12"><p>{{employees[index].quitTime}}</p></Col>
+                    </Row>
+                </Col>
+                <Col span="8">
+                    <Row :style="{margin: '0 0 15px 0'}">
+                        <Col span="8"><p>合同起始日期：</p></Col>
+                        <Col span="12"><p>{{employees[index].beginContract}}</p></Col>
+                    </Row>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="8">
+                    <Row :style="{margin: '0 0 15px 0'}">
+                        <Col span="8"><p>合同结束日期：</p></Col>
+                        <Col span="12"><p>{{employees[index].endContract}}</p></Col>
                     </Row>
                 </Col>
             </Row>
@@ -589,14 +637,77 @@ export default {
             addModal: false,
             updateModal: false,
             showModal: false,
+            page:1,
+            total: 100,
+            limit: 10,
+            loading: false,
+            spinShow: false,
+            index: 1,
+            employee: {
+                name: '',
+                jobNum: '',
+                department: "",
+                position: "",
+                jobLevelID: "",
+                gender: "",
+                date: "",
+                nativePlace: "",
+                phone: "",
+                email: "",
+            },
+            employees: [
+                // {
+                //     name: '宇哥',
+                //     jobNum: 20191016001,
+                //     department: "人事部",
+                //     position: "人事部经理",
+                //     jobLevelID: "无职称",
+                //     gender: "男",
+                //     date: "2019年10月16日",
+                //     nativePlace: "广西",
+                //     phone: "12345678910",
+                //     email: "12345678@qq.com",
+                // }
+            ],
+            newEmployee: {
+                name: '',           //名字
+                nationId: '',       //民族
+                sex: '',            //性别
+                wedlock: '',        //婚姻状态
+                idCard: '',         //身份证号
+                birthday: '',       //出生日期
+                politiclId: '',     //政治面貌
+                phone: '',          //联系方式
+                nativePlace: '',    //籍贯地
+                email: '',          //邮箱
+                address: '',        //居住地址
+                departmentId: '',   //所属部门
+                jobLevelId: '',     //职称
+                positionId: '',     //职位
+                titopDegree: '',    //学历
+                school: '',         //毕业学院
+                specialty: '',      //专业
+                beginDate: '',      //就职日期
+                workState: '',      //就职状态（在职or离职）
+                conversionTime: '', //转正日期
+                quitTime: '',       //离职日期
+                beginContract: '',  //合同起始日期
+                endContract: '',    //合同结束日期
+            },
+            newEmployeeRules: {
+                name: [
+                    {required: true, message: '角色名不能为空', trigger: 'blur'}
+                ]
+            },
             pictureItem:{
                 name: '',
-                url: 'C:\Users\wei\Pictures\Camera Roll\84353b61ly1g80i5t5dn8j21910u0k1z.jpg',
+                url: '',
             },
             souformItem:{
-                departmentID: '',
-                posID: '',
-                jobLevelID: '',
+                departmentId: null,
+                positionId: null,
+                jobLevelId: null,
+                name: '',
             },
             formItem:{
                 name: '',       //名字
@@ -633,28 +744,31 @@ export default {
                 },
                 {
                     title: '工号',
-                    key: 'jobNum'
+                    key: 'workId'
                 },
                 {
                     title: '部门',
-                    key: 'department'
+                    key: 'departmentName',
+                    width: 90
                 },
                 {
                     title: '职位',
-                    key: 'position'
+                    key: 'positionName',
+                    width: 90
                 },
                 {
                     title: '职称',
-                    key: 'jobLevelID'
+                    key: 'jobLevelName',
+                    width: 110
                 },
                 {
                     title: '性别',
-                    key: 'gender',
+                    key: 'sex',
                     width: 65
                 },
                 {
                     title: '出生日期',
-                    key: 'date'
+                    key: 'birthday'
                 },
                 {
                     title: '籍贯',
@@ -674,129 +788,6 @@ export default {
                     width: 230,
                     align: 'center'
                 }
-            ],
-            data1: [
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                {
-                    name: '宇哥',
-                    jobNum: 20191016001,
-                    department: "人事部",
-                    position: "人事部经理",
-                    jobLevelID: "无职称",
-                    gender: "男",
-                    date: "2019年10月16日",
-                    nativePlace: "广西",
-                    phone: "12345678910",
-                    email: "12345678@qq.com",
-                },
-                
             ],
             rewPunColumns: [
                 {
@@ -899,6 +890,29 @@ export default {
         }
     },
     methods: {
+        onPageSizeChange(index){
+            this.limit = index;
+        },
+        pageChange(index){
+            this.page = index;
+        },
+        getEmployeeList() {
+            this.loading = true;
+            this.getRequest("/employee/allEmp",{
+                page: this.page,
+                limit: this.limit,
+                departmentId: this.souformItem.departmentId,
+                jobLevelId: this.souformItem.jobLevelId,
+                positionId: this.souformItem.positionId,
+                name: this.souformItem.name,
+            }).then(resp=>{
+                console.log(resp);
+                this.loading = false;
+                this.employees = resp.data.data.list;
+                this.total = resp.data.data.total;
+            })
+
+        },
         ok () {
             this.$Message.info('Clicked ok');
         },
@@ -911,13 +925,16 @@ export default {
         },
         show(index) {
             this.showModal = true;
+            this.index = index;
             console.log(index);
         }
-    }
+    },
+    mounted: function (){
+        this.getEmployeeList();
+    },
+    watch: {
+        page: "getEmployeeList",
+        limit: "getEmployeeList",
+    },
 }
 </script>
-
-
-<style>
-.a{border:1px solid black; }
-</style>
