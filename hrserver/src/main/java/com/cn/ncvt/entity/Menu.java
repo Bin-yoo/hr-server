@@ -10,13 +10,13 @@ import java.util.List;
  * Created by sang on 2017/12/28.
  */
 public class Menu implements Serializable {
-    private int id;
+    private Integer id;
     private String url;
     private String path;
     private Object component;
     private String name;
     private String iconCls;
-    private int parentId;
+    private Integer parentId;
     private List<Role> roles;
     private List<Menu> children;
     private MenuMeta meta;
@@ -65,11 +65,11 @@ public class Menu implements Serializable {
         this.children = children;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -119,11 +119,11 @@ public class Menu implements Serializable {
     }
 
     @JsonIgnore
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 

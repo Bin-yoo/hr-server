@@ -9,25 +9,25 @@ package com.cn.ncvt.entity;
  **/
 public class EmployeeSalary {
 
-    private int id;
-    private int eid;
+    private Integer id;
+    private Integer eid;
     private double baseSalary;
     private double meritSalary;
     private Employee employee;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getEid() {
+    public Integer getEid() {
         return eid;
     }
 
-    public void setEid(int eid) {
+    public void setEid(Integer eid) {
         this.eid = eid;
     }
 

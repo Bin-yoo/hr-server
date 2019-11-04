@@ -14,9 +14,9 @@ import java.util.List;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
 public class Integral {
 
-    private int id;
-    private int eid;
-    private int integral;
+    private Integer id;
+    private Integer eid;
+    private Integer integral;
     private Employee employee;
     public Employee getEmployee() {
         return employee;
@@ -26,27 +26,27 @@ public class Integral {
         this.employee = employee;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getEid() {
+    public Integer getEid() {
         return eid;
     }
 
-    public void setEid(int eid) {
+    public void setEid(Integer eid) {
         this.eid = eid;
     }
 
-    public int getIntegral() {
+    public Integer getIntegral() {
         return integral;
     }
 
-    public void setIntegral(int integral) {
+    public void setIntegral(Integer integral) {
         this.integral = integral;
     }
 }

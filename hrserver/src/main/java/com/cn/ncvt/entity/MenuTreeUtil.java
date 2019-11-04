@@ -9,14 +9,14 @@ package com.cn.ncvt.entity;
  **/
 public class MenuTreeUtil {
 
-    private int rid;
+    private Integer rid;
     private int[] checkedKeys;
 
-    public int getRid() {
+    public Integer getRid() {
         return rid;
     }
 
-    public void setRid(int rid) {
+    public void setRid(Integer rid) {
         this.rid = rid;
     }
 

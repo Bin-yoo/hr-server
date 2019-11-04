@@ -9,31 +9,31 @@ package com.cn.ncvt.entity;
  **/
 public class MenuRole {
 
-    private int id;
-    private int mid;
-    private int rid;
+    private Integer id;
+    private Integer mid;
+    private Integer rid;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getMid() {
+    public Integer getMid() {
         return mid;
     }
 
-    public void setMid(int mid) {
+    public void setMid(Integer mid) {
         this.mid = mid;
     }
 
-    public int getRid() {
+    public Integer getRid() {
         return rid;
     }
 
-    public void setRid(int rid) {
+    public void setRid(Integer rid) {
         this.rid = rid;
     }
 }

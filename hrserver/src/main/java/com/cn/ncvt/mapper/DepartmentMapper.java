@@ -17,5 +17,6 @@ public interface DepartmentMapper {
 
     List<Department> selectByPID(int pid);
 
-    List<Department> selectAllDepartment();
+    Department selectByDepNum(Integer depNum);
+
 }
