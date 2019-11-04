@@ -49,14 +49,10 @@
                 <template slot-scope="{ row, index }" slot="action" >
                     <Button type="primary" style="margin-right: 5px" @click="select(index)">查看调薪记录</Button>
                     <Button type="primary" style="margin-right: 5px" @click="update(index)">调薪</Button>
-                    <Button type="error" @click="remove(index)">删除</Button>
                 </template>
             </Table>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
-            <Col span="1">
-                <Button type="error">批量删除</Button>
-            </Col>
             <Page :total="100" show-elevator/>
         </Row>
 
@@ -161,11 +157,6 @@
                     remark: '',    //备注
                 },
                 columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
                     {
                         title: '姓名',
                         key: 'name'
