@@ -2,7 +2,7 @@ package com.cn.ncvt.entity;
 
 import java.util.Date;
 
-public class salaryLog {
+public class SalaryLog {
     private Integer id;
 
     private Integer eid;

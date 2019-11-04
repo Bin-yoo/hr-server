@@ -1,6 +1,7 @@
 package com.cn.ncvt.controller.personnel;
 
 import com.cn.ncvt.biz.SalaryBiz;
+import com.cn.ncvt.biz.SalaryLogBiz;
 import com.cn.ncvt.entity.EmployeeSalary;
 import com.cn.ncvt.result.Result;
 import io.swagger.annotations.Api;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 public class SalaryController {
     @Autowired
     SalaryBiz salaryBiz;
+    @Autowired
+    SalaryLogBiz salary_logBiz;
+
     @GetMapping("/allEmpSalary")
     @ApiOperation(value = "查看所有员工的工资", notes = "必须要给page,limit传参数，其他的没有强制要求")
     public Result allIntegralFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name){
@@ -37,4 +41,10 @@ public class SalaryController {
         return salaryBiz.deleteByIdEmpSalaryFile(id);
     }
 
+
+    @GetMapping("/salary_log/{eid}")
+    @ApiOperation(value = "调薪记录", notes = "")
+    public Result allIntegralFile(Integer page, Integer limit){
+        return salary_logBiz.getAllSalaryLogByIdFile(page, limit);
+    }
 }
