@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeSalary" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="eid" property="eid" jdbcType="INTEGER" />
-    <result column="baseSalary" property="baseSalary" jdbcType="FLOAT" />
-    <result column="meritSalary" property="meritSalary" jdbcType="FLOAT" />
+    <result column="baseSalary" property="baseSalary" jdbcType="DOUBLE" />
+    <result column="meritSalary" property="meritSalary" jdbcType="DOUBLE" />
     <association property="employee" javaType="Employee">
       <id column="workId" property="workId"/>
       <result column="departmentName" property="departmentName"/>
@@ -42,32 +42,17 @@
     delete from employee_salary
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
-    insert into employee_salary (id, eid, baseSalary, 
-      meritSalary)
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{basesalary,jdbcType=DOUBLE},
-      #{meritsalary,jdbcType=DOUBLE})
-  </insert>
-  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
+  <update id="updateByIDSelective" parameterType="employeeSalary" >
     update employee_salary
     <set >
-      <if test="eid != null" >
-        eid = #{eid,jdbcType=INTEGER},
+      <if test="baseSalary != null" >
+        baseSalary = #{baseSalary,jdbcType=DOUBLE},
       </if>
-      <if test="basesalary != null" >
-        baseSalary = #{basesalary,jdbcType=DOUBLE},
-      </if>
-      <if test="meritsalary != null" >
-        meritSalary = #{meritsalary,jdbcType=DOUBLE},
+      <if test="meritSalary != null" >
+        meritSalary = #{meritSalary,jdbcType=DOUBLE},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where eid=#{eid,jdbcType=INTEGER}
   </update>
-  <update id="updateByID" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
-    update employee_salary
-    set eid = #{eid,jdbcType=INTEGER},
-      baseSalary = #{basesalary,jdbcType=DOUBLE},
-      meritSalary = #{meritsalary,jdbcType=DOUBLE}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+
 </mapper>
