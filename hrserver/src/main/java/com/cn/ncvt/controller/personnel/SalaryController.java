@@ -6,10 +6,7 @@ import com.cn.ncvt.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName: SalaryController
@@ -22,17 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class SalaryController {
     @Autowired
     SalaryBiz salaryBiz;
-    @GetMapping("/allSalary")
-    @ApiOperation(value = "查看所有员工的工资", notes = "")
+    @GetMapping("/allEmpSalary")
+    @ApiOperation(value = "查看所有员工的工资", notes = "必须要给page,limit传参数，其他的没有强制要求")
     public Result allIntegralFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name){
         return salaryBiz.getAllSalaryFile(page, limit,departmentId,positionId,jobLevelId,name);
     }
 
-    @GetMapping("/addSalary")
-    @ApiOperation(value = "查看所有员工的工资", notes = "")
-    public Result addAssessmentFile(@RequestBody EmployeeSalary employeeSalary){
-        return salaryBiz.addSalaryFile(employeeSalary);
+    @PutMapping("/updateEmpSalary")
+    @ApiOperation(value = "修改员工工资", notes = "注意，这里是以员工id来进行修改的")
+    public Result updateEmpSalaryFile(@RequestBody EmployeeSalary employeeSalary){
+        return salaryBiz.updateEmpSalaryFile(employeeSalary);
     }
 
+    @DeleteMapping("/updateEmpSalary/{id}")
+    @ApiOperation(value = "删除员工的工资", notes = "删除员工工资")
+    public Result deleteByIdEmployeeFile(@PathVariable Integer id){
+        return salaryBiz.deleteByIdEmpSalaryFile(id);
+    }
 
 }

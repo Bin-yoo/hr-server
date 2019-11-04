@@ -15,7 +15,7 @@ import java.util.List;
  **/
 @Mapper
 public interface EmployeeMapper {
-    
+
     void insertFun(Employee employee);
 
     void updateFun(Employee employee);
