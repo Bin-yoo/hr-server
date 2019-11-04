@@ -35,12 +35,6 @@ public class SalaryController {
         return salaryBiz.updateEmpSalaryFile(employeeSalary);
     }
 
-    @DeleteMapping("/updateEmpSalary/{id}")
-    @ApiOperation(value = "删除员工的工资", notes = "删除员工工资")
-    public Result deleteByIdEmployeeFile(@PathVariable Integer id){
-        return salaryBiz.deleteByIdEmpSalaryFile(id);
-    }
-
 
     @GetMapping("/salary_log/{eid}")
     @ApiOperation(value = "调薪记录", notes = "")
