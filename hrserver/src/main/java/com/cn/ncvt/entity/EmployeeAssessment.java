@@ -11,35 +11,35 @@ import java.sql.Timestamp;
  **/
 public class EmployeeAssessment {
 
-    private int id;
-    private int eid;
-    private int aid;
+    private Integer id;
+    private Integer eid;
+    private Integer aid;
     private String data;
     private String remark;
     private String result;
     private Boolean isCheck;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getEid() {
+    public Integer getEid() {
         return eid;
     }
 
-    public void setEid(int eid) {
+    public void setEid(Integer eid) {
         this.eid = eid;
     }
 
-    public int getAid() {
+    public Integer getAid() {
         return aid;
     }
 
-    public void setAid(int aid) {
+    public void setAid(Integer aid) {
         this.aid = aid;
     }
 
