@@ -30,17 +30,6 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                        <Col span="2">
-                            <FormItem>
-                                <DatePicker type="date" placeholder="选择开始日期" v-model="souFormItem.beforeDate"></DatePicker>
-                            </FormItem>
-                        </Col>
-                        <Col span="1"><p style="line-height: 35px">至</p></Col>
-                        <Col span="2">
-                            <FormItem>
-                                <DatePicker type="date" placeholder="选择结束日期" v-model="souFormItem.afterDate"></DatePicker>
-                            </FormItem>
-                        </Col>
                         <Col span="3">
                             <FormItem>
                                 <Input v-model="souFormItem.input" suffix="ios-search" placeholder="请输入..." style="width: auto" />
@@ -113,15 +102,7 @@
                         key: 'position'
                     },
                     {
-                        title: '基本工资',
-                        key: 'salary'
-                    },
-                    {
-                        title: '奖惩积分',
-                        key: 'integral'
-                    },
-                    {
-                        title: '奖惩次数',
+                        title: '员工积分',
                         key: 'count'
                     },
                     {
