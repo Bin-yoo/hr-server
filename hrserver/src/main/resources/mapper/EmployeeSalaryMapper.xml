@@ -8,6 +8,7 @@
     <result column="meritSalary" property="meritSalary" jdbcType="DOUBLE" />
     <association property="employee" javaType="Employee">
       <id column="workId" property="workId"/>
+      <result column="name" property="name"/>
       <result column="departmentName" property="departmentName"/>
       <result column="positionName" property="positionName"/>
     </association>
