@@ -1,6 +1,8 @@
 package com.cn.ncvt.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 /**
@@ -17,11 +19,14 @@ public class User {
     private String phone;
     private String address;
     private String username;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String salt;
     private String userface;
-    private boolean enabled;
+    private boolean enabled = true;
     private String remark;
+    @JsonIgnore
     private List<Role> roles;
 
     public Integer getId() {

@@ -7,4 +7,19 @@
 	    <select id="selectByUserName"  parameterType="string" resultType="User">
 			select * from user where username=#{0}
 	    </select>
+		<select id="selectAllFun"  parameterType="string" resultType="User">
+			select * from user
+	    </select>
+        <select id="selectByID"  parameterType="java.lang.Integer" resultType="User">
+			select * from user where id = #{id,jdbcType=INTEGER}
+	    </select>
+        <insert id="insertFun" parameterType="com.cn.ncvt.entity.User" >
+        insert into user (id, name, phone, address, username, password, salt,
+          userface, enabled)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},
+          #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{userface,jdbcType=VARCHAR}, #{enabled,jdbcType=TINYINT})
+      </insert>
+        <delete id="deleteFun" parameterType="java.lang.Integer" >
+            delete from user where id = #{id,jdbcType=INTEGER}
+      </delete>
 	</mapper>
