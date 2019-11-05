@@ -4,6 +4,7 @@
             :model="user"
             class="login-container"
             :rules="rules"
+            ref="user"
         >
             <h2 class="login_title">人事系统登录</h2>
             <FormItem prop="username">
@@ -35,7 +36,7 @@
             <FormItem>
                 <Button
                     type="primary"
-                    @click="Login()"
+                    @click="Login('user')"
                     long
                 >登录</Button>
             </FormItem>
@@ -68,29 +69,33 @@ export default {
         };
     },
     methods: {
-        Login : function() {
-            this.spinShow = true;
-            this.postRequest("/login",{
-                username:this.user.username,
-                password:this.user.password,
-            }).then(resp =>{
-                // console.log(resp)
-                if (resp.data.code == 200 && resp.data.error ==false){
-                    this.$store.commit("login", resp.data.data.user);
-                    this.$store.commit("token", resp.data.data.token);
-                    this.$store.commit("sessionId", resp.data.data.sessionId);
-                    this.$Message.success("登陆成功");
-                    this.spinShow = false;
-                    this.$router.push({name: 'home'})
-                } else {
-                    this.$Message.error(resp.data.message);
-                    this.spinShow = false;
+        Login : function(name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.spinShow = true;
+                    this.postRequest("/login",{
+                        username:this.user.username,
+                        password:this.user.password,
+                    }).then(resp =>{
+                        // console.log(resp)
+                        if (resp.data.code == 200 && resp.data.error ==false){
+                            this.$store.commit("login", resp.data.data.user);
+                            this.$store.commit("token", resp.data.data.token);
+                            this.$store.commit("sessionId", resp.data.data.sessionId);
+                            this.$Message.success("登陆成功");
+                            this.spinShow = false;
+                            this.$router.push({name: 'home'})
+                        } else {
+                            this.$Message.error(resp.data.message);
+                            this.spinShow = false;
+                        }
+                    }).catch(error => {
+                        this.spinShow = false;
+                        this.$Message.error("登陆失败,出现错误");
+                        // console.log(error)
+                    });
                 }
-            }).catch(error => {
-                this.spinShow = false;
-                this.$Message.error("登陆失败,出现错误");
-                // console.log(error)
-            });
+            })
         },
     }
 };

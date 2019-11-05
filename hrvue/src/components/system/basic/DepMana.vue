@@ -24,15 +24,15 @@
             @on-visible-change='cancel'>
             <Row>
                 <Col span="21">
-                    <Form :model="department" :rules="newDepRules" :label-width="80" ref="department">
+                    <Form :model="department" :rules="newDepRules" :label-width="80" ref="departments">
                         <FormItem label="部门名称" prop="name">
                             <Input v-model="department.name" placeholder="请输入角色名"></Input>
                         </FormItem>
                         <FormItem label="部门编号" prop="depNum">
-                            <Input v-model="department.depNum" :maxlength="maxlength" placeholder="请输入角色名"></Input>
+                            <Input v-model="department.depNum"  placeholder="请输入部门编号"></Input>
                         </FormItem>
                         <FormItem label="排序编号" prop="orderNum">
-                            <Input v-model="department.orderNum" :maxlength="maxlength" placeholder="请输入角色名"></Input>
+                            <Input v-model="department.orderNum"  placeholder="请输入排序编号"></Input>
                         </FormItem>
                         <FormItem label="上级部门" prop="parent">
                             <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1" placeholder="请选择上级部门..."/>
@@ -42,7 +42,7 @@
             </Row>
             <div slot="footer">
                 <Button @click="openAdd=false">取消</Button>
-                <Button type="primary" @click="addDep">保存</Button>
+                <Button type="primary" @click="addDep('departments')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -60,10 +60,10 @@
                             <Input v-model="department.name" placeholder="请输入角色名"></Input>
                         </FormItem>
                         <FormItem label="部门编号" prop="depNum">
-                            <Input v-model="department.depNum" :maxlength="maxlength" placeholder="请输入角色名"></Input>
+                            <Input v-model="department.depNum" placeholder="请输入部门编号"></Input>
                         </FormItem>
                         <FormItem label="排序编号" prop="orderNum">
-                            <Input v-model="department.orderNum" :maxlength="maxlength" placeholder="请输入角色名"></Input>
+                            <Input v-model="department.orderNum" placeholder="请输入排序编号"></Input>
                         </FormItem>
                         <FormItem label="上级部门" prop="parent">
                             <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1" placeholder="请选择上级部门..."/>
@@ -73,7 +73,7 @@
             </Row>
             <div slot="footer">
                 <Button @click="openUpdate=false">取消</Button>
-                <Button type="primary" @click="updateDep">保存</Button>
+                <Button type="primary" @click="updateDep('department')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -110,10 +110,13 @@
                 maxlength:10,
                 newDepRules: {
                     name: [
-                        {required: true, message: '部门名称不能为空', trigger: 'blur' }
+                        {required: true, message: '部门名称不能为空', trigger: 'blur' },
+                        {max:10, message: '长度不能超过10位'},
                     ],
                     depNum: [
                         {required: true, message: '部门编号不能为空', trigger: 'blur' },
+                        {max:10, message: '长度不能超过10位'},
+                        {pattern: /^[0-9]*$/, message: '部门编号只能为纯数字'},
                     ],
                 },
             }
@@ -193,34 +196,40 @@
                 this.openAdd = true;
                 this.department.parentId = data.id;
             },
-            addDep(){
-                this.spinShow = true;
-                if(isNotNullORBlank(this.department.name, this.department.depNum)){
-                    this.postRequest("/system/basic/department",{
-                        name: this.department.name,
-                        parentId: this.department.parentId
-                    }).then(resp=> {
-                        if (resp.data.code != 400) {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openAdd = false;
-                            this.getDeps();
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("部门名或部门编码不能为空");
-                    this.spinShow = false;
-                }
+            addDep(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.department.name)){
+                        this.$Message.error("部门名称存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.spinShow = true;
+                        this.postRequest("/system/basic/department",{
+                            name: this.department.name,
+                            depNum: this.department.depNum,
+                            orderNum: this.department.orderNum,
+                            parentId: this.department.parentId
+                        }).then(resp=> {
+                            if (resp.data.code != 400) {
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openAdd = false;
+                                this.getDeps();
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
             },
             befUpdate(data){
                 this.openUpdate = true;
                 this.department.id = data.id;
-                this.department.depNum = data.depNum;
+                this.department.depNum = ''+data.depNum;
                 this.department.orderNum = data.orderNum;
-                console.log(this.department.orderNum)
+                console.log(this.department.depNum)
                 this.department.name = data.name;
                 if (data.parentId === -1) {
                     this.department.parentId = null;
@@ -228,29 +237,33 @@
                     this.department.parentId = data.parentId;
                 }
             },
-            updateDep(){
-                if(isNotNullORBlank(this.department.name, this.department.depNum)){
-                    this.putRequest("/system/basic/department",{
-                        id: this.department.id,
-                        depNum: this.department.depNum,
-                        orderNum: this.department.orderNum,
-                        name: this.department.name,
-                        parentId: this.department.parentId,
-                    }).then(resp=> {
-                        if (resp.data.code != 400) {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openUpdate = false;
-                            this.getDeps();
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("部门名或部门编码不能为空");
-                    this.spinShow = false;
-                }
+            updateDep(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.department.name)){
+                        this.$Message.error("部门名称存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.putRequest("/system/basic/department",{
+                            id: this.department.id,
+                            depNum: this.department.depNum,
+                            orderNum: this.department.orderNum,
+                            name: this.department.name,
+                            parentId: this.department.parentId,
+                        }).then(resp=> {
+                            if (resp.data.code != 400) {
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openUpdate = false;
+                                this.getDeps();
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
             },
             remove (root, node, data) {
                 if(isNotNullORBlank(node.node.children)){
