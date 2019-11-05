@@ -18,4 +18,9 @@
     from salary_log
     where eid = #{eid,jdbcType=INTEGER}
   </select>
+
+  <update id="updateSalary" statementType="CALLABLE">
+    call updateEmpSalary(#{empSalary.afterbaseSalary,mode=IN,jdbcType=DOUBLE},#{empSalary.aftermeritSalary,mode=IN,jdbcType=DOUBLE},
+    #{empSalary.id,mode=IN,jdbcType=INTEGER},#{empSalary.remark ,mode=IN,jdbcType=VARCHAR})
+  </update>
 </mapper>
