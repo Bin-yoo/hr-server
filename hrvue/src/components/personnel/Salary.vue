@@ -129,6 +129,7 @@
 </template>
 
 <script>
+
     export default {
         name: 'PerMv',
         data() {
@@ -136,8 +137,11 @@
                 page:1,
                 total: 100,
                 limit: 10,
+                loading: false,
                 selectModal:false,
                 updateModal: false,
+                index: 1,
+
                 souFormItem: {
                     name: '',       //名字
                     gender: '',      //性别
