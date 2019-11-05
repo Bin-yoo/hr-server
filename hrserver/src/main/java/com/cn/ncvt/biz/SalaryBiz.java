@@ -45,4 +45,24 @@ public class SalaryBiz {
             return ResultFactory.buildFailResult("获取失败");
         }
     }
+
+    public Result updateEmpSalaryFile(EmployeeSalary employeeSalary) {
+        try{
+            employeeSalaryMapper.updateByIDSelective(employeeSalary);
+            return ResultFactory.buildSuccessResult("编辑成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("编辑失败，请检查您输入的资料");
+        }
+    }
+
+    public Result deleteByIdEmpSalaryFile(Integer id) {
+        try{
+            employeeSalaryMapper.deleteByID(id);
+            return ResultFactory.buildSuccessResult("删除成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("删除失败");
+        }
+    }
 }

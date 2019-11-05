@@ -69,4 +69,24 @@ public class RpBiz {
             return ResultFactory.buildFailResult("获取失败");
         }
     }
+
+    public Result updateRpFile(Rp rp) {
+        try{
+            rpMapper.updateByIDSelective(rp);
+            return ResultFactory.buildSuccessResult("编辑成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("编辑失败，请检查您输入的资料");
+        }
+    }
+
+    public Result deleteRPFile(Integer id) {
+        try{
+            rpMapper.deleteByID(id);
+            return ResultFactory.buildSuccessResult("删除成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("删除失败");
+        }
+    }
 }

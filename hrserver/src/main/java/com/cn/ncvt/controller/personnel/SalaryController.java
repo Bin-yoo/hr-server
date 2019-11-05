@@ -1,15 +1,13 @@
 package com.cn.ncvt.controller.personnel;
 
 import com.cn.ncvt.biz.SalaryBiz;
+import com.cn.ncvt.biz.SalaryLogBiz;
 import com.cn.ncvt.entity.EmployeeSalary;
 import com.cn.ncvt.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName: SalaryController
@@ -22,10 +20,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class SalaryController {
     @Autowired
     SalaryBiz salaryBiz;
-    @GetMapping("/allSalary")
-    @ApiOperation(value = "查看所有员工的工资", notes = "")
+    @Autowired
+    SalaryLogBiz salary_logBiz;
+
+    @GetMapping("/allEmpSalary")
+    @ApiOperation(value = "查看所有员工的工资", notes = "必须要给page,limit传参数，其他的没有强制要求")
     public Result allIntegralFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name){
         return salaryBiz.getAllSalaryFile(page, limit,departmentId,positionId,jobLevelId,name);
     }
 
+    @PutMapping("/updateEmpSalary")
+    @ApiOperation(value = "修改员工工资", notes = "注意，这里是以员工id来进行修改的")
+    public Result updateEmpSalaryFile(@RequestBody EmployeeSalary employeeSalary){
+        return salaryBiz.updateEmpSalaryFile(employeeSalary);
+    }
+
+
+    @GetMapping("/salary_log/{eid}")
+    @ApiOperation(value = "调薪记录", notes = "")
+    public Result allIntegralFile(Integer page, Integer limit){
+        return salary_logBiz.getAllSalaryLogByIdFile(page, limit);
+    }
 }

@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeSalary" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="eid" property="eid" jdbcType="INTEGER" />
-    <result column="baseSalary" property="baseSalary" jdbcType="FLOAT" />
-    <result column="meritSalary" property="meritSalary" jdbcType="FLOAT" />
+    <result column="baseSalary" property="baseSalary" jdbcType="DOUBLE" />
+    <result column="meritSalary" property="meritSalary" jdbcType="DOUBLE" />
     <association property="employee" javaType="Employee">
       <id column="workId" property="workId"/>
       <result column="departmentName" property="departmentName"/>
@@ -42,32 +42,7 @@
     delete from employee_salary
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
-    insert into employee_salary (id, eid, baseSalary, 
-      meritSalary)
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{basesalary,jdbcType=DOUBLE},
-      #{meritsalary,jdbcType=DOUBLE})
-  </insert>
-  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
-    update employee_salary
-    <set >
-      <if test="eid != null" >
-        eid = #{eid,jdbcType=INTEGER},
-      </if>
-      <if test="basesalary != null" >
-        baseSalary = #{basesalary,jdbcType=DOUBLE},
-      </if>
-      <if test="meritsalary != null" >
-        meritSalary = #{meritsalary,jdbcType=DOUBLE},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByID" parameterType="com.cn.ncvt.entity.EmployeeSalary" >
-    update employee_salary
-    set eid = #{eid,jdbcType=INTEGER},
-      baseSalary = #{basesalary,jdbcType=DOUBLE},
-      meritSalary = #{meritsalary,jdbcType=DOUBLE}
-    where id = #{id,jdbcType=INTEGER}
+  <update id="updateByIDSelective" statementType="CALLABLE">
+    call updateEmpSalary(#{empSalary.baseSalary,mode=IN,jdbcType=DOUBLE},#{empSalary.meritSalary,mode=IN,jdbcType=DOUBLE},#{empSalary.id,mode=IN,jdbcType=INTEGER},#{empSalary.remark ,mode=IN,jdbcType=VARCHAR},#{empSalary.date,mode=IN,jdbcType=VARCHAR})
   </update>
 </mapper>
