@@ -1,7 +1,7 @@
 package com.cn.ncvt.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import java.util.List;
  * @Auther: Bin
  * @Date: 2019/9/22 16:55
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
 public class User {
 
     private Integer id;
@@ -19,14 +20,11 @@ public class User {
     private String phone;
     private String address;
     private String username;
-    @JsonIgnore
     private String password;
-    @JsonIgnore
     private String salt;
     private String userface;
     private boolean enabled = true;
     private String remark;
-    @JsonIgnore
     private List<Role> roles;
 
     public Integer getId() {
