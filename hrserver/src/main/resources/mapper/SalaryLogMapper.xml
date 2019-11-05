@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.ncvt.mapper.SalaryLogMapper" >
+  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.SalaryLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="befBaseSalary" property="befBaseSalary" jdbcType="DOUBLE" />
+    <result column="afterBaseSalary" property="befBaseSalary" jdbcType="DOUBLE" />
+    <result column="befMeritSalary" property="befMeritSalary" jdbcType="DOUBLE" />
+    <result column="afterMeritSalary" property="afterMeritSalary" jdbcType="DOUBLE" />
+    <result column="date" property="date" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, eid, befBaseSalary, afterBaseSalary, befMeritSalary, afterMeritSalary, date
+  </sql>
+  <select id="selectByEid" parameterType="Integer" resultType="SalaryLog" >
+    select
+    from salary_log
+    where eid = #{eid,jdbcType=INTEGER}
+  </select>
+
+  <update id="updateSalary" statementType="CALLABLE">
+    call updateEmpSalary(#{empSalary.afterbaseSalary,mode=IN,jdbcType=DOUBLE},#{empSalary.aftermeritSalary,mode=IN,jdbcType=DOUBLE},
+    #{empSalary.id,mode=IN,jdbcType=INTEGER},#{empSalary.remark ,mode=IN,jdbcType=VARCHAR})
+  </update>
+</mapper>

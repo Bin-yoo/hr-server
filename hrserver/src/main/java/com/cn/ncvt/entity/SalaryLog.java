@@ -2,7 +2,7 @@ package com.cn.ncvt.entity;
 
 import java.util.Date;
 
-public class salaryLog {
+public class SalaryLog {
     private Integer id;
 
     private Integer eid;
@@ -16,6 +16,16 @@ public class salaryLog {
     private Double afterMeritSalary;
 
     private Date date;
+
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Integer getId() {
         return id;

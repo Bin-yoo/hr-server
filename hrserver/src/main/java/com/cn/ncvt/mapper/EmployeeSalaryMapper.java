@@ -15,9 +15,7 @@ public interface EmployeeSalaryMapper {
 
     EmployeeSalary selectByID(Integer id);
 
-    int updateByIDSelective(EmployeeSalary employeeSalary);
-
-    int updateByID(EmployeeSalary employeeSalary);
+    int updateByIDSelective(@Param("empSalary") EmployeeSalary employeeSalary);
 
     List<EmployeeSalary> selectAllEmployeeSalary(@Param("departmentId") Integer departmentId, @Param("positionId") Integer positionId, @Param("jobLevelId")  Integer jobLevelId, @Param("name")String name);
 }

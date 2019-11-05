@@ -1,5 +1,9 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
+
 /**
  * @version : V1.0
  * @ClassName: EmployeeSalary
@@ -14,6 +18,26 @@ public class EmployeeSalary {
     private double baseSalary;
     private double meritSalary;
     private Employee employee;
+    private String remark;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    private Timestamp date = new Timestamp(((new java.util.Date()).getTime()));
+
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Integer getId() {
         return id;
