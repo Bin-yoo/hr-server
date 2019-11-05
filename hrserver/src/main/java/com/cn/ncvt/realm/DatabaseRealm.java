@@ -2,6 +2,7 @@ package com.cn.ncvt.realm;
 
 import com.cn.ncvt.biz.UserBiz;
 import com.cn.ncvt.entity.User;
+import com.cn.ncvt.mapper.UserMapper;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DatabaseRealm extends AuthorizingRealm {
 
 	@Autowired
-	private UserBiz userBiz;
+    private UserMapper userMapper;
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -39,7 +40,7 @@ public class DatabaseRealm extends AuthorizingRealm {
 		UsernamePasswordToken t = (UsernamePasswordToken) token;
 		String userName = token.getPrincipal().toString();
 		// 获取数据库中的密码
-		User user = userBiz.getByName(userName);
+        User user = userMapper.selectByUserName(userName);
 		if (user == null){
 			return null;
 		} else {

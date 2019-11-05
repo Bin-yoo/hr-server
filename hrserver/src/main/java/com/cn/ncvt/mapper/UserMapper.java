@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserMapper {
     User selectByUserName(String userName);
 
+    User selectByUserNameLimit(String userName);
+
     List<User> selectAllFun();
 
     void deleteFun(Integer id);
