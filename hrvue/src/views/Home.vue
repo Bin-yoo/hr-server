@@ -3,7 +3,7 @@
         <Header>
             <Row>
                 <Col span="2">
-                    <h1 class="header_title">臭逼系统</h1>
+                    <h1 class="header_title">人事管理系统</h1>
                 </Col>
                 <Col span="1" offset="19">
                     <h3 class="header_userName">{{this.user.name}}</h3>
