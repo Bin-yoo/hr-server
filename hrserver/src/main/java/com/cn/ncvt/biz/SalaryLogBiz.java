@@ -22,6 +22,7 @@ import java.util.Map;
 public class SalaryLogBiz {
     @Autowired
     SalaryLogMapper salaryLogMapper;
+
     public Result getAllSalaryLogByIdFile(Integer page, Integer limit) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
