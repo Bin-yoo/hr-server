@@ -3,17 +3,17 @@
         <Row>
             <Col span="22">
                 <Row :gutter="6">
-                    <Col span="4">
-                        <treeselect v-model="souformItem.departmentId" :options="depTree" :default-expand-level="1" placeholder="请选择部门"/>
+                    <Col span="3">
+                        <treeselect class="departDown" v-model="souformItem.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
                     </Col>
                     <Col span="2">
                         <Select v-model="souformItem.positionId" placeholder="职位" clearable>
-                            <Option v-for="item in positionList" :value="item.id" :key="item.id">{{item.name}}</Option>
+                            <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id">{{item.name}}</Option>
                         </Select>
                     </Col>
                     <Col span="2">
                         <Select v-model="souformItem.jobLevelId" placeholder="职称" clearable>
-                            <Option v-for="item in jobLvlList" :value="item.id" :key="item.id">{{item.name}}</Option>
+                            <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id">{{item.name}}</Option>
                         </Select>
                     </Col>
                     <Col span="5">
@@ -45,11 +45,9 @@
         <Modal
             v-model="addModal"
             title="添加员工档案"
-            width=55%
-            @on-ok="ok"
-            @on-cancel="cancel">
+            width=55%>
 
-            <Form :model="newEmployee" :label-width="100" :rules="newEmployeeRules" ref="newEmployee">
+            <Form ref="newEmployee" :model="newEmployee" :rules="newEmployeeRules" :label-width="100">
                 <Row>
                     <Col span="8">
                         <Row>
@@ -58,7 +56,7 @@
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="性别：">
+                            <FormItem label="性别：" prop="sex">
                                 <RadioGroup v-model="newEmployee.sex">
                                     <Radio label="1">男</Radio>
                                     <Radio label="0">女</Radio>
@@ -66,28 +64,28 @@
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="身份证号：">
+                            <FormItem label="身份证号：" prop="idCard">
                                 <Input v-model="newEmployee.idCard" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="政治面貌：">
-                                <Select v-model="newEmployee.politiclId">
-                                    <Option value="1">群众</Option>
-                                    <Option value="2">共青团员</Option>
-                                    <Option value="3">中共党员</Option>
+                            <FormItem label="政治面貌：" prop="politiclId" >
+                                <Select v-model="newEmployee.politiclId" clearable>
+                                    <Option v-for="item in dropDownList.politicalStatusList" :value="item.id" :key="item.id"  :label="item.name"></Option>
                                 </Select>
                             </FormItem>
                         </Row>
                     </Col>
                     <Col span="8">
                         <Row>
-                            <FormItem label="民族：">
-                                <Input v-model="newEmployee.nationId" placeholder="请输入"></Input>
+                            <FormItem label="民族：" prop="nationId">
+                                <Select v-model="newEmployee.nationId" clearable>
+                                    <Option v-for="item in dropDownList.nationList" :value="item.id" :key="item.id" :label="item.name"></Option>
+                                </Select>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="婚姻状态：">
+                            <FormItem label="婚姻状态：" prop="wedlock">
                                 <RadioGroup v-model="newEmployee.wedlock">
                                     <Radio label="0">未婚</Radio>
                                     <Radio label="1">已婚</Radio>
@@ -95,12 +93,13 @@
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="出生日期：">
-                                <DatePicker type="date" placeholder="选择出生日期" v-model="newEmployee.birthday"></DatePicker>
+                            <FormItem label="出生日期：" prop="birthday">
+                                <DatePicker type="date" placeholder="请选择生日" format="yyyy-MM-dd" :value="newEmployee.birthday" @on-change="newEmployee.birthday=$event"></DatePicker>
                             </FormItem>
+                            <input type="text" v-model="newEmployee.birthday">
                         </Row>
                         <Row>
-                            <FormItem label="联系方式：">
+                            <FormItem label="联系方式：" prop="phone">
                                 <Input v-model="newEmployee.phone" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
@@ -134,88 +133,77 @@
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="籍贯：">
+                        <FormItem label="籍贯：" prop="nativePlace">
                             <Input v-model="newEmployee.nativePlace" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="邮箱：">
+                        <FormItem label="邮箱：" prop="email">
                             <Input v-model="newEmployee.email" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="居住地址：">
+                        <FormItem label="居住地址：" prop="address">
                             <Input v-model="newEmployee.address" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="所属部门：">
-                            <Select v-model="newEmployee.departmentId">
-                                <Option value="0">人事部</Option>
-                                <Option value="1">财务部</Option>
-                                <Option value="2">技术部</Option>
+                        <FormItem label="所属部门：" prop="departmentId">
+                            <treeselect v-model="newEmployee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="职称：" prop="jobLevelId">
+                            <Select v-model="newEmployee.jobLevelId" clearable>
+                                <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id" :label="item.name"></Option>
                             </Select>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="职称：">
-                            <Select v-model="newEmployee.jobLevelId">
-                                <Option value="0">正高级教师</Option>
-                                <Option value="1">高级教师</Option>
-                                <Option value="2">一级教师</Option>
-                                <Option value="3">二级教师</Option>
-                                <Option value="4">三级教师</Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="职位：">
-                            <Select v-model="newEmployee.positionId">
-                                <Option value="0">教授</Option>
-                                <Option value="1">教师</Option>
-                                <Option value="2">教务管理人员</Option>
-                                <Option value="3">其他</Option>
+                        <FormItem label="职位：" prop="positionId">
+                            <Select v-model="newEmployee.positionId" clearable>
+                                <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id" :label="item.name"></Option>
                             </Select>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="学历：">
-                            <Select v-model="newEmployee.titopDegree">
-                                <Option value="0">小学</Option>
-                                <Option value="1">初中</Option>
-                                <Option value="2">高中</Option>
-                                <Option value="3">中专</Option>
-                                <Option value="3">职校</Option>
-                                <Option value="3">专科</Option>
-                                <Option value="3">本科</Option>
-                                <Option value="3">硕士研究生</Option>
-                                <Option value="3">博士研究生</Option>
+                        <FormItem label="学历：" prop="titopDegree">
+                            <Select v-model="newEmployee.titopDegree" clearable>
+                                <Option value="小学">小学</Option>
+                                <Option value="初中">初中</Option>
+                                <Option value="高中">高中</Option>
+                                <Option value="中专">中专</Option>
+                                <Option value="职校">职校</Option>
+                                <Option value="专科">专科</Option>
+                                <Option value="本科">本科</Option>
+                                <Option value="硕士研究生">硕士研究生</Option>
+                                <Option value="博士研究生">博士研究生</Option>
                             </Select>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="毕业院校：">
+                        <FormItem label="毕业院校：" prop="school">
                             <Input v-model="newEmployee.school" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="专业：">
+                        <FormItem label="专业：" prop="specialty">
                             <Input v-model="newEmployee.specialty" placeholder="请输入"></Input>
                         </FormItem>
                     </Col> 
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="就职日期：">
-                            <DatePicker type="date" placeholder="请选择就职日期" v-model="newEmployee.beginDate"></DatePicker>
+                        <FormItem label="就职日期：" prop="beginDate">
+                            <DatePicker type="date" placeholder="请选择就职日期" format="yyyy-MM-dd" :value="newEmployee.beginDate" @on-change="newEmployee.beginDate=$event"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="就职状态：">
+                        <FormItem label="就职状态：" prop="workState">
                             <RadioGroup v-model="newEmployee.workState">
                                 <Radio label="0">在职</Radio>
                                 <Radio label="1">离职</Radio>
@@ -224,35 +212,49 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="转正日期：">
-                            <DatePicker type="date" placeholder="请选择转正日期" v-model="newEmployee.conversionTime"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择转正日期" format="yyyy-MM-dd" :value="newEmployee.conversionTime" @on-change="newEmployee.conversionTime=$event"></DatePicker>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="基本工资：" prop="baseSalary">
+                            <Input v-model="newEmployee.baseSalary" placeholder="请输入"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="合同起始日期：" prop="beginContract">
+                            <DatePicker type="date" placeholder="请选择合同起始日期" format="yyyy-MM-dd" :value="newEmployee.beginContract" @on-change="newEmployee.beginContract=$event"></DatePicker>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="合同结束日期：" prop="endContract">
+                            <DatePicker type="date" placeholder="请选择合同结束日期" format="yyyy-MM-dd" :value="newEmployee.endContract" @on-change="newEmployee.endContract=$event"></DatePicker>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
                         <FormItem label="离职日期：">
-                            <DatePicker type="date" placeholder="请选择离职日期" v-model="newEmployee.quitTime"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" :value="newEmployee.quitTime" @on-change="newEmployee.quitTime=$event"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="合同起始日期：">
-                            <DatePicker type="date" placeholder="请选择合同起始日期" v-model="newEmployee.beginContract"></DatePicker>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="合同结束日期：">
-                            <DatePicker type="date" placeholder="请选择合同结束日期" v-model="newEmployee.endContract"></DatePicker>
+                        <FormItem label="工号：" prop="workId">
+                            <Input v-model="newEmployee.workId" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                 </Row>
             </Form>
+            <div slot="footer">
+                <Button @click="handleReset('newEmployee')">重置</Button>
+                <Button type="primary" @click="addEmployee('newEmployee')">保存</Button>
+            </div>
         </Modal>
         <Modal
             v-model="updateModal"
             title="编辑员工档案"
-            width=50%
-            @on-ok="ok"
-            @on-cancel="cancel">
+            width=50%>
 
             <Form :model="formItem" :label-width="80">
                 <Row>
@@ -440,9 +442,7 @@
             <Modal
                 v-model="showModal"
                 title="员工档案详情"
-                @on-ok="ok"
-                width=40%
-                @on-cancel="cancel">
+                width=40%>
                 <Row>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
@@ -625,9 +625,7 @@
                 loading: false,
                 spinShow: false,
                 index: 1,
-                depTree: [],
-                positionList: [],
-                jobLvlList: [],
+                dropDownList: [],
                 department:{
                     id: null,
                     name: '',
@@ -671,7 +669,7 @@
                     nativePlace: '',    //籍贯地
                     email: '',          //邮箱
                     address: '',        //居住地址
-                    departmentId: '',   //所属部门
+                    departmentId: null, //所属部门
                     jobLevelId: '',     //职称
                     positionId: '',     //职位
                     titopDegree: '',    //学历
@@ -680,14 +678,86 @@
                     beginDate: '',      //就职日期
                     workState: '',      //就职状态（在职or离职）
                     conversionTime: '', //转正日期
-                    quitTime: '',       //离职日期
+                    baseSalary: '',     //基本工资
+                    picture: '',        //照片
                     beginContract: '',  //合同起始日期
                     endContract: '',    //合同结束日期
+                    quitTime: '',       //离职日期
+                    workId:''
                 },
                 newEmployeeRules: {
                     name: [
-                        {required: true, message: '角色名不能为空', trigger: 'blur'}
-                    ]
+                        {required: true, message: '姓名不能为空', trigger: 'blur'}
+                    ],
+                    sex: [
+                        {required: true, message: '请选择性别', trigger: 'change'}
+                    ],
+                    idCard: [
+                        {required: true, message: '身份证不能为空', trigger: 'blur'},
+                        {type: 'string', min: 16, message: '身份证不能少于16位', trigger: 'blur'},
+                        {type: 'string', max: 18, message: '身份证不能大于18位', trigger: 'blur'},
+                    ],
+                    politiclId: [
+                        {required: true, type: 'number', message: '请选择政治面貌', trigger: 'change'}
+                    ],
+                    wedlock: [
+                        {required: true, message: '请选择婚姻状态', trigger: 'change'}
+                    ],
+                    nationId: [
+                        {required: true, type: 'number', message: '请选择民族', trigger: 'change'}
+                    ],
+                    birthday: [
+                        {required: true, type: 'date', message: '请选择出生日期', trigger: 'change'}
+                    ],
+                    phone: [
+                        {required: true, message: '联系方式不能为空', trigger: 'blur'}
+                    ],
+                    nativePlace: [
+                        {required: true, message: '籍贯不能为空', trigger: 'blur'}
+                    ],
+                    email: [
+                        {required: true, message: '邮箱不能为空', trigger: 'blur'},
+                        { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
+                    ],
+                    address: [
+                        {required: true, message: '居住地址不能为空', trigger: 'blur'}
+                    ],
+                    departmentId: [
+                        {required: true, type: 'number', message: '请选择所属部门', trigger: 'change'}
+                    ],
+                    jobLevelId: [
+                        {required: true, type: 'number', message: '请选择职称', trigger: 'change'}
+                    ],
+                    positionId: [
+                        {required: true, type: 'number', message: '请选择职位', trigger: 'change'}
+                    ],
+                    titopDegree: [
+                        {required: true, message: '请选择学历', trigger: 'change'}
+                    ],
+                    school: [
+                        {required: true, message: '毕业院校不能为空', trigger: 'blur'}
+                    ],
+                    specialty: [
+                        {required: true, message: '专业不能为空', trigger: 'blur'}
+                    ],
+                    beginDate: [
+                        {required: true, type: 'date', message: '请选择就职日期', trigger: 'change'}
+                    ],
+                    workState: [
+                        {required: true, message: '请选择就职状态', trigger: 'change'}
+                    ],
+                    beginContract: [
+                        {required: true, type: 'date', message: '请选择合同起始日期', trigger: 'change'}
+                    ],
+                    endContract: [
+                        {required: true, type: 'date', message: '请选择合同结束日期', trigger: 'change'}
+                    ],
+                    baseSalary: [
+                        {required: true, message: '基本工资不能为空', trigger: 'blur'}
+                    ],
+                    workId: [
+                        {required: true, message: '工号不能为空', trigger: 'blur'}
+                    ],
                 },
                 pictureItem:{
                     name: '',
@@ -891,28 +961,9 @@
                     this.getEmployeeList();
                 }
             },
-            getDeps(){
-                this.getRequest("/system/basic/department/list").then(resp=> {
-                    this.spinShow = false;
-                    this.depTree = resp.data.data;
-                })
-            },
-            getPositionList(){
-                this.getRequest("/system/basic/positionList",{
-                    page: this.page,
-                    limit: this.limit,
-                }).then(resp=>{
-                    console.log(resp);
-                    this.positionList = resp.data.data.list;
-                })
-            },
-            getJobLvlList(){
-                this.getRequest("/system/basic/jobLvlList",{
-                    page: this.page,
-                    limit: this.limit,
-                }).then(resp=>{
-                    console.log(resp);
-                    this.jobLvlList = resp.data.data.list;
+            getDropDownList(){
+                this.getRequest("/employee/init").then(resp=> {
+                    this.dropDownList = resp.data.data;
                 })
             },
             getEmployeeList() {
@@ -930,13 +981,97 @@
                     this.employees = resp.data.data.list;
                     this.total = resp.data.data.total;
                 })
+            },
+            handleReset (name) {
+                this.$refs[name].resetFields();
+            },
+            addEmployee(name) {
+                this.$refs[name].validate((valid) => {
+                    console.log("佛了")
+                    if (valid) {
+                        this.postRequest("/employee/addEmp",{
+                            name: name.name,
+                            nationId: name.nationId,
+                            sex: name.sex,
+                            wedlock: name.wedlock,
+                            idCard: name.idCard,
+                            birthday: name.birthday,
+                            politiclId: name.politiclId,
+                            phone: name.phone,
+                            nativePlace: name.nativePlace,
+                            email: name.email,
+                            address: name.address,
+                            departmentId: name.departmentId,
+                            jobLevelId: name.jobLevelId,
+                            positionId: name.positionId,
+                            titopDegree: name.titopDegree,
+                            school: name.school,
+                            specialty: name.specialty,
+                            beginDate: name.beginDate,
+                            workState: name.workState,
+                            conversionTime: name.conversionTime,
+                            quitTime: name.quitTime,
+                            beginContract: name.beginContract,
+                            endContract: name.endContract,
+                            baseSalary: name.baseSalary,
+                            workId: name.workId
+                        }).then(resp=> {
+                            if (resp.data.code != 400) {
+                                this.$Message.success(resp.data.data);
+                                this.addModal = false;
+                                this.this.getEmployeeList();
+                            } else {
+                                this.$Message.error(resp.data.message);
+                            }
+                        })
+                    } else {
+                        this.$Message.error('必填项不能为空');
+                    }
+                })
 
-            },
-            ok () {
-                this.$Message.info('Clicked ok');
-            },
-            cancel () {
-                this.$Message.info('Clicked cancel');
+                // if(isNotNullORBlank(this.newEmployee.name,this.newEmployee.nationId,this.newEmployee.sex,this.newEmployee.wedlock,this.newEmployee.idCard,
+                //     this.newEmployee.birthday,this.newEmployee.politiclId,this.newEmployee.phone,this.newEmployee.nativePlace,this.newEmployee.email,this.newEmployee.address,
+                //     this.newEmployee.departmentId,this.newEmployee.jobLevelId,this.newEmployee.positionId,this.newEmployee.titopDegree,this.newEmployee.school,
+                //     this.newEmployee.specialty,this.newEmployee.beginDate,this.newEmployee.workState,this.newEmployee.beginContract,this.newEmployee.endContract)){
+                //         this.postRequest("/employee/addEmp",{
+                //             name: this.newEmployee.name,
+                //             nationId: this.newEmployee.nationId,
+                //             sex: this.newEmployee.sex,
+                //             wedlock: this.newEmployee.wedlock,
+                //             idCard: this.newEmployee.idCard,
+                //             birthday: this.newEmployee.birthday,
+                //             politiclId: this.newEmployee.politiclId,
+                //             phone: this.newEmployee.phone,
+                //             nativePlace: this.newEmployee.nativePlace,
+                //             email: this.newEmployee.email,
+                //             address: this.newEmployee.address,
+                //             departmentId: this.newEmployee.departmentId,
+                //             jobLevelId: this.newEmployee.jobLevelId,
+                //             positionId: this.newEmployee.positionId,
+                //             titopDegree: this.newEmployee.titopDegree,
+                //             school: this.newEmployee.school,
+                //             specialty: this.newEmployee.specialty,
+                //             beginDate: this.newEmployee.beginDate,
+                //             workState: this.newEmployee.workState,
+                //             conversionTime: this.newEmployee.conversionTime,
+                //             quitTime: this.newEmployee.quitTime,
+                //             beginContract: this.newEmployee.beginContract,
+                //             endContract: this.newEmployee.endContract,
+                //             baseSalary: this.newEmployee.baseSalary
+                //         }).then(resp=> {
+                //             if (resp.data.code != 400){
+                //                 this.$Message.success(resp.data.data);
+                //                 this.addModal = false;
+                //                 this.getEmployeeList();
+                //             } else {
+                //                 this.$Message.error(resp.data.message);
+                //                 this.addModal = false;
+                //             }
+                //         })
+                // }else{
+                //     this.$Message.error("必填项不能为空");
+                //     this.addModal = false;
+                // }
             },
             update (index) {
                 this.updateModal = true;
@@ -950,9 +1085,7 @@
         },
         mounted: function (){
             this.getEmployeeList();
-            this.getDeps();
-            this.getPositionList();
-            this.getJobLvlList();
+            this.getDropDownList();
         },
         watch: {
             page: "getEmployeeList",
@@ -960,3 +1093,11 @@
         },
     }
 </script>
+
+<style>
+
+    .departDown{
+        height: 30px;
+    }
+
+</style>
