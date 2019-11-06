@@ -45,7 +45,7 @@
             </Col>
         </Row>
         <Row>
-            <Table border ref="selection" :columns="columns" :data="data1">
+            <Table border ref="selection" :columns="columns" :data="employeeSalarylist">
                 <template slot-scope="{ row, index }" slot="action" >
                     <Button type="primary" style="margin-right: 5px" @click="select(index)">查看调薪记录</Button>
                     <Button type="primary" style="margin-right: 5px" @click="update(index)">调薪</Button>
@@ -141,7 +141,9 @@
                 selectModal:false,
                 updateModal: false,
                 index: 1,
+                employeeSalarylist:[
 
+                ],
                 souFormItem: {
                     name: '',       //名字
                     gender: '',      //性别
@@ -163,19 +165,31 @@
                 columns: [
                     {
                         title: '姓名',
-                        key: 'name'
+                        key: 'name',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.name);
+                        }
                     },
                     {
                         title: '工号',
-                        key: 'jobNum'
+                        key: 'workId',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.workId);
+                        }
                     },
                     {
                         title: '部门',
-                        key: 'department'
+                        key: 'departmentName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.departmentName);
+                        }
                     },
                     {
                         title: '职位',
-                        key: 'position'
+                        key: 'positionName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.positionName);
+                        }
                     },
                     {
                         title: '基础工资',
@@ -218,57 +232,6 @@
                         key: 'remark'
                     }
                 ],
-                data1: [
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        baseSalary:"1200",
-                        meritSalary:"2500",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        baseSalary:"1200",
-                        meritSalary:"2500",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        baseSalary:"1200",
-                        meritSalary:"2500",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        baseSalary:"1200",
-                        meritSalary:"2500",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        baseSalary:"1200",
-                        meritSalary:"2500",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        baseSalary:"1200",
-                        meritSalary:"2500",
-                    },
-
-                ],
                 data2:[
                     {
                         befBaseSalary: '1223',
@@ -281,7 +244,23 @@
                 ]
             }
         },
+        mounted: function () {
+            this.getEmpSalaryList();
+        },
         methods: {
+            getEmpSalaryList(){
+                this.loading = true;
+                this.getRequest("/salary/allEmpSalary",{
+                    page: this.page,
+                    limit: this.limit,
+                    name: this.keyword,
+                }).then(resp=> {
+                    console.log(resp)
+                    this.loading = false;
+                    this.employeeSalarylist = resp.data.data.list;
+                    this.total = resp.data.data.total;
+                })
+            },
             ok() {
                 this.$Message.info('Clicked ok');
             },

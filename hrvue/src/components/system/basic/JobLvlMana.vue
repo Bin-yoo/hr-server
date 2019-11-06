@@ -45,7 +45,7 @@
             </Row>
             <div slot="footer">
                 <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="addNewJobLvl">保存</Button>
+                <Button type="primary" @click="addNewJobLvl('newJobLvl')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -70,7 +70,7 @@
             </Row>
             <div slot="footer">
                 <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="updateJobLvl">保存</Button>
+                <Button type="primary" @click="updateJobLvl('joblvl')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -120,10 +120,11 @@
                 },
                 newJobLvlRules: {
                     name: [
-                        {required: true, message: '职称名称不能为空', trigger: 'blur' }
+                        {required: true, message: '职称名称不能为空', trigger: 'blur' },
+                        {max:10, message: '长度不能超过10位'},
                     ],
                     remark: [
-                        { type: 'string', max: 50, message: '备注长度不能超过50个字符', trigger: 'change' }
+                        {type: 'string', max: 50, message: '备注长度不能超过50个字符'}
                     ]
                 },
                 joblvl: {
@@ -164,29 +165,33 @@
                     this.total = resp.data.data.total;
                 })
             },
-            addNewJobLvl(){
-                var check = /\s/;
-                if(!check.test(this.newJobLvl.name) && isNotNullORBlank(this.newJobLvl.name)){
-                    this.spinShow = true;
-                    this.postRequest("/system/basic/jobLvl", {
-                        name: this.newJobLvl.name,
-                        remark: this.newJobLvl.remark
-                    }).then(resp=> {
-                        if (resp.data.error == false && resp.data.code == 200) {
-                            this.getjoblvlList();
-                            this.newJobLvl.name = '';
-                            this.newJobLvl.remark = '';
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openAddNew = false;
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("职称名称不能为空");
-                }
+            addNewJobLvl(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.newJobLvl.name)){
+                        this.$Message.error("职称名称存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.spinShow = true;
+                        this.postRequest("/system/basic/jobLvl", {
+                            name: this.newJobLvl.name,
+                            remark: this.newJobLvl.remark
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getjoblvlList();
+                                this.newJobLvl.name = '';
+                                this.newJobLvl.remark = '';
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openAddNew = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
             },
             beforeUpdate(index){
                 this.openUpdate = true;
@@ -195,31 +200,35 @@
                 this.joblvl.createDate = this.joblvls[index].createDate;
                 this.joblvl.remark = this.joblvls[index].remark;
             },
-            updateJobLvl(){
-                var check = /\s/;
-                if(!check.test(this.joblvl.name) && isNotNullORBlank(this.joblvl.name)){
-                    this.spinShow = true;
-                    this.putRequest("/system/basic/jobLvl", {
-                        id: this.joblvl.id,
-                        name: this.joblvl.name,
-                        remark: this.joblvl.remark
-                    }).then(resp=> {
-                        if (resp.data.error == false && resp.data.code == 200) {
-                            this.getjoblvlList();
-                            this.joblvl.id = 0;
-                            this.joblvl.name = '';
-                            this.joblvl.remark = '';
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openUpdate = false;
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("职称名称不能为空");
-                }
+            updateJobLvl(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.joblvl.name)){
+                        this.$Message.error("职称名称存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.spinShow = true;
+                        this.putRequest("/system/basic/jobLvl", {
+                            id: this.joblvl.id,
+                            name: this.joblvl.name,
+                            remark: this.joblvl.remark
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getjoblvlList();
+                                this.joblvl.id = 0;
+                                this.joblvl.name = '';
+                                this.joblvl.remark = '';
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openUpdate = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
             },
             cancel(){
                 this.openAddNew = false;
