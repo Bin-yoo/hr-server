@@ -31,7 +31,7 @@
             <Table border ref="selection" :columns="columns" :data="employees">
                 <template slot-scope="{ row, index }" slot="action">
                     <Button style="margin-right: 5px" @click="show(index)">查看</Button>
-                    <Button type="primary" style="margin-right: 5px" @click="update(index)">编辑</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑</Button>
                     <Button type="error" @click="remove(index)">删除</Button>
                 </template>
             </Table>
@@ -205,8 +205,8 @@
                     <Col span="8">
                         <FormItem label="就职状态：" prop="workState">
                             <RadioGroup v-model="newEmployee.workState">
-                                <Radio label="0">在职</Radio>
-                                <Radio label="1">离职</Radio>
+                                <Radio label="在职">在职</Radio>
+                                <Radio label="离职">离职</Radio>
                             </RadioGroup>
                         </FormItem>
                     </Col>
@@ -254,61 +254,62 @@
         <Modal
             v-model="updateModal"
             title="编辑员工档案"
-            width=50%>
+            width=55%>
 
-            <Form :model="formItem" :label-width="80">
+            <Form ref="employee" :model="employee" :rules="newEmployeeRules" :label-width="100" >
                 <Row>
                     <Col span="8">
                         <Row>
-                            <FormItem label="姓名：">
-                                <Input v-model="formItem.name" placeholder="请输入"></Input>
+                            <FormItem label="姓名：" prop="name">
+                                <Input v-model="employee.name" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="性别：">
-                                <RadioGroup v-model="formItem.gender">
-                                    <Radio label="1">男</Radio>
-                                    <Radio label="0">女</Radio>
+                            <FormItem label="性别：" prop="sex">
+                                <RadioGroup v-model="employee.sex">
+                                    <Radio label="男">男</Radio>
+                                    <Radio label="女">女</Radio>
                                 </RadioGroup>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="身份证号：">
-                                <Input v-model="formItem.idCard" placeholder="请输入"></Input>
+                            <FormItem label="身份证号：" prop="idCard">
+                                <Input v-model="employee.idCard" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="政治面貌：">
-                                <Select v-model="formItem.politicID">
-                                    <Option value="1">群众</Option>
-                                    <Option value="2">共青团员</Option>
-                                    <Option value="3">中共党员</Option>
+                            <FormItem label="政治面貌：" prop="politiclId">
+                                <Select v-model="employee.politiclId">
+                                    <Option v-for="item in dropDownList.politicalStatusList" :value="item.id" :key="item.id"  :label="item.name"></Option>
                                 </Select>
                             </FormItem>
                         </Row>
                     </Col>
                     <Col span="8">
                         <Row>
-                            <FormItem label="民族：">
-                                <Input v-model="formItem.nationID" placeholder="请输入"></Input>
+                            <FormItem label="民族：" prop="nationId">
+                                <Select v-model="employee.nationId" clearable>
+                                    <Option v-for="item in dropDownList.nationList" :value="item.id" :key="item.id" :label="item.name"></Option>
+                                </Select>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="婚姻状态：">
-                                <RadioGroup v-model="formItem.wedlock">
-                                    <Radio label="0">未婚</Radio>
-                                    <Radio label="1">已婚</Radio>
+                            <FormItem label="婚姻状态：" prop="wedlock">
+                                <RadioGroup v-model="employee.wedlock">
+                                    <Radio label="未婚">未婚</Radio>
+                                    <Radio label="已婚">已婚</Radio>
+                                    <Radio label="离异">离异</Radio>
                                 </RadioGroup>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="出生日期：">
-                                <DatePicker type="date" placeholder="选择出生日期" v-model="formItem.birthday"></DatePicker>
+                            <FormItem label="出生日期：" prop="birthday">
+                                <DatePicker type="date" placeholder="选择出生日期" v-model="employee.birthday"></DatePicker>
                             </FormItem>
                         </Row>
                         <Row>
-                            <FormItem label="联系方式：">
-                                <Input v-model="formItem.phone" placeholder="请输入"></Input>
+                            <FormItem label="联系方式：" prop="phone">
+                                <Input v-model="employee.phone" placeholder="请输入"></Input>
                             </FormItem>
                         </Row>
                     </Col>
@@ -342,101 +343,123 @@
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="籍贯：">
-                            <Input v-model="formItem.nativePlace" placeholder="请输入"></Input>
+                        <FormItem label="籍贯：" prop="nativePlace">
+                            <Input v-model="employee.nativePlace" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="邮箱：">
-                            <Input v-model="formItem.email" placeholder="请输入"></Input>
+                        <FormItem label="邮箱：" prop="email">
+                            <Input v-model="employee.email" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="居住地址：">
-                            <Input v-model="formItem.adress" placeholder="请输入"></Input>
+                        <FormItem label="居住地址：" prop="address">
+                            <Input v-model="employee.address" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="所属部门：">
-                            <Select v-model="formItem.departmentID">
-                                <Option value="0">人事部</Option>
-                                <Option value="1">财务部</Option>
-                                <Option value="2">技术部</Option>
+                        <FormItem label="所属部门：" prop="departmentId">
+                            <treeselect v-model="employee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="职称：" prop="jobLevelId">
+                            <Select v-model="employee.jobLevelId">
+                                <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id" :label="item.name"></Option>
                             </Select>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="职称：">
-                            <Select v-model="formItem.departmentID">
-                                <Option value="0">正高级教师</Option>
-                                <Option value="1">高级教师</Option>
-                                <Option value="2">一级教师</Option>
-                                <Option value="3">二级教师</Option>
-                                <Option value="4">三级教师</Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="职位：">
-                            <Select v-model="formItem.posID">
-                                <Option value="0">教授</Option>
-                                <Option value="1">教师</Option>
-                                <Option value="2">教务管理人员</Option>
-                                <Option value="3">其他</Option>
+                        <FormItem label="职位：" prop="positionId">
+                            <Select v-model="employee.positionId">
+                                <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id" :label="item.name"></Option>
                             </Select>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="学历：">
-                            <Select v-model="formItem.titopDegree">
-                                <Option value="0">小学</Option>
-                                <Option value="1">初中</Option>
-                                <Option value="2">高中</Option>
-                                <Option value="3">中专</Option>
-                                <Option value="3">职校</Option>
-                                <Option value="3">专科</Option>
-                                <Option value="3">本科</Option>
-                                <Option value="3">硕士研究生</Option>
-                                <Option value="3">博士研究生</Option>
+                        <FormItem label="学历：" prop="titopDegree">
+                            <Select v-model="employee.titopDegree">
+                                <Option value="小学">小学</Option>
+                                <Option value="初中">初中</Option>
+                                <Option value="高中">高中</Option>
+                                <Option value="中专">中专</Option>
+                                <Option value="职校">职校</Option>
+                                <Option value="专科">专科</Option>
+                                <Option value="本科">本科</Option>
+                                <Option value="硕士研究生">硕士研究生</Option>
+                                <Option value="博士研究生">博士研究生</Option>
                             </Select>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="毕业院校：">
-                            <Input v-model="formItem.school" placeholder="请输入"></Input>
+                        <FormItem label="毕业院校：" prop="school">
+                            <Input v-model="employee.school" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="专业：">
-                            <Input v-model="formItem.specialty" placeholder="请输入"></Input>
+                        <FormItem label="专业：" prop="specialty">
+                            <Input v-model="employee.specialty" placeholder="请输入"></Input>
                         </FormItem>
                     </Col> 
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="就职日期：">
-                            <DatePicker type="date" placeholder="请选择就职日期" v-model="formItem.beginDate"></DatePicker>
+                        <FormItem label="就职日期：" prop="beginDate">
+                            <DatePicker type="date" placeholder="请选择就职日期" v-model="employee.beginDate"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="就职状态：">
-                            <RadioGroup v-model="formItem.workState">
-                                <Radio label="0">在职</Radio>
-                                <Radio label="1">离职</Radio>
+                        <FormItem label="就职状态：" prop="workState">
+                            <RadioGroup v-model="employee.workState">
+                                <Radio label="在职">在职</Radio>
+                                <Radio label="离职">离职</Radio>
                             </RadioGroup>
                         </FormItem>
                     </Col>
                     <Col span="8">
                         <FormItem label="转正日期：">
-                            <DatePicker type="date" placeholder="请选择转正日期" v-model="formItem.conversionTime"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择转正日期" v-model="employee.conversionTime"></DatePicker>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="基本工资：" prop="baseSalary">
+                            <Input v-model="employee.baseSalary" placeholder="请输入"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="合同起始日期：" prop="beginContract">
+                            <DatePicker type="date" placeholder="请选择合同起始日期" format="yyyy-MM-dd" v-model="employee.beginContract"></DatePicker>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="合同结束日期：" prop="endContract">
+                            <DatePicker type="date" placeholder="请选择合同结束日期" format="yyyy-MM-dd" v-model="employee.endContract"></DatePicker>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem label="离职日期：">
+                            <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="employee.quitTime"></DatePicker>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="工号：" prop="workId">
+                            <Input v-model="employee.workId" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                 </Row>
             </Form>
+            <div slot="footer">
+                <Button @click="handleReset('employee')">重置</Button>
+                <Button type="primary" @click="update('newEmployee')">保存</Button>
+            </div>
         </Modal>
         <div v-if="showModal">
             <Modal
@@ -547,7 +570,7 @@
                     </Col>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>就职状态：</p></Col>
+                            <Col span="9"><p>在职状态：</p></Col>
                             <Col span="11"><p>{{employees[index].workState}}</p></Col>
                         </Row>
                     </Col>
@@ -555,28 +578,34 @@
                 <Row>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>是否正式员工：</p></Col>
+                            <Col span="11"><p>{{employees[index].conversionTime == null||'' ? "实习" : "正式"}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
                             <Col span="9"><p>转正日期：</p></Col>
                             <Col span="11"><p>{{employees[index].conversionTime}}</p></Col>
-                        </Row>
-                    </Col>
-                    <Col span="8">
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>离职日期：</p></Col>
-                            <Col span="11"><p>{{employees[index].quitTime}}</p></Col>
-                        </Row>
-                    </Col>
-                    <Col span="8">
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>合同起始日期：</p></Col>
-                            <Col span="11"><p>{{employees[index].beginContract}}</p></Col>
                         </Row>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>合同起始日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].beginContract}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
                             <Col span="9"><p>合同结束日期：</p></Col>
                             <Col span="11"><p>{{employees[index].endContract}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>离职日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].quitTime}}</p></Col>
                         </Row>
                     </Col>
                 </Row>
@@ -624,7 +653,6 @@
                 total: 100,
                 limit: 10,
                 loading: false,
-                spinShow: false,
                 index: 1,
                 dropDownList: [],
                 department:{
@@ -633,31 +661,40 @@
                     parentId: null
                 },
                 employee: {
+                    id: '',
+                    workId: '',
                     name: '',
-                    jobNum: '',
-                    department: "",
-                    position: "",
-                    jobLevelID: "",
-                    gender: "",
-                    date: "",
-                    nativePlace: "",
-                    phone: "",
-                    email: "",
+                    sex: '',
+                    nationId: '',
+                    nationName: '',
+                    birthday: '',
+                    politiclId: '',
+                    politiclName: '',
+                    picture: '',
+                    wedlock: '',
+                    nativePlace: '',
+                    idCard: '',
+                    email: '',
+                    phone: '',
+                    address: '',
+                    departmentId: '',
+                    departmentName: '',
+                    positionId: '',
+                    positionName: '',
+                    jobLevelId: '',
+                    jobLevelName: '',
+                    titopDegree: '',
+                    specialty: '',
+                    school: '',
+                    beginDate: '',
+                    workState: '',
+                    conversionTime: '',
+                    quitTime: '',
+                    beginContract: '',
+                    endContract: '',
+                    baseSalary: '',
                 },
-                employees: [
-                    // {
-                    //     name: '宇哥',
-                    //     jobNum: 20191016001,
-                    //     department: "人事部",
-                    //     position: "人事部经理",
-                    //     jobLevelID: "无职称",
-                    //     gender: "男",
-                    //     date: "2019年10月16日",
-                    //     nativePlace: "广西",
-                    //     phone: "12345678910",
-                    //     email: "12345678@qq.com",
-                    // }
-                ],
+                employees: [],
                 formatDate:{   //转化后日期临时存储
                     birthday:'',
                     beginDate:'',
@@ -692,7 +729,7 @@
                     beginContract: '',  //合同起始日期
                     endContract: '',    //合同结束日期
                     quitTime: '',       //离职日期
-                    workId:''
+                    workId:''           //工号
                 },
                 newEmployeeRules: {
                     name: [
@@ -965,11 +1002,6 @@
             pageChange(index){
                 this.page = index;
             },
-            check(){
-                if(!isNotNullORBlank(this.souformItem.departmentId)){
-                    this.getEmployeeList();
-                }
-            },
             getDropDownList(){
                 this.getRequest("/employee/init").then(resp=> {
                     this.dropDownList = resp.data.data;
@@ -1063,6 +1095,41 @@
                     }
                 })
             },
+            beforeUpdate(index){
+                this.updateModal = true;
+                this.employee.id = this.employees[index].id;
+                this.employee.workId = this.employees[index].workId;
+                this.employee.name = this.employees[index].name;
+                this.employee.sex = this.employees[index].sex;
+                this.employee.nationId = this.employees[index].nationId;
+                this.employee.nationName = this.employees[index].nationName;
+                this.employee.birthday = this.employees[index].birthday;
+                this.employee.politiclId = this.employees[index].politiclId;
+                this.employee.politiclName = this.employees[index].politiclName;
+                this.employee.wedlock = this.employees[index].wedlock;
+                this.employee.nativePlace = this.employees[index].nativePlace;
+                this.employee.idCard = this.employees[index].idCard;
+                this.employee.email = this.employees[index].email;
+                this.employee.phone = this.employees[index].phone;
+                this.employee.address = this.employees[index].address;
+                this.employee.departmentId = this.employees[index].departmentId;
+                this.employee.departmentName = this.employees[index].departmentName;
+                this.employee.positionId = this.employees[index].positionId;
+                this.employee.positionName = this.employees[index].positionName;
+                this.employee.jobLevelId = this.employees[index].jobLevelId;
+                this.employee.jobLevelName = this.employees[index].jobLevelName;
+                this.employee.titopDegree = this.employees[index].titopDegree;
+                this.employee.specialty = this.employees[index].specialty;
+                this.employee.school = this.employees[index].school;
+                this.employee.beginDate = this.employees[index].beginDate;
+                this.employee.workState = this.employees[index].workState;
+                this.employee.conversionTime = this.employees[index].conversionTime;
+                this.employee.quitTime = this.employees[index].quitTime;
+                this.employee.beginContract = this.employees[index].beginContract;
+                this.employee.endContract = this.employees[index].endContract;
+                this.employee.baseSalary = this.employees[index].baseSalary;
+                this.employee.picture = this.employees[index].picture;
+            },
             update (index) {
                 this.updateModal = true;
                 console.log(index);
@@ -1070,7 +1137,6 @@
             show(index) {
                 this.showModal = true;
                 this.index = index;
-                console.log(index);
             },
             birthday(date){
                 this.newEmployee.birthday = date;
