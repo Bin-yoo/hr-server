@@ -25,8 +25,8 @@ public class SystemUserController {
 
     @GetMapping("/userlist")
     @ApiOperation(value = "获取系统用户列表", notes = "")
-    public Result getUserList(){
-        return userBiz.getAllUserList();
+    public Result getUserList(Integer page, Integer limit, String name){
+        return userBiz.getAllUserList(page, limit, name);
     }
 
     @PostMapping("/addUser")

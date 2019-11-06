@@ -6,6 +6,8 @@ import com.cn.ncvt.mapper.UserRoleMapper;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import com.cn.ncvt.util.Token;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -62,10 +64,18 @@ public class UserBiz {
         }
     }
 
-    public Result getAllUserList() {
-        List<User> list = userMapper.selectAllFun();
-        if (list != null) {
-            return ResultFactory.buildSuccessResult(list);
+    public Result getAllUserList(Integer page, Integer limit, String name) {
+        PageHelper.startPage(page, limit);
+        List<User> list = userMapper.selectUserByCondition(name);
+
+        if (list != null){
+            PageInfo pageInfo = new PageInfo(list);
+            Map map = new HashMap();
+            map.put("total", pageInfo.getTotal());
+            map.put("totalPage" , pageInfo.getPages());
+            map.put("page" , pageInfo.getPageNum());
+            map.put("list", list);
+            return ResultFactory.buildSuccessResult(map);
         } else {
             return ResultFactory.buildFailResult("获取失败");
         }

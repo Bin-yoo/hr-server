@@ -10,8 +10,14 @@
 		<select id="selectByUserNameLimit"  parameterType="string" resultType="User">
 			select id, name, phone, address, username, userface, enabled from user where username=#{0}
 	    </select>
-		<select id="selectAllFun"  parameterType="string" resultType="User">
+		<select id="selectAllFun"  resultType="User">
 			select id, name, phone, address, username, userface, enabled from user
+	    </select>
+		<select id="selectUserByCondition"  parameterType="string" resultType="User">
+			select id, name, phone, address, username, userface, enabled from user
+            <if test="name != null and name != '' " >
+                where name like '%${name}%'
+            </if>
 	    </select>
         <select id="selectByID"  parameterType="java.lang.Integer" resultType="User">
 			select * from user where id = #{id,jdbcType=INTEGER}

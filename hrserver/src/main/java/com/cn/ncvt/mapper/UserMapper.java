@@ -23,4 +23,6 @@ public interface UserMapper {
     int updateByID(User record);
 
     void updateByEnabled(User user);
+
+    List<User> selectUserByCondition(@Param("name") String name);
 }
