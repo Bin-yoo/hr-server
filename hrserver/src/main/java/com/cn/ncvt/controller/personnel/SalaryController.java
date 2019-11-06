@@ -35,6 +35,11 @@ public class SalaryController {
         return salaryBiz.updateEmpSalaryFile(employeeSalary);
     }
 
+    @GetMapping("/befUpdate/{eid}")
+    @ApiOperation(value = "初始化修改信息", notes = "")
+    public Result befUpdateEmpSalaryFile(@PathVariable Integer eid){
+        return salaryBiz.befUpdateEmpSalaryFile(eid);
+    }
 
     @GetMapping("/salary_log/{eid}")
     @ApiOperation(value = "调薪记录", notes = "")
