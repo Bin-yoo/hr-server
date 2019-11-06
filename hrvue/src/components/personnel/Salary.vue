@@ -165,7 +165,10 @@
                 columns: [
                     {
                         title: '姓名',
-                        key: 'name'
+                        key: 'name',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.name);
+                        }
                     },
                     {
                         title: '工号',
