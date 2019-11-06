@@ -38,7 +38,7 @@ public class SalaryController {
 
     @GetMapping("/salary_log/{eid}")
     @ApiOperation(value = "调薪记录", notes = "")
-    public Result allIntegralFile(Integer page, Integer limit){
-        return salary_logBiz.getAllSalaryLogByIdFile(page, limit);
+    public Result allIntegralFile(Integer page, Integer limit,@PathVariable Integer eid){
+        return salary_logBiz.getAllSalaryLogByIdFile(page, limit,eid);
     }
 }
