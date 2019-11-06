@@ -35,7 +35,7 @@ public class SystemBasicController {
     DepartmentBiz departmentBiz;
 
     @GetMapping("/jobLvlList")
-    @ApiOperation(value = "获取职称列表", notes = "page为当前页码, limit为每页记录数量, name作为条件进行模糊查询")
+    @ApiOperation(value = "获取职称列表", notes = "page为当前页,limit为记录每页数量,name为查询条件")
     public Result getJobLvlList(Integer page, Integer limit, String name){
         return jobLevelBiz.getAllJobLvl(page, limit, name);
     }
@@ -59,7 +59,7 @@ public class SystemBasicController {
     }
 
     @GetMapping("/positionList")
-    @ApiOperation(value = "获取职位列表", notes = "page为当前页码, limit为每页记录数量, name作为条件进行模糊查询")
+    @ApiOperation(value = "获取职位列表", notes = "page为当前页,limit为记录每页数量,name为查询条件")
     public Result getPositionList(Integer page, Integer limit, String name){
         return positionBiz.getAllPosition(page, limit, name);
     }
