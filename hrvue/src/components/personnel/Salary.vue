@@ -67,19 +67,24 @@
                 <Row>
                     <Col span="12">
                         <FormItem label="姓名：">
-                            <Input v-model="formItem.grade" placeholder="梁彬" disabled></Input>
+                            <p>{{salary.name}}</p>
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="工号：">
+                            <p>{{salary.workId}}</p>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="12">
                         <FormItem label="基础工资：">
-                            <Input v-model="salary.baseSalary" placeholder="1300"></Input>
+                            <Input v-model="salary.baseSalary" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                     <Col span="12">
                         <FormItem label="绩效工资：">
-                            <Input v-model="salary.meritSalary" placeholder="2000"></Input>
+                            <Input v-model="salary.meritSalary" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
                 </Row>
@@ -139,6 +144,8 @@
                 ],
                 salary:{
                     eid:0,
+                    name:'',
+                    workId:'',
                     baseSalary:'',
                     meritSalary:'',
                     remark:'',
@@ -258,7 +265,11 @@
             },
             beforeupdate(index) {
                 this.updateModal = true;
-                console.log(index);
+                this.salary.eid = this.employeeSalarylist[index].eid;
+                this.salary.name = this.employeeSalarylist[index].employee.name;
+                this.salary.workId = this.employeeSalarylist[index].employee.workId;
+                this.salary.baseSalary = this.employeeSalarylist[index].baseSalary;
+                this.salary.meritSalary = this.employeeSalarylist[index].meritSalary;
             },
             onPageSizeChange(index){
                 this.limit = index;
@@ -273,7 +284,7 @@
                     page: this.page,
                     limit: this.limit,
                 }).then(resp=> {
-                    // console.log(resp)
+                    console.log(resp)
                     this.loading = false;
                     this.employeeSalarylogList = resp.data.data.list;
                     this.name=name;
