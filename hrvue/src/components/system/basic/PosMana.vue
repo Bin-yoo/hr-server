@@ -45,7 +45,7 @@
             </Row>
             <div slot="footer">
                 <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="addNewPosition">保存</Button>
+                <Button type="primary" @click="addNewPosition('newPosition')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -70,7 +70,7 @@
             </Row>
             <div slot="footer">
                 <Button @click="cancel">取消</Button>
-                <Button type="primary" @click="updatePosition">保存</Button>
+                <Button type="primary" @click="updatePosition('position')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -120,10 +120,11 @@
                 },
                 newPositionRules: {
                     name: [
-                        {required: true, message: '职位名称不能为空', trigger: 'blur' }
+                        {required: true, message: '职位名称不能为空', trigger: 'blur' },
+                        {max:10, message: '长度不能超过10位'},
                     ],
                     remark: [
-                        { type: 'string', max: 50, message: '备注长度不能超过50个字符', trigger: 'change' }
+                        {type: 'string', max: 50, message: '备注长度不能超过50个字符'}
                     ]
                 },
                 position: {
@@ -164,29 +165,33 @@
                     this.total = resp.data.data.total;
                 })
             },
-            addNewPosition(){
-                var check = /\s/;
-                if(!check.test(this.newPosition.name) && isNotNullORBlank(this.newPosition.name)){
-                    this.spinShow = true;
-                    this.postRequest("/system/basic/position", {
-                        name: this.newPosition.name,
-                        remark: this.newPosition.remark
-                    }).then(resp=> {
-                        if (resp.data.error == false && resp.data.code == 200) {
-                            this.getPositionList();
-                            this.newPosition.name = '';
-                            this.newPosition.remark = '';
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openAddNew = false;
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("职位名称不能为空");
-                }
+            addNewPosition(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.newPosition.name)){
+                        this.$Message.error("职位名称存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.spinShow = true;
+                        this.postRequest("/system/basic/position", {
+                            name: this.newPosition.name,
+                            remark: this.newPosition.remark
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getPositionList();
+                                this.newPosition.name = '';
+                                this.newPosition.remark = '';
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openAddNew = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
             },
             beforeUpdate(index){
                 this.openUpdate = true;
@@ -195,31 +200,36 @@
                 this.position.createDate = this.positionList[index].createDate;
                 this.position.remark = this.positionList[index].remark;
             },
-            updatePosition(){
+            updatePosition(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.position.name)){
+                        this.$Message.error("职位名称存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.spinShow = true;
+                        this.putRequest("/system/basic/position", {
+                            id: this.position.id,
+                            name: this.position.name,
+                            remark: this.position.remark
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getPositionList();
+                                this.position.id = 0;
+                                this.position.name = '';
+                                this.position.remark = '';
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openUpdate = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
                 var check = /\s/;
-                if(!check.test(this.position.name) && isNotNullORBlank(this.position.name)){
-                    this.spinShow = true;
-                    this.putRequest("/system/basic/position", {
-                        id: this.position.id,
-                        name: this.position.name,
-                        remark: this.position.remark
-                    }).then(resp=> {
-                        if (resp.data.error == false && resp.data.code == 200) {
-                            this.getPositionList();
-                            this.position.id = 0;
-                            this.position.name = '';
-                            this.position.remark = '';
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openUpdate = false;
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("职位名称不能为空");
-                }
             },
             cancel(){
                 this.openAddNew = false;
