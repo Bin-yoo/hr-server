@@ -2,6 +2,7 @@ package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface UserMapper {
     User selectByID(Integer id);
 
     int updateByID(User record);
+
+    void updateByEnabled(User user);
 }

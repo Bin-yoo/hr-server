@@ -29,8 +29,8 @@ public class SystemUserController {
         return userBiz.getAllUserList();
     }
 
-    @PostMapping("/user")
-    @ApiOperation(value = "删除系统用户账号", notes = "根据用户id删除账号")
+    @PostMapping("/addUser")
+    @ApiOperation(value = "新增账号", notes = "传入用户对象进行新增")
     public Result addNewUser(@RequestBody User user){
         return userBiz.addNewUser(user);
     }
@@ -39,6 +39,12 @@ public class SystemUserController {
     @ApiOperation(value = "删除系统用户账号", notes = "根据用户id删除账号")
     public Result deleteUser(@PathVariable Integer id){
         return userBiz.deleteUser(id);
+    }
+
+    @PutMapping("/enabled")
+    @ApiOperation(value = "禁用或启用账号", notes = "根据用户id和enable进行修改")
+    public Result changeUserEnabledState(@RequestBody User user){
+        return userBiz.changeUserEnabledState(user);
     }
 
 }

@@ -9,19 +9,29 @@
   <sql id="Base_Column_List">
     id, uid, rid
   </sql>
-  <select id="selectByID" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByID" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from user_role
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByID" parameterType="java.lang.Long">
+  <delete id="deleteByID" parameterType="java.lang.Integer">
     delete from user_role
     where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByUID" parameterType="java.lang.Integer">
+    delete from user_role
+    where uid = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.cn.ncvt.entity.UserRole">
     insert into user_role (id, uid, rid)
     values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT}, #{rid,jdbcType=BIGINT})
+  </insert>
+  <insert id="addUserRole">
+    INSERT INTO user_role(uid,rid) VALUES
+    <foreach collection="rolesKey" item="key" separator=",">
+      (#{uid},#{key})
+    </foreach>
   </insert>
   <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.UserRole">
     update user_role

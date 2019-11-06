@@ -2,6 +2,7 @@ package com.cn.ncvt.biz;
 
 import com.cn.ncvt.entity.User;
 import com.cn.ncvt.mapper.UserMapper;
+import com.cn.ncvt.mapper.UserRoleMapper;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import com.cn.ncvt.util.Token;
@@ -33,12 +34,14 @@ public class UserBiz {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    UserRoleMapper userRoleMapper;
+
     public Result userLogin(User user) {
-
-        if (user.getUsername().equals("") || user.getUsername() == null || user.getPassword().equals("") || user.getPassword() == null){
-            return ResultFactory.buildPermissionFailResult("登录失败,用户名或密码错误");
+        User isEnabled =  userMapper.selectByUserName(user.getUsername());
+        if (!isEnabled.isEnabled()){
+            return ResultFactory.buildFailResult("该账号已被禁用,请联系管理员");
         }
-
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
         try {
@@ -78,6 +81,18 @@ public class UserBiz {
 
         try {
             userMapper.insertFun(user);
+            userRoleMapper.addUserRole(user.getId(),user.getRolesKey());
+            return ResultFactory.buildSuccessResult("添加成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("添加失败");
+        }
+    }
+
+    public Result deleteUser(Integer id) {
+        try {
+            userRoleMapper.deleteByUID(id);
+            userMapper.deleteFun(id);
             return ResultFactory.buildSuccessResult("删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,13 +100,13 @@ public class UserBiz {
         }
     }
 
-    public Result deleteUser(Integer id) {
+    public Result changeUserEnabledState(User user) {
         try {
-            userMapper.deleteFun(id);
-            return ResultFactory.buildSuccessResult("删除成功");
+            userMapper.updateByEnabled(user);
+            return ResultFactory.buildSuccessResult("修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultFactory.buildFailResult("删除失败");
+            return ResultFactory.buildFailResult("修改失败");
         }
     }
 }

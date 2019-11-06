@@ -8,21 +8,21 @@
 			select * from user where username=#{0}
 	    </select>
 		<select id="selectByUserNameLimit"  parameterType="string" resultType="User">
-			select id, name, phone, address, username, userface, enable from user where username=#{0}
+			select id, name, phone, address, username, userface, enabled from user where username=#{0}
 	    </select>
 		<select id="selectAllFun"  parameterType="string" resultType="User">
-			select id, name, phone, address, username, userface, enable from user
+			select id, name, phone, address, username, userface, enabled from user
 	    </select>
         <select id="selectByID"  parameterType="java.lang.Integer" resultType="User">
 			select * from user where id = #{id,jdbcType=INTEGER}
 	    </select>
-        <insert id="insertFun" parameterType="com.cn.ncvt.entity.User" >
-        insert into user (id, name, phone, address, username, password, salt,
-          userface, enable)
-        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},
-          #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{userface,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT})
-      </insert>
+        <select id="insertFun" statementType="CALLABLE" parameterType="User">
+          call insertUser(#{name,mode=IN,jdbcType=VARCHAR}, #{phone,mode=IN,jdbcType=VARCHAR},#{address,mode=IN,jdbcType=VARCHAR},#{username,mode=IN,jdbcType=VARCHAR}, #{password,mode=IN,jdbcType=VARCHAR}, #{salt,mode=IN,jdbcType=VARCHAR}, #{userface,mode=IN,jdbcType=VARCHAR}, #{remark,mode=IN,jdbcType=VARCHAR}, #{enabled,mode=IN,jdbcType=BOOLEAN}, #{id,mode=OUT,jdbcType=INTEGER});
+      </select>
         <delete id="deleteFun" parameterType="java.lang.Integer" >
             delete from user where id = #{id,jdbcType=INTEGER}
       </delete>
+	<update id="updateByEnabled" parameterType="com.cn.ncvt.entity.User" >
+		update user set enabled = #{enabled,jdbcType=TINYINT} where id = #{id,jdbcType=INTEGER}
+	</update>
 	</mapper>
