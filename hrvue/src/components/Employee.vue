@@ -58,8 +58,8 @@
                         <Row>
                             <FormItem label="性别：" prop="sex">
                                 <RadioGroup v-model="newEmployee.sex">
-                                    <Radio label="1">男</Radio>
-                                    <Radio label="0">女</Radio>
+                                    <Radio label="男">男</Radio>
+                                    <Radio label="女">女</Radio>
                                 </RadioGroup>
                             </FormItem>
                         </Row>
@@ -87,16 +87,16 @@
                         <Row>
                             <FormItem label="婚姻状态：" prop="wedlock">
                                 <RadioGroup v-model="newEmployee.wedlock">
-                                    <Radio label="0">未婚</Radio>
-                                    <Radio label="1">已婚</Radio>
+                                    <Radio label="未婚">未婚</Radio>
+                                    <Radio label="已婚">已婚</Radio>
+                                    <Radio label="离异">离异</Radio>
                                 </RadioGroup>
                             </FormItem>
                         </Row>
                         <Row>
                             <FormItem label="出生日期：" prop="birthday">
-                                <DatePicker type="date" placeholder="请选择生日" format="yyyy-MM-dd" :value="newEmployee.birthday" @on-change="newEmployee.birthday=$event"></DatePicker>
+                                <DatePicker type="date" placeholder="请选择生日" v-model="newEmployee.birthday"></DatePicker>
                             </FormItem>
-                            <input type="text" v-model="newEmployee.birthday">
                         </Row>
                         <Row>
                             <FormItem label="联系方式：" prop="phone">
@@ -199,7 +199,7 @@
                 <Row>
                     <Col span="8">
                         <FormItem label="就职日期：" prop="beginDate">
-                            <DatePicker type="date" placeholder="请选择就职日期" format="yyyy-MM-dd" :value="newEmployee.beginDate" @on-change="newEmployee.beginDate=$event"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择就职日期" format="yyyy-MM-dd" v-model="newEmployee.beginDate"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
@@ -211,8 +211,8 @@
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="转正日期：">
-                            <DatePicker type="date" placeholder="请选择转正日期" format="yyyy-MM-dd" :value="newEmployee.conversionTime" @on-change="newEmployee.conversionTime=$event"></DatePicker>
+                        <FormItem label="转正日期：" prop="conversionTime">
+                            <DatePicker type="date" placeholder="请选择转正日期" format="yyyy-MM-dd" v-model="newEmployee.conversionTime"></DatePicker>
                         </FormItem>
                     </Col>
                 </Row>
@@ -224,19 +224,19 @@
                     </Col>
                     <Col span="8">
                         <FormItem label="合同起始日期：" prop="beginContract">
-                            <DatePicker type="date" placeholder="请选择合同起始日期" format="yyyy-MM-dd" :value="newEmployee.beginContract" @on-change="newEmployee.beginContract=$event"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择合同起始日期" format="yyyy-MM-dd" v-model="newEmployee.beginContract"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
                         <FormItem label="合同结束日期：" prop="endContract">
-                            <DatePicker type="date" placeholder="请选择合同结束日期" format="yyyy-MM-dd" :value="newEmployee.endContract" @on-change="newEmployee.endContract=$event"></DatePicker>
+                            <DatePicker type="date" placeholder="请选择合同结束日期" format="yyyy-MM-dd" v-model="newEmployee.endContract"></DatePicker>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="离职日期：">
-                            <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" :value="newEmployee.quitTime" @on-change="newEmployee.quitTime=$event"></DatePicker>
+                        <FormItem label="离职日期：" prop="quitTime">
+                            <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="newEmployee.quitTime"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col span="8">
@@ -611,6 +611,7 @@
     import Treeselect from '@riophae/vue-treeselect'
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
     import {isNotNullORBlank} from '../utils/utils'
+    import moment from "moment"
     export default {
         components: { Treeselect },
         name: 'PerEmp',
@@ -657,6 +658,14 @@
                     //     email: "12345678@qq.com",
                     // }
                 ],
+                formatDate:{   //转化后日期临时存储
+                    birthday:'',
+                    beginDate:'',
+                    conversionTime:'',
+                    beginContract:'',
+                    endContract:'',
+                    quitTime:'',
+                },
                 newEmployee: {
                     name: '',           //名字
                     nationId: '',       //民族
@@ -986,40 +995,65 @@
                 this.$refs[name].resetFields();
             },
             addEmployee(name) {
+                if(name.birthday != ''){
+                    this.formatDate.birthday = moment(name.birthday).format('YYYY-MM-DD');
+                }
+                if(name.beginDate != ''){
+                    this.formatDate.beginDate = moment(name.beginDate).format('YYYY-MM-DD');
+                }
+                if(name.conversionTime != ''){
+                    this.formatDate.conversionTime = moment(name.conversionTime).format('YYYY-MM-DD');
+                }
+                if(name.beginContract != ''){
+                    this.formatDate.beginContract = moment(name.beginContract).format('YYYY-MM-DD');
+                }
+                if(name.endContract != ''){
+                    this.formatDate.endContract = moment(name.endContract).format('YYYY-MM-DD');
+                }
+                if(name.quitTime != ''){
+                    this.formatDate.quitTime = moment(name.quitTime).format('YYYY-MM-DD');
+                }
                 this.$refs[name].validate((valid) => {
-                    console.log("佛了")
                     if (valid) {
                         this.postRequest("/employee/addEmp",{
-                            name: name.name,
-                            nationId: name.nationId,
-                            sex: name.sex,
-                            wedlock: name.wedlock,
-                            idCard: name.idCard,
-                            birthday: name.birthday,
-                            politiclId: name.politiclId,
-                            phone: name.phone,
-                            nativePlace: name.nativePlace,
-                            email: name.email,
-                            address: name.address,
-                            departmentId: name.departmentId,
-                            jobLevelId: name.jobLevelId,
-                            positionId: name.positionId,
-                            titopDegree: name.titopDegree,
-                            school: name.school,
-                            specialty: name.specialty,
-                            beginDate: name.beginDate,
-                            workState: name.workState,
-                            conversionTime: name.conversionTime,
-                            quitTime: name.quitTime,
-                            beginContract: name.beginContract,
-                            endContract: name.endContract,
-                            baseSalary: name.baseSalary,
-                            workId: name.workId
+                            name: this.newEmployee.name,
+                            nationId: this.newEmployee.nationId,
+                            sex: this.newEmployee.sex,
+                            wedlock: this.newEmployee.wedlock,
+                            idCard: this.newEmployee.idCard,
+                            birthday: this.formatDate.birthday,
+                            politiclId: this.newEmployee.politiclId,
+                            phone: this.newEmployee.phone,
+                            nativePlace: this.newEmployee.nativePlace,
+                            email: this.newEmployee.email,
+                            address: this.newEmployee.address,
+                            departmentId: this.newEmployee.departmentId,
+                            jobLevelId: this.newEmployee.jobLevelId,
+                            positionId: this.newEmployee.positionId,
+                            titopDegree: this.newEmployee.titopDegree,
+                            school: this.newEmployee.school,
+                            specialty: this.newEmployee.specialty,
+                            beginDate: this.formatDate.beginDate,
+                            workState: this.newEmployee.workState,
+                            conversionTime: this.formatDate.conversionTime,
+                            quitTime: this.formatDate.quitTime,
+                            beginContract: this.formatDate.beginContract,
+                            endContract: this.formatDate.endContract,
+                            baseSalary: this.newEmployee.baseSalary,
+                            workId: this.newEmployee.workId
                         }).then(resp=> {
                             if (resp.data.code != 400) {
                                 this.$Message.success(resp.data.data);
                                 this.addModal = false;
                                 this.this.getEmployeeList();
+
+                                //初始化
+                                this.formatDate.birthday = '';
+                                this.formatDate.beginDate = '';
+                                this.formatDate.conversionTime = '';
+                                this.formatDate.beginContract = '';
+                                this.formatDate.endContract = '';
+                                this.formatDate.quitTime = '';
                             } else {
                                 this.$Message.error(resp.data.message);
                             }
@@ -1028,50 +1062,6 @@
                         this.$Message.error('必填项不能为空');
                     }
                 })
-
-                // if(isNotNullORBlank(this.newEmployee.name,this.newEmployee.nationId,this.newEmployee.sex,this.newEmployee.wedlock,this.newEmployee.idCard,
-                //     this.newEmployee.birthday,this.newEmployee.politiclId,this.newEmployee.phone,this.newEmployee.nativePlace,this.newEmployee.email,this.newEmployee.address,
-                //     this.newEmployee.departmentId,this.newEmployee.jobLevelId,this.newEmployee.positionId,this.newEmployee.titopDegree,this.newEmployee.school,
-                //     this.newEmployee.specialty,this.newEmployee.beginDate,this.newEmployee.workState,this.newEmployee.beginContract,this.newEmployee.endContract)){
-                //         this.postRequest("/employee/addEmp",{
-                //             name: this.newEmployee.name,
-                //             nationId: this.newEmployee.nationId,
-                //             sex: this.newEmployee.sex,
-                //             wedlock: this.newEmployee.wedlock,
-                //             idCard: this.newEmployee.idCard,
-                //             birthday: this.newEmployee.birthday,
-                //             politiclId: this.newEmployee.politiclId,
-                //             phone: this.newEmployee.phone,
-                //             nativePlace: this.newEmployee.nativePlace,
-                //             email: this.newEmployee.email,
-                //             address: this.newEmployee.address,
-                //             departmentId: this.newEmployee.departmentId,
-                //             jobLevelId: this.newEmployee.jobLevelId,
-                //             positionId: this.newEmployee.positionId,
-                //             titopDegree: this.newEmployee.titopDegree,
-                //             school: this.newEmployee.school,
-                //             specialty: this.newEmployee.specialty,
-                //             beginDate: this.newEmployee.beginDate,
-                //             workState: this.newEmployee.workState,
-                //             conversionTime: this.newEmployee.conversionTime,
-                //             quitTime: this.newEmployee.quitTime,
-                //             beginContract: this.newEmployee.beginContract,
-                //             endContract: this.newEmployee.endContract,
-                //             baseSalary: this.newEmployee.baseSalary
-                //         }).then(resp=> {
-                //             if (resp.data.code != 400){
-                //                 this.$Message.success(resp.data.data);
-                //                 this.addModal = false;
-                //                 this.getEmployeeList();
-                //             } else {
-                //                 this.$Message.error(resp.data.message);
-                //                 this.addModal = false;
-                //             }
-                //         })
-                // }else{
-                //     this.$Message.error("必填项不能为空");
-                //     this.addModal = false;
-                // }
             },
             update (index) {
                 this.updateModal = true;
@@ -1081,6 +1071,10 @@
                 this.showModal = true;
                 this.index = index;
                 console.log(index);
+            },
+            birthday(date){
+                this.newEmployee.birthday = date;
+                console.log(this.newEmployee.birthday)
             }
         },
         mounted: function (){
