@@ -26,6 +26,7 @@ public class User {
     private boolean enabled = true;
     private String remark;
     private List<Role> roles;
+    private int[] rolesKey;
 
     public Integer getId() {
         return id;
@@ -113,5 +114,13 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public int[] getRolesKey() {
+        return rolesKey;
+    }
+
+    public void setRolesKey(int[] rolesKey) {
+        this.rolesKey = rolesKey;
     }
 }
