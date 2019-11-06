@@ -24,7 +24,7 @@ public class SystemUserController {
     UserBiz userBiz;
 
     @GetMapping("/userlist")
-    @ApiOperation(value = "获取系统用户列表", notes = "")
+    @ApiOperation(value = "获取系统用户列表", notes = "page为当前页,limit为记录每页数量,name为查询条件")
     public Result getUserList(Integer page, Integer limit, String name){
         return userBiz.getAllUserList(page, limit, name);
     }
