@@ -19,7 +19,7 @@ public class EmployeeSalary {
     private double meritSalary;
     private Employee employee;
     private String remark;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp date = new Timestamp(((new java.util.Date()).getTime()));
 
 

@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -13,6 +15,7 @@ public class Rp {
 
     private Integer id;
     private Integer eid;
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp date;
     private String type;
     private String reason;
