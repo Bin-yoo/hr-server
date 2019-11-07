@@ -15,8 +15,8 @@
         <Row>
             <Col span="24">
                 <Table  border  :columns="columns1" :data="users" :loading="loading">
-                    <template slot-scope="{ row, index }" slot="enable">
-                        <i-switch size="large">
+                    <template slot-scope="{ row, index }" slot="state">
+                        <i-switch size="large" v-model="row.enabled" @on-change="changeState(row.id,row.enabled)">
                             <span slot="open">启用</span>
                             <span slot="close">禁用</span>
                         </i-switch>
@@ -162,7 +162,7 @@
                     {
                         title: '状态',
                         width: '100',
-                        slot: 'enable',
+                        slot: 'state',
                     },
                     {
                         title: '操作',
@@ -191,11 +191,17 @@
                     remark: ''
                 },
                 newUserRules: {
+                    phone: [
+                        {required: true, message: '用户名不能为空', trigger: 'blur' }
+                    ],
+                    address: [
+                        { type: 'string', max: 50, message: '地址长度不能超过50个字符'}
+                    ],
                     name: [
                         {required: true, message: '用户名不能为空', trigger: 'blur' }
                     ],
                     remark: [
-                        { type: 'string', max: 50, message: '备注长度不能超过50个字符', trigger: 'change' }
+                        { type: 'string', max: 50, message: '备注长度不能超过50个字符'}
                     ]
                 },
                 user: {
@@ -212,7 +218,7 @@
             }
         },
         mounted: function () {
-            // this.getUserList();
+            this.getUserList();
         },
         watch: {
             page: "getUserList",
@@ -232,7 +238,7 @@
             },
             getUserList(){
                 this.loading = true;
-                this.getRequest("/system/user/users",{
+                this.getRequest("/system/user/userlist",{
                     page: this.page,
                     limit: this.limit,
                     name: this.keyword,
@@ -273,10 +279,26 @@
                 //     this.$Message.error("用户姓名不能为空");
                 // }
             },
+            changeState(id,enabled){
+                this.putRequest("/system/user/enabled", {
+                    id: id,
+                    enabled: enabled,
+                }).then(resp=> {
+                    if (resp.data.error == false && resp.data.code == 200) {
+                        this.$Message.success("更新状态成功");
+                    } else {
+                        this.$Message.error(resp.data.message);
+                    }
+                })
+            },
             beforeUpdate(index){
                 this.openUpdate = true;
                 this.user.id = this.users[index].id;
                 this.user.name = this.users[index].name;
+                this.user.username = this.users[index].username;
+                this.user.phone = this.users[index].phone;
+                this.user.address = this.users[index].address;
+                this.user.userface = this.users[index].userface;
                 this.user.remark = this.users[index].remark;
             },
             updateUser(name){
