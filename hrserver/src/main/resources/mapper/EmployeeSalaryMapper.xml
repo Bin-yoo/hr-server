@@ -33,11 +33,8 @@
       and e.jobLevelId=#{jobLevelId}
     </if>
   </select>
-  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from employee_salary
-    where id = #{id,jdbcType=INTEGER}
+  <select id="selectByID" resultMap="BaseResultMap" parameterType="Integer" >
+    SELECT e.name,e.workId,es.* from employee e,employee_salary es where e.id=es.eid and es.eid=#{eid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByID" parameterType="java.lang.Integer" >
     delete from employee_salary
