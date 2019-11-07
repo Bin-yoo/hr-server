@@ -65,4 +65,18 @@ public class SalaryBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public Result befUpdateEmpSalaryFile(Integer eid) {
+        try{
+            EmployeeSalary employeeSalary=employeeSalaryMapper.selectByID(eid);
+            Map map = new HashMap();
+            map.put("employeeSalary", employeeSalary);
+            return ResultFactory.buildSuccessResult(map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("获取失败");
+        }
+
+
+    }
 }

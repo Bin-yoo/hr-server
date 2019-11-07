@@ -13,7 +13,7 @@ public interface EmployeeSalaryMapper {
 
     int insert(EmployeeSalary employeeSalary);
 
-    EmployeeSalary selectByID(Integer id);
+    EmployeeSalary selectByID(Integer eid);
 
     int updateByIDSelective(@Param("empSalary") EmployeeSalary employeeSalary);
 
