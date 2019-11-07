@@ -25,10 +25,10 @@ public class AssessmentBiz {
     @Autowired
     AssessmentMapper assessmentMapper;
 
-    public Result getAllAssessmentFile(int page, int limit) {
+    public Result getAllAssessmentFile(int page, int limit, String state, String name) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
-        List<Assessment> fileList = assessmentMapper.selectAllAssessment();
+        List<Assessment> fileList = assessmentMapper.selectAllAssessment(state,name);
 
         if (fileList != null){
             //用PageInfo对结果进行包装,获取分页信息
