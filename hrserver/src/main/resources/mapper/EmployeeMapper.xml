@@ -22,6 +22,17 @@
             and e.jobLevelId=#{jobLevelId}
           </if>
 	    </select>
+        <insert id="insert" statementType="CALLABLE">
+            call addEmp(#{emp.workId,mode=IN,jdbcType=BIGINT}, #{emp.name,mode=IN,jdbcType=VARCHAR},
+            #{emp.sex,mode=IN,jdbcType=VARCHAR}, #{emp.nationId,mode=IN,jdbcType=INTEGER}, #{emp.birthday,mode=IN,jdbcType=DATE},
+            #{emp.politiclId,mode=IN,jdbcType=INTEGER}, #{emp.wedlock,mode=IN,jdbcType=CHAR}, #{emp.nativePlace,mode=IN,jdbcType=VARCHAR},
+            #{emp.idCard,mode=IN,jdbcType=VARCHAR}, #{emp.email,mode=IN,jdbcType=VARCHAR}, #{emp.phone,mode=IN,jdbcType=VARCHAR},
+            #{emp.address,mode=IN,jdbcType=VARCHAR}, #{emp.departmentId,mode=IN,jdbcType=INTEGER}, #{emp.jobLevelId,mode=IN,jdbcType=INTEGER},#{emp.positionId,mode=IN,jdbcType=INTEGER},
+            #{emp.titopDegree,mode=IN,jdbcType=CHAR}, #{emp.specialty,mode=IN,jdbcType=VARCHAR}, #{emp.school,mode=IN,jdbcType=VARCHAR},
+            #{emp.beginDate,mode=IN,jdbcType=DATE}, #{emp.workState,mode=IN,jdbcType=CHAR}, #{emp.conversionTime,mode=IN,jdbcType=DATE},
+            #{emp.quitTime,mode=IN,jdbcType=DATE}, #{emp.beginContract,mode=IN,jdbcType=DATE}, #{emp.endContract,mode=IN,jdbcType=DATE},
+            #{emp.picture,mode=IN,jdbcType=VARCHAR}, #{emp.baseSalary,mode=IN,jdbcType=DOUBLE}, #{password,mode=IN,jdbcType=DOUBLE}, #{salt,mode=IN,jdbcType=DOUBLE})
+        </insert>
 		<insert id="insertFun" parameterType="employee">
 	  insert into employee (workId, name,
       sex, nationId, birthday,
