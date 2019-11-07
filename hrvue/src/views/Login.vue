@@ -12,7 +12,7 @@
                     type="text"
                     v-model="user.username"
                     placeholder="用户名"
-                    @on-enter="Login"
+                    @on-enter="Login('user')"
                 >
                     <Icon
                         type="ios-person-outline"
@@ -25,7 +25,7 @@
                     type="password"
                     v-model="user.password"
                     placeholder="密码"
-                    @on-enter="Login"
+                    @on-enter="Login('user')"
                 >
                     <Icon
                         type="ios-lock-outline"
