@@ -22,8 +22,8 @@ public class AssessmentController {
 
     @GetMapping("/allAssesment")
     @ApiOperation(value = "查看所有考核", notes = "返回全部考核")
-    public Result allEmployeeFile(int page, int limit){
-        return assessmentBiz.getAllAssessmentFile(page, limit);
+    public Result allEmployeeFile(int page, int limit,String state,String name){
+        return assessmentBiz.getAllAssessmentFile(page,limit,state,name);
     }
 
     /**
