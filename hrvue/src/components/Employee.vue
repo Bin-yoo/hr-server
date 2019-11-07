@@ -176,12 +176,11 @@
                                 <Option value="小学">小学</Option>
                                 <Option value="初中">初中</Option>
                                 <Option value="高中">高中</Option>
-                                <Option value="中专">中专</Option>
-                                <Option value="职校">职校</Option>
-                                <Option value="专科">专科</Option>
+                                <Option value="大专">大专</Option>
                                 <Option value="本科">本科</Option>
-                                <Option value="硕士研究生">硕士研究生</Option>
-                                <Option value="博士研究生">博士研究生</Option>
+                                <Option value="硕士">硕士</Option>
+                                <Option value="博士">博士</Option>
+                                <Option value="其他">其他</Option>
                             </Select>
                         </FormItem>
                     </Col>
@@ -234,11 +233,6 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="8">
-                        <FormItem label="离职日期：" prop="quitTime">
-                            <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="newEmployee.quitTime"></DatePicker>
-                        </FormItem>
-                    </Col>
                     <Col span="8">
                         <FormItem label="工号：" prop="workId">
                             <Input v-model="newEmployee.workId" placeholder="请输入"></Input>
@@ -386,12 +380,11 @@
                                 <Option value="小学">小学</Option>
                                 <Option value="初中">初中</Option>
                                 <Option value="高中">高中</Option>
-                                <Option value="中专">中专</Option>
-                                <Option value="职校">职校</Option>
-                                <Option value="专科">专科</Option>
+                                <Option value="大专">大专</Option>
                                 <Option value="本科">本科</Option>
-                                <Option value="硕士研究生">硕士研究生</Option>
-                                <Option value="博士研究生">博士研究生</Option>
+                                <Option value="硕士">硕士</Option>
+                                <Option value="博士">博士</Option>
+                                <Option value="其他">其他</Option>
                             </Select>
                         </FormItem>
                     </Col>
@@ -421,7 +414,7 @@
                         </FormItem>
                     </Col>
                     <Col span="8">
-                        <FormItem label="转正日期：">
+                        <FormItem label="转正日期：" prop="conversionTime">
                             <DatePicker type="date" placeholder="请选择转正日期" v-model="employee.conversionTime"></DatePicker>
                         </FormItem>
                     </Col>
@@ -445,7 +438,7 @@
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="离职日期：">
+                        <FormItem label="离职日期：" prop="quitTime">
                             <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="employee.quitTime"></DatePicker>
                         </FormItem>
                     </Col>
@@ -458,7 +451,7 @@
             </Form>
             <div slot="footer">
                 <Button @click="handleReset('employee')">重置</Button>
-                <Button type="primary" @click="update('newEmployee')">保存</Button>
+                <Button type="primary" @click="update('employee')">保存</Button>
             </div>
         </Modal>
         <div v-if="showModal">
@@ -740,8 +733,8 @@
                     ],
                     idCard: [
                         {required: true, message: '身份证不能为空', trigger: 'blur'},
-                        {type: 'string', min: 16, message: '身份证不能少于16位', trigger: 'blur'},
-                        {type: 'string', max: 18, message: '身份证不能大于18位', trigger: 'blur'},
+                        {type: 'string', min: 16, message: '身份证不能少于16位'},
+                        {type: 'string', max: 18, message: '身份证不能大于18位'},
                     ],
                     politiclId: [
                         {required: true, type: 'number', message: '请选择政治面貌', trigger: 'change'}
@@ -763,7 +756,7 @@
                     ],
                     email: [
                         {required: true, message: '邮箱不能为空', trigger: 'blur'},
-                        { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
+                        { type: 'email', message: '邮箱格式不正确'}
                     ],
                     address: [
                         {required: true, message: '居住地址不能为空', trigger: 'blur'}
@@ -799,10 +792,12 @@
                         {required: true, type: 'date', message: '请选择合同结束日期', trigger: 'change'}
                     ],
                     baseSalary: [
-                        {required: true, message: '基本工资不能为空', trigger: 'blur'}
+                        {required: true, message: '基本工资不能为空', trigger: 'blur'},
+                        {message: '基本工资只能用数字', pattern:/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/}
                     ],
                     workId: [
-                        {required: true, message: '工号不能为空', trigger: 'blur'}
+                        {required: true, message: '工号不能为空', trigger: 'blur'},
+                        {message: '工号只能用纯数字', pattern: /^[0-9]*$/}
                     ],
                 },
                 pictureItem:{
@@ -1027,23 +1022,23 @@
                 this.$refs[name].resetFields();
             },
             addEmployee(name) {
-                if(name.birthday != ''){
-                    this.formatDate.birthday = moment(name.birthday).format('YYYY-MM-DD');
+                if(this.newEmployee.birthday != ''){
+                    this.formatDate.birthday = moment(this.newEmployee.birthday).format('YYYY-MM-DD');
                 }
-                if(name.beginDate != ''){
-                    this.formatDate.beginDate = moment(name.beginDate).format('YYYY-MM-DD');
+                if(this.newEmployee.beginDate != ''){
+                    this.formatDate.beginDate = moment(this.newEmployee.beginDate).format('YYYY-MM-DD');
                 }
-                if(name.conversionTime != ''){
-                    this.formatDate.conversionTime = moment(name.conversionTime).format('YYYY-MM-DD');
+                if(this.newEmployee.conversionTime != ''){
+                    this.formatDate.conversionTime = moment(this.newEmployee.conversionTime).format('YYYY-MM-DD');
                 }
-                if(name.beginContract != ''){
-                    this.formatDate.beginContract = moment(name.beginContract).format('YYYY-MM-DD');
+                if(this.newEmployee.beginContract != ''){
+                    this.formatDate.beginContract = moment(this.newEmployee.beginContract).format('YYYY-MM-DD');
                 }
-                if(name.endContract != ''){
-                    this.formatDate.endContract = moment(name.endContract).format('YYYY-MM-DD');
+                if(this.newEmployee.endContract != ''){
+                    this.formatDate.endContract = moment(this.newEmployee.endContract).format('YYYY-MM-DD');
                 }
-                if(name.quitTime != ''){
-                    this.formatDate.quitTime = moment(name.quitTime).format('YYYY-MM-DD');
+                if(this.newEmployee.quitTime != ''){
+                    this.formatDate.quitTime = moment(this.newEmployee.quitTime).format('YYYY-MM-DD');
                 }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -1077,7 +1072,10 @@
                             if (resp.data.code != 400) {
                                 this.$Message.success(resp.data.data);
                                 this.addModal = false;
-                                this.this.getEmployeeList();
+                                this.getEmployeeList();
+
+                                //初始化字段
+                                this.$refs[name].resetFields();
 
                                 //初始化
                                 this.formatDate.birthday = '';
@@ -1098,7 +1096,7 @@
             beforeUpdate(index){
                 this.updateModal = true;
                 this.employee.id = this.employees[index].id;
-                this.employee.workId = this.employees[index].workId;
+                this.employee.workId = '' + this.employees[index].workId;
                 this.employee.name = this.employees[index].name;
                 this.employee.sex = this.employees[index].sex;
                 this.employee.nationId = this.employees[index].nationId;
@@ -1127,21 +1125,89 @@
                 this.employee.quitTime = this.employees[index].quitTime;
                 this.employee.beginContract = this.employees[index].beginContract;
                 this.employee.endContract = this.employees[index].endContract;
-                this.employee.baseSalary = this.employees[index].baseSalary;
+                this.employee.baseSalary = '' + this.employees[index].baseSalary;
                 this.employee.picture = this.employees[index].picture;
             },
-            update (index) {
-                this.updateModal = true;
-                console.log(index);
+            update (name) {
+                if(this.employee.birthday != ''){
+                    console.log(this.employee.birthday);
+                    this.formatDate.birthday = moment(this.employee.birthday).format('YYYY-MM-DD');
+                    console.log(this.formatDate.birthday);
+                }
+                if(this.employee.beginDate != ''){
+                    this.formatDate.beginDate = moment(this.employee.beginDate).format('YYYY-MM-DD');
+                }
+                if(this.employee.conversionTime != ''){
+                    this.formatDate.conversionTime = moment(this.employee.conversionTime).format('YYYY-MM-DD');
+                }
+                if(this.employee.beginContract != ''){
+                    this.formatDate.beginContract = moment(this.employee.beginContract).format('YYYY-MM-DD');
+                }
+                if(this.employee.endContract != ''){
+                    this.formatDate.endContract = moment(this.employee.endContract).format('YYYY-MM-DD');
+                }
+                if(this.employee.quitTime != ''){
+                    this.formatDate.quitTime = moment(this.employee.quitTime).format('YYYY-MM-DD');
+                }
+                this.$refs[name].validate((valid) =>{
+                    if (valid) {
+                        this.putRequest("/employee/updateEmp",{
+                            id: this.employee.id,
+                            name: this.employee.name,
+                            nationId: this.employee.nationId,
+                            sex: this.employee.sex,
+                            wedlock: this.employee.wedlock,
+                            idCard: this.employee.idCard,
+                            birthday: this.formatDate.birthday,
+                            politiclId: this.employee.politiclId,
+                            phone: this.employee.phone,
+                            nativePlace: this.employee.nativePlace,
+                            email: this.employee.email,
+                            address: this.employee.address,
+                            departmentId: this.employee.departmentId,
+                            jobLevelId: this.employee.jobLevelId,
+                            positionId: this.employee.positionId,
+                            titopDegree: this.employee.titopDegree,
+                            school: this.employee.school,
+                            specialty: this.employee.specialty,
+                            beginDate: this.formatDate.beginDate,
+                            workState: this.employee.workState,
+                            conversionTime: this.formatDate.conversionTime,
+                            quitTime: this.formatDate.quitTime,
+                            beginContract: this.formatDate.beginContract,
+                            endContract: this.formatDate.endContract,
+                            baseSalary: this.employee.baseSalary,
+                            workId: this.employee.workId,
+                            picture: this.employee.picture
+                        }).then(resp => {
+                            if (resp.data.code != 400) {
+                                this.$Message.success(resp.data.data);
+                                this.updateModal = false;
+                                this.getEmployeeList();
+
+                                //初始化字段
+                                this.$refs[name].resetFields();
+
+                                //初始化
+                                this.formatDate.birthday = '';
+                                this.formatDate.beginDate = '';
+                                this.formatDate.conversionTime = '';
+                                this.formatDate.beginContract = '';
+                                this.formatDate.endContract = '';
+                                this.formatDate.quitTime = '';
+                            } else {
+                                this.$Message.error(resp.data.message);
+                            }
+                        })
+                    } else {
+                        this.$Message.error('必填项不能为空');
+                    }
+                })
             },
             show(index) {
                 this.showModal = true;
                 this.index = index;
             },
-            birthday(date){
-                this.newEmployee.birthday = date;
-                console.log(this.newEmployee.birthday)
-            }
         },
         mounted: function (){
             this.getEmployeeList();
