@@ -25,16 +25,16 @@
             <Row>
                 <Col span="21">
                     <Form :model="department" :rules="newDepRules" :label-width="80" ref="departments">
-                        <FormItem label="部门名称" prop="name">
+                        <FormItem label="部门名称:" prop="name">
                             <Input v-model="department.name" placeholder="请输入角色名"></Input>
                         </FormItem>
-                        <FormItem label="部门编号" prop="depNum">
+                        <FormItem label="部门编号:" prop="depNum">
                             <Input v-model="department.depNum"  placeholder="请输入部门编号"></Input>
                         </FormItem>
-                        <FormItem label="排序编号" prop="orderNum">
+                        <FormItem label="排序编号:" prop="orderNum">
                             <Input v-model="department.orderNum"  placeholder="请输入排序编号"></Input>
                         </FormItem>
-                        <FormItem label="上级部门" prop="parent">
+                        <FormItem label="上级部门:" prop="parent">
                             <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1" placeholder="请选择上级部门..."/>
                         </FormItem>
                     </Form>

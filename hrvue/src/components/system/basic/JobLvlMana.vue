@@ -34,10 +34,10 @@
             <Row>
                 <Col span="21">
                     <Form :model="newJobLvl" :rules="newJobLvlRules" :label-width="80" ref="newJobLvl">
-                        <FormItem label="职称名称" prop="name">
+                        <FormItem label="职称名称:" prop="name">
                             <Input v-model="newJobLvl.name" placeholder="请输入职称名称"></Input>
                         </FormItem>
-                        <FormItem label="备注" prop="remark">
+                        <FormItem label="备注:" prop="remark">
                             <Input v-model="newJobLvl.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
                     </Form>
@@ -59,10 +59,10 @@
             <Row>
                 <Col span="21">
                     <Form :model="joblvl" :rules="newJobLvlRules" :label-width="80" ref="joblvl">
-                        <FormItem label="角色名" prop="name">
+                        <FormItem label="角色名:" prop="name">
                             <Input v-model="joblvl.name" placeholder="请输入角色名"></Input>
                         </FormItem>
-                        <FormItem label="备注" prop="remark">
+                        <FormItem label="备注:" prop="remark">
                             <Input v-model="joblvl.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
                     </Form>

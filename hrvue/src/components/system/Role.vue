@@ -35,10 +35,10 @@
             <Row>
                 <Col span="21">
                     <Form :model="newRole" :rules="newRoleRules" :label-width="80" ref="newRole">
-                        <FormItem label="角色名" prop="name">
+                        <FormItem label="角色名:" prop="name">
                             <Input v-model="newRole.name" placeholder="请输入角色名"></Input>
                         </FormItem>
-                        <FormItem label="备注" prop="remark">
+                        <FormItem label="备注:" prop="remark">
                             <Input v-model="newRole.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
                     </Form>
@@ -60,10 +60,10 @@
             <Row>
                 <Col span="21">
                     <Form :model="role" :rules="newRoleRules" :label-width="80" ref="role">
-                        <FormItem label="角色名" prop="name">
+                        <FormItem label="角色名:" prop="name">
                             <Input v-model="role.name" placeholder="请输入角色名"></Input>
                         </FormItem>
-                        <FormItem label="备注" prop="remark">
+                        <FormItem label="备注:" prop="remark">
                             <Input v-model="role.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
                     </Form>
