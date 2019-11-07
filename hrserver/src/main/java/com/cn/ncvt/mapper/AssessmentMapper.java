@@ -2,6 +2,7 @@ package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.Assessment;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface AssessmentMapper {
 
     int updateByID(Assessment assessment);
 
-    List<Assessment> selectAllAssessment();
+    List<Assessment> selectAllAssessment(@Param("state")String state,@Param("name")String name);
 }
