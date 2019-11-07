@@ -1,6 +1,7 @@
 package com.cn.ncvt.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 /**
  * Created by sang on 2017/12/28.
  */
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 public class Role implements Serializable {
     private Integer id;
     private String name;

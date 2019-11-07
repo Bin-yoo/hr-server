@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class SalaryLog {
@@ -15,6 +17,7 @@ public class SalaryLog {
 
     private Double afterMeritSalary;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Date date;
 
     private String remark;
