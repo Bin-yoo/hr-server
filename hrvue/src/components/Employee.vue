@@ -632,7 +632,6 @@
 <script>
     import Treeselect from '@riophae/vue-treeselect'
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-    import {isNotNullORBlank} from '../utils/utils'
     import moment from "moment"
     export default {
         components: { Treeselect },
