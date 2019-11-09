@@ -21,12 +21,13 @@
             <result column="address" property="address" jdbcType="VARCHAR"/>
             <result column="username" property="username" jdbcType="VARCHAR"/>
             <result column="userface" property="userface" jdbcType="VARCHAR"/>
+            <result column="remark" property="remark" jdbcType="VARCHAR"/>
             <result column="enabled" property="enabled" jdbcType="BOOLEAN"/>
             <collection property="roles" ofType="com.cn.ncvt.entity.Role" select="selectUserRoleByUID" column="id">
             </collection>
         </resultMap>
 		<select id="selectUserByCondition"  parameterType="string" resultMap="BaseResultMap">
-            select id, name, phone, address, username, userface, enabled from user
+            select id, name, phone, address, username, userface, remark, enabled from user
             <if test="name != null and name != '' " >
                 where name like '%${name}%'
             </if>
