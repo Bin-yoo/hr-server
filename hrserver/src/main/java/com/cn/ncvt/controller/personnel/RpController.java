@@ -26,6 +26,12 @@ public class RpController {
         return rpBiz.getAllRpFile(page, limit, departmentId, positionId, name);
     }
 
+    @PostMapping("/addRp")
+    @ApiOperation(value = "添加奖惩记录", notes = "请将没必要填的东西设置为空")
+    public Result addEmployeeFile(@RequestBody Rp Rp){
+        return rpBiz.addRpFile(Rp);
+    }
+
     @PutMapping("/updateRp")
     @ApiOperation(value = "奖惩修改记录", notes = "")
     public Result updateRpFile(@RequestBody Rp rp){

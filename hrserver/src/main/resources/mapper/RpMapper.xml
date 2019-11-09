@@ -47,10 +47,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.cn.ncvt.entity.Rp" >
-    insert into rp (id, eid, date, type, 
+    insert into rp (eid, date, type,
       reason, point, remark
       )
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{type,jdbcType=CHAR}, 
+    values (#{eid,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{type,jdbcType=CHAR},
       #{reason,jdbcType=VARCHAR}, #{point,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
       )
   </insert>

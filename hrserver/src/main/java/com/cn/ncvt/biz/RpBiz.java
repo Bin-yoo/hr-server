@@ -89,4 +89,14 @@ public class RpBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public Result addRpFile(Rp rp) {
+        try{
+            rpMapper.insert(rp);
+            return ResultFactory.buildSuccessResult("添加成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("添加失败，请检查您输入的资料");
+        }
+    }
 }
