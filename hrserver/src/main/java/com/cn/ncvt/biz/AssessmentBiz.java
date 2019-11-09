@@ -67,6 +67,16 @@ public class AssessmentBiz {
         }
     }
 
+    public Result updateAssessmentState(Assessment assessment) {
+        try {
+            assessmentMapper.updateAssessmentStateByID(assessment);
+            return ResultFactory.buildSuccessResult("修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("修改失败");
+        }
+    }
+
     public Result deleteAssessmentFile(Integer id) {
         try{
             assessmentMapper.deleteByID(id);

@@ -18,6 +18,8 @@ public interface EmployeeMapper {
 
     void insertFun(Employee employee);
 
+    void insert(@Param("emp") Employee employee, @Param("password") String password, @Param("salt") String salt);
+
     void updateFun(Employee employee);
 
     void deleteByIdFun(Integer id);

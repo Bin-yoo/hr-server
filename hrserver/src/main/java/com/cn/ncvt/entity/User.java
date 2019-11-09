@@ -16,6 +16,7 @@ import java.util.List;
 public class User {
 
     private Integer id;
+    private Integer eid;
     private String name;
     private String phone;
     private String address;
@@ -34,6 +35,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getEid() {
+        return eid;
+    }
+
+    public void setEid(Integer eid) {
+        this.eid = eid;
     }
 
     public String getName() {

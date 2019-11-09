@@ -35,6 +35,12 @@ public class SystemUserController {
         return userBiz.addNewUser(user);
     }
 
+    @PutMapping("/updateUser")
+    @ApiOperation(value = "修改用户账号信息", notes = "传入用户对象进行修改")
+    public Result updateUser(@RequestBody User user){
+        return userBiz.updateUser(user);
+    }
+
     @DeleteMapping("/user/{id}")
     @ApiOperation(value = "删除系统用户账号", notes = "根据用户id删除账号")
     public Result deleteUser(@PathVariable Integer id){
