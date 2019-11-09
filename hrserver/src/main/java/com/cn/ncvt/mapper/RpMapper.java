@@ -2,6 +2,7 @@ package com.cn.ncvt.mapper;
 
 import com.cn.ncvt.entity.Rp;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface RpMapper {
 
     List<Rp> selectAllRpByID(Integer eid);
 
-    List<Rp> selectAllRp();
+    List<Rp> selectAllRp(@Param("departmentId") Integer departmentId, @Param("positionId") Integer positionId, @Param("name")String name);
 }
