@@ -6,7 +6,9 @@
     <result column="eid" property="eid" jdbcType="INTEGER" />
     <result column="integral" property="integral" jdbcType="INTEGER" />
     <association property="employee" javaType="Employee">
+
       <result column="name" property="name"/>
+      <result column="workId" property="workId"/>
       <result column="departmentName" property="departmentName"/>
       <result column="positionName" property="positionName"/>
       <result column="jobLevelName" property="jobLevelName"/>
