@@ -14,7 +14,7 @@
                         <Input v-model="souFormItem.name" clearable placeholder="请输入考核名称"/>
                     </Col>
                     <Col span="1">
-                        <Button icon="ios-search">搜索</Button>
+                        <Button icon="ios-search" @click="getAssessment">搜索</Button>
                     </Col>
                 </Row>
             </Col>
