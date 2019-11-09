@@ -19,7 +19,9 @@
                     </Col>
                 </Row>
             </Col>
-            <Col span="2"><Button type="primary" @click="addModal = true">添加奖惩记录</Button></Col>
+            <Col span="2">
+                <Button type="primary" @click="addModal = true">添加奖惩记录</Button>
+            </Col>
         </Row>
         <br>
         <Row>
@@ -485,7 +487,30 @@
             limit: "getRpList",
             empPage: "getEmpLists",
             empLimit: "getEmpLists",
+
         },
+        methods: {
+            getRpList() {
+                this.getRequest("/rp/allRp", {
+                    page: this.page,
+                    limit: this.limit
+                }).then(resp => {
+                    console.log(resp)
+                    this.rpList = resp.data.data.list;
+                    this.total = resp.data.data.total;
+                })
+            },
+            ok() {
+                this.$Message.info('Clicked ok');
+            },
+            cancel() {
+                this.$Message.info('Clicked cancel');
+            },
+            update(index) {
+                this.updateModal = true;
+                console.log(index);
+            },
+        }
     }
 </script>
 

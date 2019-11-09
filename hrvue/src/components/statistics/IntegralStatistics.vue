@@ -1,80 +1,75 @@
 <template>
     <div>
         <Row>
-            <Col>
-                <Form :model="souformItem">
-                    <Row :gutter="6">
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="souFormItem.departmentID" placeholder="部门">
-                                    <Option value="0">财务部</Option>
-                                    <Option value="1">人事部</Option>
-                                    <Option value="2">技术部</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="souFormItem.posID" placeholder="职位">
-                                    <Option value="0">财务经理</Option>
-                                    <Option value="1">人事经理</Option>
-                                    <Option value="2">出纳</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="souFormItem.jobLevelID" placeholder="职称">
-                                    <Option value="0">高级工程师</Option>
-                                    <Option value="1">高级教师</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="3">
-                            <FormItem>
-                                <Input v-model="souFormItem.input" suffix="ios-search" placeholder="请输入..." style="width: auto" />
-                            </FormItem>
-                        </Col>
-                        <Col span="1">
-                            <FormItem>
-                                <Button icon="ios-search">搜索</Button>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                </Form>
+            <Col span="22">
+                <Row :gutter="6">
+                    <Col span="3">
+                        <treeselect class="departDown" v-model="souformItem.departmentId"
+                                    :options="dropDownList.departmentList" :default-expand-level="1"
+                                    placeholder="请选择部门"/>
+                    </Col>
+                    <Col span="2">
+                        <Select v-model="souformItem.positionId" placeholder="职位" clearable>
+                            <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id">
+                                {{item.name}}
+                            </Option>
+                        </Select>
+                    </Col>
+                    <Col span="5">
+                        <Input v-model="souformItem.name" clearable placeholder="请输入姓名..."/>
+                    </Col>
+                    <Col span="1">
+                        <Button icon="ios-search" @click="">搜索</Button>
+                    </Col>
+                </Row>
             </Col>
         </Row>
+        <br>
         <Row>
-            <Table border ref="selection" :columns="columns" :data="data1">
-                <template slot-scope="{ row, index }" slot="action">
-                    <Button type="primary" style="margin-right: 5px" @click="show(index)">查看</Button>
+            <Table border ref="selection" :columns="columns" :data="empIntegerList">
+                <template slot-scope="{ row }" slot="action">
+                    <Button type="primary" style="margin-right: 5px" @click="getEmpRpList(row.eid)">查看</Button>
                 </template>
-          </Table>
+            </Table>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
-            <Page :total="100" show-elevator />
+            <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange"
+                  @on-page-size-change="onPageSizeChange"/>
         </Row>
         <Modal
-            v-model="showModal"
-            title="查看详情"
-            width=55%
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
-            <Table border ref="selection" :columns="showColumns" :data="showData"></Table>
+                v-model="showModal"
+                title="查看详情"
+                width=55%
+                @on-ok="ok"
+                @on-cancel="cancel">
+            <Table border ref="selection" :columns="showColumns" :data="empRpList">
+            </Table>
             <br>
             <Row :style="{textAlign: 'center'}">
-                <Page :total="100" show-elevator />
+                <Page :total="100" show-elevator/>
             </Row>
         </Modal>
     </div>
 </template>
 <script>
-    export default{
+    import Treeselect from '@riophae/vue-treeselect'
+    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
+    export default {
+        components: {Treeselect},
         data() {
             return {
                 showModal: false,
-                souFormItem:{
+                page: 1,
+                total: 100,
+                limit: 10,
+                dropDownList: [],
+                souformItem: {
+                    departmentId: null,
+                    positionId: null,
+                    name: '',
+                },
+                souFormItem: {
                     name: '',       //名字
                     gender: '',      //性别
                     department: '',  //部门
@@ -84,30 +79,40 @@
                     afterDate: '',    //结束日期
                     input: '',          //模糊查询
                 },
+                empIntegerList: [],
+                empRpList: [],
                 columns: [
                     {
                         title: '姓名',
-                        key: 'name'
+                        key: 'name',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.name);
+                        }
                     },
                     {
                         title: '工号',
-                        key: 'jobNum'
+                        key: 'workId',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.workId);
+                        }
                     },
                     {
                         title: '部门',
-                        key: 'department'
+                        key: 'departmentName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.departmentName);
+                        }
                     },
                     {
                         title: '职位',
-                        key: 'position'
+                        key: 'positionName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.positionName);
+                        }
                     },
                     {
                         title: '员工积分',
-                        key: 'count'
-                    },
-                    {
-                        title: '在职状态',
-                        key: 'state'
+                        key: 'integral'
                     },
                     {
                         title: '操作',
@@ -116,141 +121,51 @@
                         align: 'center'
                     }
                 ],
-                data1: [
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        salary: "1,000.00",
-                        integral: "-3",
-                        count: "3",
-                        state: "在职",
-                    },
-                ],
-                showColumns:[
+                showColumns: [
                     {
                         title: '姓名',
                         width: 80,
-                        key: 'name'
+                        key: 'name',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.name);
+                        }
                     },
                     {
                         title: '工号',
-                        key: 'jobNum'
+                        key: 'workId',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.workId);
+                        }
                     },
                     {
                         title: '部门',
                         width: 80,
-                        key: 'department'
+                        key: 'departmentName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.departmentName);
+                        }
                     },
                     {
                         title: '职位',
                         width: 100,
-                        key: 'position'
+                        key: 'positionName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.positionName);
+                        }
                     },
                     {
-                        title: '奖惩日期',
+                        title: '日期',
                         key: 'date'
                     },
                     {
                         title: '奖惩类型',
                         width: 90,
-                        key: 'category'
+                        key: 'type'
                     },
                     {
                         title: '奖惩分数',
                         width: 90,
-                        key: 'fraction'
+                        key: 'point'
                     },
                     {
                         title: '奖惩原因',
@@ -258,56 +173,64 @@
                     },
                     {
                         title: '备注',
-                        key: 'remarks'
+                        key: 'remark'
                     },
                 ],
-                showData:[
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        date: "2019年10月16日",
-                        category: "惩罚",
-                        reason: "迟到",
-                        fraction: "-2",
-                        remarks: "无",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        date: "2019年10月16日",
-                        category: "惩罚",
-                        reason: "迟到",
-                        fraction: "-2",
-                        remarks: "无",
-                    },
-                    {
-                        name: '宇哥',
-                        jobNum: 20191016001,
-                        department: "人事部",
-                        position: "人事部经理",
-                        date: "2019年10月16日",
-                        category: "惩罚",
-                        reason: "迟到",
-                        fraction: "-2",
-                        remarks: "无",
-                    },
-                ]
             }
         },
+        watch: {
+            page: "getEmpIntegerList",
+            limit: "getEmpIntegerList",
+        },
+        mounted() {
+            this.getEmpIntegerList();
+            this.getDropDownList();
+        },
         methods: {
-            ok () {
+            getDropDownList() {
+                this.getRequest("/employee/init").then(resp => {
+                    this.dropDownList = resp.data.data;
+                })
+            },
+            pageChange(index) {
+                this.page = index;
+                console.log(page)
+            },
+            onPageSizeChange(index) {
+                this.limit = index;
+            },
+            onPageSizeChange(index) {
+                this.limit = index;
+            },
+            getEmpRpList(eid) {
+                this.showModal = true;
+                this.getRequest("/integral/rp/" + eid, {
+                    page: this.page,
+                    limit: this.limit,
+                }).then(resp => {
+                    console.log(resp);
+                    this.empRpList = resp.data.data.list;
+                    this.total = resp.data.data.total;
+                })
+            },
+            getEmpIntegerList() {
+                this.getRequest("/integral/allIntegral", {
+                    page: this.page,
+                    limit: this.limit,
+                    departmentId: this.souformItem.departmentId,
+                    positionId: this.souformItem.positionId,
+                    name: this.souformItem.name,
+                }).then(resp => {
+                    console.log(resp);
+                    this.empIntegerList = resp.data.data.list;
+                    this.total = resp.data.data.total;
+                })
+            },
+            ok() {
                 this.$Message.info('Clicked ok');
             },
-            cancel () {
+            cancel() {
                 this.$Message.info('Clicked cancel');
-            }, 
-            show (index) {
-                this.showModal = true;
-                console.log(index);
             },
         }
     }
