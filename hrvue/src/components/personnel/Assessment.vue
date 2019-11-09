@@ -4,7 +4,7 @@
             <Col span="22">
                 <Row :gutter="6">
                     <Col span="2">
-                        <Select v-model="souFormItem.state" placeholder="考核状态">
+                        <Select v-model="souFormItem.state" placeholder="考核状态" clearable>
                             <Option value="未开始">未开始</Option>
                             <Option value="已开始">已开始</Option>
                             <Option value="已结束">已结束</Option>
@@ -14,7 +14,7 @@
                         <Input v-model="souFormItem.name" clearable placeholder="请输入考核名称"/>
                     </Col>
                     <Col span="1">
-                        <Button icon="ios-search" @click="getAssessment">搜索</Button>
+                        <Button icon="ios-search" @click="getAssessment" >搜索</Button>
                     </Col>
                 </Row>
             </Col>
