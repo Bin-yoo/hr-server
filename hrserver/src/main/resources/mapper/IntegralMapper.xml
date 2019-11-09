@@ -6,7 +6,9 @@
     <result column="eid" property="eid" jdbcType="INTEGER" />
     <result column="integral" property="integral" jdbcType="INTEGER" />
     <association property="employee" javaType="Employee">
-      <id column="eid" property="id"/>
+
+      <result column="name" property="name"/>
+      <result column="workId" property="workId"/>
       <result column="departmentName" property="departmentName"/>
       <result column="positionName" property="positionName"/>
       <result column="jobLevelName" property="jobLevelName"/>
@@ -18,6 +20,15 @@
   <select id="selectAllIntegerFile" parameterType="string" resultMap="BaseResultMap" >
     select i.id,i.eid,e.name,e.workId,d.name as departmentName,p.name as positionName,j.name as jobLevelName,i.integral from employee e,position p,department d,job_level j,integral i
     where e.id=i.eid and p.id=e.positionId and d.id=e.departmentId and j.id=e.jobLevelId
+    <if test="name != null and name != '' " >
+      and e.name like '%${name}%'
+    </if>
+    <if test="departmentId != null and departmentId != '' " >
+      and e.departmentId=#{departmentId}
+    </if>
+    <if test="positionId != null and positionId != '' " >
+      and e.positionId=#{positionId}
+    </if>
   </select>
 
 </mapper>
