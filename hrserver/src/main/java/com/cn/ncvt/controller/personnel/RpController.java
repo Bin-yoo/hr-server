@@ -23,7 +23,7 @@ public class RpController {
     @GetMapping("/allRp")
     @ApiOperation(value = "查看所有员工的奖惩记录", notes = "")
     public Result allRpFile(Integer page, Integer limit,Integer departmentId,Integer positionId, String name){
-        return rpBiz.getAllRpFile(page, limit);
+        return rpBiz.getAllRpFile(page, limit, departmentId, positionId, name);
     }
 
     @PutMapping("/updateRp")

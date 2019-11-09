@@ -7,6 +7,8 @@ import com.cn.ncvt.result.ResultFactory;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,8 +63,14 @@ public class EmployeeBiz {
 
 
     public Result addEmployeeFile(Employee employee) {
+        String password = employee.getIdCard().substring(employee.getIdCard().length() - 6);
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();    //生成加密盐
+        int times = 2;    //加密两次
+        String algorithmName = "md5";     //使用md5算法
+        String encodedPassword = new SimpleHash(algorithmName,password,salt,times).toString();    //生成加密后的密码
         try{
-            employeeMapper.insertFun(employee);
+            //employeeMapper.insertFun(employee);
+            employeeMapper.insert(employee, encodedPassword, salt);
             return ResultFactory.buildSuccessResult("添加成功");
         }catch (Exception e){
             e.printStackTrace();

@@ -82,12 +82,14 @@ public class UserBiz {
     }
 
     public Result addNewUser(User user) {
-        String password = "123";
+        String password = user.getPassword();
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();    //生成加密盐
         int times = 2;    //加密两次
         String algorithmName = "md5";     //使用md5算法
-
         String encodedPassword = new SimpleHash(algorithmName,password,salt,times).toString();    //生成加密后的密码
+
+        user.setPassword(encodedPassword);
+        user.setSalt(salt);
 
         try {
             userMapper.insertFun(user);
@@ -96,6 +98,18 @@ public class UserBiz {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultFactory.buildFailResult("添加失败");
+        }
+    }
+
+    public Result updateUser(User user) {
+        try {
+            userMapper.updateByID(user);
+            userRoleMapper.deleteByUID(user.getId());
+            userRoleMapper.addUserRole(user.getId(),user.getRolesKey());
+            return ResultFactory.buildSuccessResult("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("修改失败");
         }
     }
 
@@ -119,4 +133,5 @@ public class UserBiz {
             return ResultFactory.buildFailResult("修改失败");
         }
     }
+
 }
