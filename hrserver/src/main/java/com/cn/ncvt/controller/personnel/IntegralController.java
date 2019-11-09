@@ -24,16 +24,9 @@ public class IntegralController {
 
     @GetMapping("/allIntegral")
     @ApiOperation(value = "查看所有员工的积分", notes = "")
-    public Result allIntegralFile(int page, int limit){
-        return integralBiz.getAllIntegralFile(page, limit);
+    public Result allIntegralFile(int page, int limit,Integer departmentId,Integer positionId,String name){
+        return integralBiz.getAllIntegralFile(page, limit,departmentId,positionId,name);
     }
-
-    @GetMapping("/rp/{eid}")
-    @ApiOperation(value = "查看某个员工所有的奖惩记录", notes = "")
-    public Result allRpFile(@PathVariable Integer eid,int page, int limit){
-        return rpBiz.getRpFile(eid,page,limit);
-    }
-
 
 
 }
