@@ -15,6 +15,9 @@
         <Row>
             <Col span="24">
                 <Table  border  :columns="columns1" :data="users" :loading="loading">
+                    <template slot-scope="{ row, index }" slot="role">
+                        <Tag v-for="item in row.roles" :key="item.id">{{item.name}}</Tag>
+                    </template>
                     <template slot-scope="{ row, index }" slot="state">
                         <div v-if="row.username == 'admin' ? true : false">
                             <i-switch size="large" v-model="row.enabled" @on-change="changeState(row.id,row.enabled)" disabled>
@@ -30,14 +33,8 @@
                         </div>
                     </template>
                     <template slot-scope="{ row, index }" slot="action">
-                        <div v-if="row.username == 'admin' ? true : false">
-                            <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" disabled>编辑</Button>
-                            <Button type="error" style="margin-right: 5px" @click="deleteUser(row.id)" disabled>删除</Button>
-                        </div>
-                        <div v-else>
-                            <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑</Button>
-                            <Button type="error" style="margin-right: 5px" @click="deleteUser(row.id)">删除</Button>
-                        </div>
+                        <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" :disabled="row.id === 1 ? true : false">编辑</Button>
+                        <Button type="error" style="margin-right: 5px" @click="deleteUser(row.id)" :disabled="row.id === 1 ? true : false">删除</Button>
                     </template>
                 </Table>
             </Col>
@@ -53,7 +50,7 @@
             title="添加新用户">
             <Row>
                 <Col span="21">
-                    <Form :model="newUser" :rules="newUserRules" :label-width="80" ref="newUser">
+                    <Form :model="user" :rules="newUserRules" :label-width="80" ref="newUser">
                         <FormItem label="当前头像:" prop="userface">
                             <img src="https://wwc.alicdn.com/avatar/getAvatar.do?userId=822908364&width=80&height=80&type=sns" :style="{width:'128px',height:'128px',borderRadius: '50%'}">
                             <Upload
@@ -69,30 +66,33 @@
                             </Upload>
                         </FormItem>
                         <FormItem label="用户名:" prop="username">
-                            <Input v-model="newUser.username"></Input>
+                            <Input v-model="user.username" placeholder="用户名..."></Input>
                         </FormItem>
-                        <FormItem label="用户姓名:" prop="name">
-                            <Input v-model="newUser.name" placeholder="备注"></Input>
+                        <FormItem label="密码:" prop="password">
+                            <Input type="password" v-model="user.password" placeholder="密码..."></Input>
+                        </FormItem>
+                        <FormItem label="个人姓名:" prop="name">
+                            <Input v-model="user.name" placeholder="个人姓名..."></Input>
                         </FormItem>
                         <FormItem label="手机号:" prop="phone">
-                            <Input v-model="newUser.phone" placeholder="请输入用户姓名"></Input>
+                            <Input v-model="user.phone" placeholder="手机号..."></Input>
                         </FormItem>
                         <FormItem label="联系地址:" prop="address">
-                            <Input v-model="newUser.address" type="textarea" placeholder="地址..."></Input>
+                            <Input v-model="user.address" type="textarea" placeholder="地址..."></Input>
                         </FormItem>
                         <FormItem label="用户角色:" prop="roles">
-                            <Select v-model="model10" multiple>
-                                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Select v-model="user.roles" multiple @on-change="selectchange">
+                                <Option v-for="item in rolelist" :value="item.id" :key="item.id" :disabled="item.id == 2 ? true : false">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="备注:" prop="remark">
-                            <Input v-model="newUser.remark" type="textarea" placeholder="备注..."></Input>
+                            <Input v-model="user.remark" type="textarea" placeholder="备注..."></Input>
                         </FormItem>
                     </Form>
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('newUser')">取消</Button>
                 <Button type="primary" @click="addNewUser('newUser')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -103,7 +103,8 @@
         <Modal
             v-model="openUpdate"
             title="编辑"
-            footer-hide>
+            footer-hide
+            @on-visible-change="cancelUpdate">
             <Tabs size="small">
                 <TabPane label="修改用户信息">
                     <Row>
@@ -124,24 +125,24 @@
                                     </Upload>
                                 </FormItem>
                                 <FormItem label="用户名:" prop="username">
-                                    <Input v-model="user.username" disabled></Input>
+                                    <Input v-model="user.username" disabled placeholder="用户名..."></Input>
                                 </FormItem>
-                                <FormItem label="用户姓名:" prop="name">
-                                    <Input v-model="user.name" placeholder="备注"></Input>
+                                <FormItem label="个人姓名:" prop="name">
+                                    <Input v-model="user.name" placeholder="个人姓名..."></Input>
                                 </FormItem>
                                 <FormItem label="手机号:" prop="phone">
-                                    <Input v-model="user.phone" placeholder="请输入用户姓名"></Input>
+                                    <Input v-model="user.phone" placeholder="手机号..."></Input>
                                 </FormItem>
                                 <FormItem label="联系地址:" prop="address">
-                                    <Input v-model="user.address" type="textarea" placeholder="备注"></Input>
+                                    <Input v-model="user.address" type="textarea" placeholder="联系地址..."></Input>
                                 </FormItem>
                                 <FormItem label="用户角色:" prop="roles">
-                                    <Select v-model="model10" multiple>
-                                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    <Select v-model="user.roles" multiple @on-change="selectchange">
+                                        <Option v-for="item in rolelist" :value="item.id" :key="item.id" :disabled="item.id == 2 ? true : false">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
                                 <FormItem label="备注:" prop="remark">
-                                    <Input v-model="user.remark" type="textarea" placeholder="备注"></Input>
+                                    <Input v-model="user.remark" type="textarea" placeholder="备注..."></Input>
                                 </FormItem>
                             </Form>
                         </Col>
@@ -159,14 +160,14 @@
                                 <FormItem label="用户名:" prop="username">
                                     <span>{{user.username}}</span>
                                 </FormItem>
-                                <FormItem label="旧密码:" prop="phone">
-                                    <Input v-model="user.oldpassword" placeholder="请输入用户姓名"></Input>
+                                <FormItem label="旧密码:" prop="oldpassword">
+                                    <Input v-model="user.oldpassword" placeholder="旧密码"></Input>
                                 </FormItem>
-                                <FormItem label="新密码:" prop="address">
-                                    <Input v-model="user.password" type="textarea" placeholder="备注"></Input>
+                                <FormItem label="新密码:" prop="password">
+                                    <Input v-model="user.password" type="textarea" placeholder="新密码"></Input>
                                 </FormItem>
-                                <FormItem label="重复新密码:" prop="roles">
-                                    <Input v-model="user.strPassword" type="textarea" placeholder="备注"></Input>
+                                <FormItem label="重复新密码:" prop="strPassword">
+                                    <Input v-model="user.strPassword" type="textarea" placeholder="重复新密码"></Input>
                                 </FormItem>
                             </Form>
                         </Col>
@@ -197,7 +198,7 @@
                         key: 'username'
                     },
                     {
-                        title: '用户姓名',
+                        title: '个人姓名',
                         key: 'name'
                     },
                     {
@@ -238,30 +239,24 @@
                 spinShow: false,
                 openAddNew : false,
                 openUpdate: false,
-                openUser: false,
-                newUser: {
-                    name: '',
-                    username: '',
-                    phone: '',
-                    address: '',
-                    userface: '',
-                    remark: '',
-                    rols: []
-                },
                 newUserRules: {
                     username: [
                         {required: true, message: '用户名不能为空', trigger: 'blur' },
-                        {pattern: /^[0-9a-zA-Z]+$/, message: '用户名不能输入中文或特殊字符', trigger: 'blur'},
+                        {pattern: /^[0-9a-zA-Z]+$/, message: '用户名不能包含中文或特殊字符', trigger: 'blur'},
                     ],
                     phone: [
                         {required: true, message: '手机号不能为空', trigger: 'blur' },
                         {pattern: /^1(3|4|5|7|8)\d{9}$/, message: '手机号格式不正确', trigger: 'blur'},
                     ],
+                    password: [
+                        {required: true, message: '密码不能为空', trigger: 'blur' },
+                        {pattern: /^[0-9a-zA-Z]+$/, message: '密码不能包含中文或特殊字符', trigger: 'blur'},
+                    ],
                     address: [
                         { type: 'string', max: 50, message: '地址长度不能超过50个字符'}
                     ],
                     name: [
-                        {required: true, message: '用户姓名不能为空', trigger: 'blur' }
+                        {required: true, message: '个人姓名不能为空', trigger: 'blur' }
                     ],
                     remark: [
                         { type: 'string', max: 50, message: '备注长度不能超过50个字符'}
@@ -276,14 +271,15 @@
                     phone: '',
                     address: '',
                     userface: '',
-                    remark: ''
+                    remark: '',
+                    roles: [2]
                 },
-                treeData: [],
-                treeRid:'',
+                rolelist: [],
             }
         },
         mounted: function () {
             this.getUserList();
+            this.getRoleList();
         },
         watch: {
             page: "getUserList",
@@ -313,36 +309,47 @@
                     this.total = resp.data.data.total;
                 })
             },
+            getRoleList(){
+                this.loading = true;
+                this.getRequest("/system/role/roles",{
+                    page: 0,
+                    limit: 0,
+                }).then(resp=> {
+                    this.loading = false;
+                    this.rolelist = resp.data.data.list;
+                })
+            },
             addNewUser(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
                 this.$refs[name].validate((valid) => {
+                    if (check.test(this.user.name)){
+                        this.$Message.error("个人姓名存在特殊字符");
+                        return;
+                    }
                     if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
+                        this.spinShow = true;
+                        this.postRequest("/system/user/addUser", {
+                            username: this.user.username,
+                            password: this.user.password,
+                            name: this.user.name,
+                            phone: this.user.phone,
+                            address: this.user.address,
+                            remark: this.user.remark,
+                            rolesKey: this.user.roles,
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getUserList();
+                                this.$refs[name].resetFields();
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openAddNew = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
                     }
                 })
-                // var check = /\s/;
-                // if(!check.test(this.newUser.name) && isNotNullORBlank(this.newUser.name)){
-                //     this.spinShow = true;
-                //     this.postRequest("/system/user/addUser", {
-                //         name: this.newUser.name,
-                //         remark: this.newUser.remark
-                //     }).then(resp=> {
-                //         if (resp.data.error == false && resp.data.code == 200) {
-                //             this.getUserList();
-                //             this.newUser.name = '';
-                //             this.newUser.remark = '';
-                //             this.$Message.success(resp.data.data);
-                //             this.spinShow = false;
-                //             this.openAddNew = false;
-                //         } else {
-                //             this.$Message.error(resp.data.message);
-                //             this.spinShow = false;
-                //         }
-                //     })
-                // } else {
-                //     this.$Message.error("用户姓名不能为空");
-                // }
             },
             changeState(id,enabled){
                 this.putRequest("/system/user/enabled", {
@@ -361,61 +368,60 @@
                 this.user.id = this.users[index].id;
                 this.user.name = this.users[index].name;
                 this.user.username = this.users[index].username;
-                this.user.phone = this.users[index].phone;
+                this.user.phone = ''+this.users[index].phone;
                 this.user.address = this.users[index].address;
                 this.user.userface = this.users[index].userface;
                 this.user.remark = this.users[index].remark;
             },
             updateUser(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
                 this.$refs[name].validate((valid) => {
+                    if (check.test(this.user.name)){
+                        this.$Message.error("个人姓名存在特殊字符");
+                        return;
+                    }
                     if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
+                        this.spinShow = true;
+                        this.putRequest("/system/user/updateUser", {
+                            id: this.user.id,
+                            name: this.user.name,
+                            remark: this.user.remark
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getUserList();
+                                this.$refs[name].resetFields();
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openUpdate = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
                     }
                 })
-                var check = /\s/;
-                if(!check.test(this.user.name) && isNotNullORBlank(this.user.name)){
-                    this.spinShow = true;
-                    this.putRequest("/system/user/updateUser", {
-                        id: this.user.id,
-                        name: this.user.name,
-                        remark: this.user.remark
-                    }).then(resp=> {
-                        if (resp.data.error == false && resp.data.code == 200) {
-                            this.getUserList();
-                            this.user.id = 0;
-                            this.user.name = '';
-                            this.user.remark = '';
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            this.openUpdate = false;
-                        } else {
-                            this.$Message.error(resp.data.message);
-                            this.spinShow = false;
-                        }
-                    })
-                } else {
-                    this.$Message.error("用户姓名不能为空");
-                }
             },
-            cancel(){
+            cancel(name){
                 this.openAddNew = false;
                 this.openUpdate = false;
-                this.openUser = false;
-                this.newUser.name = '';
-                this.newUser.remark = '';
+                this.$refs[name].resetFields();
             },
-            updateCancel(flag){
-                if(flag == false){
-                    this.user.name = '';
-                    this.user.remark = '';
+            cancelUpdate(flag){
+                if(flag == fasle){
+                    this.$refs['user'].resetFields();
+                    this.$refs['password'].resetFields();
+                }
+            },
+            selectchange(value){
+                if (value.indexOf(2) == -1){
+                    this.user.roles.push(2);
+                    this.$Message.error("员工为必选基础角色");
                 }
             },
             deleteUser(id){
                 this.$Modal.confirm({
                     title: '你正在进行删除操作',
-                    content: '<p>如果该账号为员工账号,您先需要把该员工的档案删除</p><p>你确定要删除该账号吗?</p>',
+                    content: '<p>账号删除后将无法恢复!!!!!!</p><p>你确定要删除该账号吗?</p>',
                     onOk: () => {
                         var _this = this;
                         this.deleteRequest("/system/user/user/" + id).then(resp=> {

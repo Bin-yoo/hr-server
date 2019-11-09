@@ -20,8 +20,7 @@
         </Row>
         <Modal
             v-model="openAdd"
-            title="新增部门"
-            @on-visible-change='cancel'>
+            title="新增部门">
             <Row>
                 <Col span="21">
                     <Form :model="department" :rules="newDepRules" :label-width="80" ref="departments">
@@ -34,14 +33,14 @@
                         <FormItem label="排序编号:" prop="orderNum">
                             <Input v-model="department.orderNum"  placeholder="请输入排序编号"></Input>
                         </FormItem>
-                        <FormItem label="上级部门:" prop="parent">
+                        <FormItem label="上级部门:" prop="parentId">
                             <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1" placeholder="请选择上级部门..."/>
                         </FormItem>
                     </Form>
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="openAdd=false">取消</Button>
+                <Button @click="cancel('departments')">取消</Button>
                 <Button type="primary" @click="addDep('departments')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -51,8 +50,7 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="修改部门"
-            @on-visible-change='cancel'>
+            title="修改部门">
             <Row>
                 <Col span="22">
                     <Form :model="department" :rules="newDepRules" :label-width="80" ref="department">
@@ -65,14 +63,14 @@
                         <FormItem label="排序编号" prop="orderNum">
                             <Input v-model="department.orderNum" placeholder="请输入排序编号"></Input>
                         </FormItem>
-                        <FormItem label="上级部门" prop="parent">
+                        <FormItem label="上级部门" prop="parentId">
                             <treeselect v-model="department.parentId" :options="depTree" :default-expand-level="1" placeholder="请选择上级部门..."/>
                         </FormItem>
                     </Form>
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="openUpdate=false">取消</Button>
+                <Button @click="cancel('department')">取消</Button>
                 <Button type="primary" @click="updateDep('department')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -213,6 +211,7 @@
                         }).then(resp=> {
                             if (resp.data.code != 400) {
                                 this.$Message.success(resp.data.data);
+                                this.$refs[name].resetFields();
                                 this.spinShow = false;
                                 this.openAdd = false;
                                 this.getDeps();
@@ -254,6 +253,7 @@
                         }).then(resp=> {
                             if (resp.data.code != 400) {
                                 this.$Message.success(resp.data.data);
+                                this.$refs[name].resetFields();
                                 this.spinShow = false;
                                 this.openUpdate = false;
                                 this.getDeps();
@@ -283,14 +283,10 @@
                     });
                 }
             },
-            cancel(flag){
-                if(flag == false){
-                    this.department.id = null;
-                    this.department.depNum = null;
-                    this.department.orderNum = null;
-                    this.department.name = '';
-                    this.department.parentId = null;
-                }
+            cancel(name){
+                this.openAdd = false;
+                this.openUpdate = false;
+                this.$refs[name].resetFields();
             }
         }
     };
