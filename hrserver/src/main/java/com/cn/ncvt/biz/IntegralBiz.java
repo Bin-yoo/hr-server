@@ -24,10 +24,10 @@ public class IntegralBiz {
     @Autowired
     IntegralMapper integralMapper;
 
-    public Result getAllIntegralFile(int page, int limit) {
+    public Result getAllIntegralFile(int page, int limit, Integer departmentId, Integer positionId, String name) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
-        List<Integral> fileList = integralMapper.selectAllIntegerFile();
+        List<Integral> fileList = integralMapper.selectAllIntegerFile(departmentId,positionId,name);
 
         if (fileList != null){
             //用PageInfo对结果进行包装,获取分页信息

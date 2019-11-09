@@ -26,7 +26,7 @@ public class RpBiz {
     RpMapper rpMapper;
 
 
-    public Result getRpFile(Integer eid, int page, int limit) {
+    public Result empAllRpFile(Integer eid, int page, int limit) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
         List<Rp> fileList = rpMapper.selectAllRpByID(eid);

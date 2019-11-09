@@ -37,4 +37,10 @@ public class RpController {
     public Result deleteByIdEmployeeFile(@PathVariable Integer id){
         return rpBiz.deleteRPFile(id);
     }
+
+    @GetMapping("/empRp/{eid}")
+    @ApiOperation(value = "查看某个员工所有的奖惩记录", notes = "")
+    public Result empAllRpFile(@PathVariable Integer eid,int page, int limit){
+        return rpBiz.empAllRpFile(eid,page,limit);
+    }
 }
