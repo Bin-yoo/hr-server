@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="eid" property="eid" jdbcType="INTEGER" />
     <result column="befBaseSalary" property="befBaseSalary" jdbcType="DOUBLE" />
-    <result column="afterBaseSalary" property="befBaseSalary" jdbcType="DOUBLE" />
+    <result column="afterBaseSalary" property="afterBaseSalary" jdbcType="DOUBLE" />
     <result column="befMeritSalary" property="befMeritSalary" jdbcType="DOUBLE" />
     <result column="afterMeritSalary" property="afterMeritSalary" jdbcType="DOUBLE" />
     <result column="date" property="date" jdbcType="DATE" />
