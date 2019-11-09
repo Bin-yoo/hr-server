@@ -30,7 +30,8 @@
         </Row>
         <Modal
             v-model="openAddNew"
-            title="添加新职称">
+            title="添加新职称"
+            @on-visible-change="cancel">
             <Row>
                 <Col span="21">
                     <Form :model="newJobLvl" :rules="newJobLvlRules" :label-width="80" ref="newJobLvl">
@@ -44,7 +45,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel('newJobLvl')">取消</Button>
+                <Button @click="openAddNew=false">取消</Button>
                 <Button type="primary" @click="addNewJobLvl('newJobLvl')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -54,7 +55,8 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="编辑角色信息">
+            title="编辑角色信息"
+            @on-visible-change="cancel">
             <Row>
                 <Col span="21">
                     <Form :model="joblvl" :rules="newJobLvlRules" :label-width="80" ref="joblvl">
@@ -68,7 +70,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel('joblvl')">取消</Button>
+                <Button @click="openUpdate=false">取消</Button>
                 <Button type="primary" @click="updateJobLvl('joblvl')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -83,7 +85,6 @@
     export default{
         data(){
             return {
-                date: new Date(),
                 columns1: [
                     {
                         title: '职称名称',
@@ -226,10 +227,11 @@
                     }
                 })
             },
-            cancel(name){
-                this.openAddNew = false;
-                this.openUpdate = false;
-                this.$refs[name].resetFields();
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['joblvl'].resetFields();
+                    this.$refs['newJobLvl'].resetFields();
+                }
             },
             deleteJobLvl(id){
                 this.$Modal.confirm({
