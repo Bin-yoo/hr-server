@@ -35,7 +35,7 @@
             </Table>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
-                <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="onPageSizeChange"/>
+            <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="onPageSizeChange"/>
         </Row>
         <Modal
             v-model="addModal"
@@ -293,8 +293,8 @@
             this.getAssessment();
         },
         watch: {
-            page: "getEmployeeList",
-            limit: "getEmployeeList",
+            page: "getAssessment",
+            limit: "getAssessment",
         },
     }
 </script>
