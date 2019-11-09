@@ -26,7 +26,7 @@ public class RpBiz {
     RpMapper rpMapper;
 
 
-    public Result getRpFile(Integer eid, int page, int limit) {
+    public Result empAllRpFile(Integer eid, int page, int limit) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
         List<Rp> fileList = rpMapper.selectAllRpByID(eid);
@@ -87,6 +87,16 @@ public class RpBiz {
         }catch (Exception e){
             e.printStackTrace();
             return ResultFactory.buildFailResult("删除失败");
+        }
+    }
+
+    public Result addRpFile(Rp rp) {
+        try{
+            rpMapper.insert(rp);
+            return ResultFactory.buildSuccessResult("添加成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("添加失败，请检查您输入的资料");
         }
     }
 }

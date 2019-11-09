@@ -34,7 +34,7 @@
   </select>
   <select id="selectAllRpByID" parameterType="Integer" resultMap="BaseResultMap" >
     select r.*,e.name,e.workId,d.name as departmentName,p.name as positionName from rp r,employee e,department d,position p
-    where r.eid=#{eid} and r.eid=e.id and e.departmentId=d.id and e.positionId=p.id
+    where r.eid=#{eid} and r.eid=e.id and e.departmentId=d.id and e.positionId=p.id and r.eid=#{eid,jdbcType=INTEGER}
   </select>
   <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
@@ -47,10 +47,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.cn.ncvt.entity.Rp" >
-    insert into rp (id, eid, date, type, 
+    insert into rp (eid, date, type,
       reason, point, remark
       )
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{type,jdbcType=CHAR}, 
+    values (#{eid,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{type,jdbcType=CHAR},
       #{reason,jdbcType=VARCHAR}, #{point,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
