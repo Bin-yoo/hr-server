@@ -186,13 +186,6 @@
                         }
                     },
                     {
-                        title: '职位',
-                        key: 'positionName',
-                        render: (h, params) => {
-                            return h('span', params.row.employee.positionName);
-                        }
-                    },
-                    {
                         title: '基础工资',
                         key: 'baseSalary'
                     },

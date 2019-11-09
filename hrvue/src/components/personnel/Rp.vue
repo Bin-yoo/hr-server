@@ -22,17 +22,9 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                        <Col span="2">
-                            <FormItem>
-                                <Select v-model="formItem.jobLevelID" placeholder="职称">
-                                    <Option value="0">高级工程师</Option>
-                                    <Option value="1">高级教师</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
                         <Col span="5">
                             <FormItem>
-                                <Input v-model="formItem.input" clearable placeholder="请输入..." />
+                                <Input v-model="formItem.input" clearable placeholder="请输入..."/>
                             </FormItem>
                         </Col>
                         <Col span="1">
@@ -43,27 +35,31 @@
                     </Row>
                 </Form>
             </Col>
-            <Col span="2"><Button type="primary" @click="addModal = true">添加奖惩记录</Button></Col>
+            <Col span="2">
+                <Button type="primary" @click="addModal = true">添加奖惩记录</Button>
+            </Col>
         </Row>
         <Row>
-            <Table border ref="selection" :columns="columns" :data="data1">
+            <Table border ref="selection" :columns="columns" :data="rpList">
                 <template slot-scope="{ row, index }" slot="action">
                     <Button type="primary" style="margin-right: 5px" @click="update(index)">编辑</Button>
                     <Button type="error" @click="remove(index)">删除</Button>
                 </template>
-          </Table>
+            </Table>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
-            <Col span="1"><Button type="error">批量删除</Button></Col>
-            <Page :total="100" show-elevator />
+            <Col span="1">
+                <Button type="error">批量删除</Button>
+            </Col>
+            <Page :total="100" show-elevator/>
         </Row>
         <Modal
-            v-model="addModal"
-            title="添加奖惩记录"
-            width=30%
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
+                v-model="addModal"
+                title="添加奖惩记录"
+                width=30%
+                @on-ok="ok"
+                @on-cancel="cancel">
+
             <Form :model="formItem" :label-width="80">
                 <Row>
                     <Col span="12">
@@ -106,9 +102,9 @@
                     <Col span="12">
                         <FormItem label="奖惩类型："><!-- 级联菜单1 -->
                             <RadioGroup v-model="formItem.type">
-                                    <Radio label="0">奖励</Radio>
-                                    <Radio label="1">惩罚</Radio>
-                                </RadioGroup>
+                                <Radio label="0">奖励</Radio>
+                                <Radio label="1">惩罚</Radio>
+                            </RadioGroup>
                         </FormItem>
                     </Col>
                     <Col span="12">
@@ -127,19 +123,20 @@
                 <Row>
                     <Col span="24">
                         <FormItem label="备注：">
-                            <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                            <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
+                                   placeholder="请输入..."></Input>
                         </FormItem>
                     </Col>
                 </Row>
             </Form>
         </Modal>
         <Modal
-            v-model="updateModal"
-            title="修改奖惩记录"
-            width=30%
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
+                v-model="updateModal"
+                title="修改奖惩记录"
+                width=30%
+                @on-ok="ok"
+                @on-cancel="cancel">
+
             <Form :model="formItem" :label-width="80">
                 <Row>
                     <Col span="12">
@@ -182,9 +179,9 @@
                     <Col span="12">
                         <FormItem label="奖惩类型："><!-- 级联菜单1 -->
                             <RadioGroup v-model="formItem.type">
-                                    <Radio label="0">奖励</Radio>
-                                    <Radio label="1">惩罚</Radio>
-                                </RadioGroup>
+                                <Radio label="0">奖励</Radio>
+                                <Radio label="1">惩罚</Radio>
+                            </RadioGroup>
                         </FormItem>
                     </Col>
                     <Col span="12">
@@ -203,7 +200,8 @@
                 <Row>
                     <Col span="24">
                         <FormItem label="备注：">
-                            <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                            <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
+                                   placeholder="请输入..."></Input>
                         </FormItem>
                     </Col>
                 </Row>
@@ -213,13 +211,17 @@
 </template>
 
 <script>
-export default {
-    name: 'PerMv',
+    export default {
+        name: 'PerMv',
         data() {
             return {
+                page: 1,
+                total: 100,
+                limit: 10,
                 addModal: false,
                 updateModal: false,
-                souFormItem:{
+                rpList: [],
+                souFormItem: {
                     name: '',       //名字
                     gender: '',      //性别
                     department: '',  //部门
@@ -227,191 +229,99 @@ export default {
                     jobLevelID: '',    //职称
                     input: '',          //模糊查询
                 },
-                formItem:{
+                formItem: {
                     name: '',       //名字
-                    gender:'',      //性别
-                    department:'',  //部门
-                    date:'',    //奖惩日期
-                    type:'',    //奖惩类型
-                    season:'',    //奖惩原因
-                    grade:'',    //奖惩分数
-                    remark:'',    //备注
+                    gender: '',      //性别
+                    department: '',  //部门
+                    date: '',    //奖惩日期
+                    type: '',    //奖惩类型
+                    season: '',    //奖惩原因
+                    grade: '',    //奖惩分数
+                    remark: '',    //备注
                 },
                 columns: [
-                        {
-                            type: 'selection',
-                            width: 60,
-                            align: 'center'
-                        },
-                        {
-                            title: '姓名',
-                            key: 'name'
-                        },
-                        {
-                            title: '工号',
-                            key: 'jobNum'
-                        },
-                        {
-                            title: '部门',
-                            key: 'department'
-                        },
-                        {
-                            title: '职位',
-                            key: 'position'
-                        },
-                        {
-                            title: '日期',
-                            key: 'date'
-                        },
-                        {
-                            title: '奖惩类别',
-                            key: 'category'
-                        },
-                        {
-                            title: '奖惩原因',
-                            key: 'reason'
-                        },
-                        {
-                            title: '奖惩分数',
-                            key: 'fraction'
-                        },
-                        {
-                            title: '备注',
-                            key: 'remarks'
-                        },
-                        {
-                            title: '操作',
-                            slot: 'action',
-                            width: 175,
-                            align: 'center'
+                    {
+                        title: '姓名',
+                        key: 'name',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.name);
                         }
-                    ],
-                data1: [
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                        {
-                            name: '宇哥',
-                            jobNum: 20191016001,
-                            department: "人事部",
-                            position: "人事部经理",
-                            date: "2019年10月16日",
-                            category: "惩罚",
-                            reason: "迟到",
-                            fraction: "-2",
-                            remarks: "无",
-                        },
-                ]
+                    },
+                    {
+                        title: '工号',
+                        key: 'workId',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.workId);
+                        }
+                    },
+                    {
+                        title: '部门',
+                        key: 'departmentName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.departmentName);
+                        }
+                    },
+                    {
+                        title: '职位',
+                        key: 'positionName',
+                        render: (h, params) => {
+                            return h('span', params.row.employee.positionName);
+                        }
+                    },
+                    {
+                        title: '日期',
+                        key: 'date'
+                    },
+                    {
+                        title: '奖惩类别',
+                        key: 'type'
+                    },
+                    {
+                        title: '奖惩原因',
+                        key: 'reason'
+                    },
+                    {
+                        title: '奖惩分数',
+                        key: 'point'
+                    },
+                    {
+                        title: '备注',
+                        key: 'remark'
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        width: 175,
+                        align: 'center'
+                    }
+                ],
             }
         },
-    methods: {
-        ok () {
-            this.$Message.info('Clicked ok');
+        mounted:function(){
+            this.getRpList();
         },
-        cancel () {
-            this.$Message.info('Clicked cancel');
-        }, 
-        update (index) {
-            this.updateModal = true;
-            console.log(index);
-        },
+        methods: {
+            getRpList() {
+                this.getRequest("/rp/allRp", {
+                    page: this.page,
+                    limit: this.limit
+                }).then(resp => {
+                    console.log(resp)
+                    this.rpList = resp.data.data.list;
+                    this.total = resp.data.data.total;
+                })
+            },
+            ok() {
+                this.$Message.info('Clicked ok');
+            },
+            cancel() {
+                this.$Message.info('Clicked cancel');
+            },
+            update(index) {
+                this.updateModal = true;
+                console.log(index);
+            },
+        }
     }
-}
 </script>
 
