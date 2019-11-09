@@ -10,10 +10,10 @@
     <result column="point" property="point" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <association property="employee" javaType="Employee">
+      <result column="name" property="name"/>
       <result column="workId" property="workId"/>
       <result column="departmentName" property="departmentName"/>
       <result column="positionName" property="positionName"/>
-      <result column="jobLevelName" property="jobLevelName"/>
     </association>
   </resultMap>
   <sql id="Base_Column_List" >
@@ -22,6 +22,15 @@
   <select id="selectAllRp" parameterType="String" resultMap="BaseResultMap" >
     select r.*,e.name,e.workId,d.name as departmentName,p.name as positionName from rp r,employee e,department d,position p
     where  r.eid=e.id and e.departmentId=d.id and e.positionId=p.id
+    <if test="name != null and name != '' " >
+      and e.name like '%${name}%'
+    </if>
+    <if test="departmentId != null and departmentId != '' " >
+      and e.departmentId=#{departmentId}
+    </if>
+    <if test="positionId != null and positionId != '' " >
+      and e.positionId=#{positionId}
+    </if>
   </select>
   <select id="selectAllRpByID" parameterType="Integer" resultMap="BaseResultMap" >
     select r.*,e.name,e.workId,d.name as departmentName,p.name as positionName from rp r,employee e,department d,position p

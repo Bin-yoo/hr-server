@@ -42,10 +42,16 @@ public class AssessmentController {
      * @param assessment
      * @return
      */
-    @PostMapping("/updateAssesment")
+    @PutMapping("/updateAssesment")
     @ApiOperation(value = "修改考核项目", notes = "修改考核")
     public Result updateAssessmentFile(@RequestBody Assessment assessment){
         return assessmentBiz.updateAssessmentFile(assessment);
+    }
+
+    @PutMapping("/updateAssesmentState")
+    @ApiOperation(value = "更新考核状态", notes = "修改考核状态")
+    public Result updateAssesmentState(@RequestBody Assessment assessment){
+        return assessmentBiz.updateAssessmentState(assessment);
     }
 
 

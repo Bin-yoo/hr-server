@@ -48,10 +48,10 @@ public class RpBiz {
         }
     }
 
-    public Result getAllRpFile(int page, int limit) {
+    public Result getAllRpFile(Integer page, Integer limit,Integer departmentId,Integer positionId, String name) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
-        List<Rp> fileList = rpMapper.selectAllRp();
+        List<Rp> fileList = rpMapper.selectAllRp(departmentId, positionId, name);
 
         if (fileList != null){
             //用PageInfo对结果进行包装,获取分页信息

@@ -69,11 +69,20 @@
     <update id="updateByID" parameterType="Assessment">
     update assessment
     set name = #{name,jdbcType=VARCHAR},
-      remarks = #{remarks,jdbcType=VARCHAR},
-      state = #{state,jdbcType=CHAR},
-      beginDate = #{beginDate,jdbcType=DATE},
-      endDate = #{endDate,jdbcType=DATE},
-      createDate = #{createDate,jdbcType=TIMESTAMP}
+      remarks = #{remarks,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="updateAssessmentStateByID" parameterType="Assessment">
+        update assessment
+        <set>
+            state = #{state,jdbcType=CHAR},
+            <if test="beginDate != null">
+                beginDate = #{beginDate,jdbcType=DATE},
+            </if>
+            <if test="endDate != null">
+                endDate = #{endDate,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
