@@ -44,7 +44,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('newPosition')">取消</Button>
                 <Button type="primary" @click="addNewPosition('newPosition')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -54,8 +54,7 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="编辑角色信息"
-            @on-visible-change='updateCancel'>
+            title="编辑角色信息">
             <Row>
                 <Col span="21">
                     <Form :model="position" :rules="newPositionRules" :label-width="80" ref="position">
@@ -69,7 +68,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('position')">取消</Button>
                 <Button type="primary" @click="updatePosition('position')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -180,8 +179,7 @@
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getPositionList();
-                                this.newPosition.name = '';
-                                this.newPosition.remark = '';
+                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
                                 this.openAddNew = false;
@@ -216,9 +214,7 @@
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getPositionList();
-                                this.position.id = 0;
-                                this.position.name = '';
-                                this.position.remark = '';
+                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
                                 this.openUpdate = false;
@@ -231,17 +227,10 @@
                 })
                 var check = /\s/;
             },
-            cancel(){
+            cancel(name){
                 this.openAddNew = false;
                 this.openUpdate = false;
-                this.newPosition.name = '';
-                this.newPosition.remark = '';
-            },
-            updateCancel(flag){
-                if(flag == false){
-                    this.position.name = '';
-                    this.position.remark = '';
-                }
+                this.$refs[name].resetFields();
             },
             deletePosition(id){
                 this.$Modal.confirm({

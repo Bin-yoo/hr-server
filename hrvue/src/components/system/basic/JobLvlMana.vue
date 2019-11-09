@@ -44,7 +44,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('newJobLvl')">取消</Button>
                 <Button type="primary" @click="addNewJobLvl('newJobLvl')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -54,8 +54,7 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="编辑角色信息"
-            @on-visible-change='updateCancel'>
+            title="编辑角色信息">
             <Row>
                 <Col span="21">
                     <Form :model="joblvl" :rules="newJobLvlRules" :label-width="80" ref="joblvl">
@@ -69,7 +68,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('joblvl')">取消</Button>
                 <Button type="primary" @click="updateJobLvl('joblvl')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -180,8 +179,7 @@
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getjoblvlList();
-                                this.newJobLvl.name = '';
-                                this.newJobLvl.remark = '';
+                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
                                 this.openAddNew = false;
@@ -216,9 +214,7 @@
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getjoblvlList();
-                                this.joblvl.id = 0;
-                                this.joblvl.name = '';
-                                this.joblvl.remark = '';
+                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
                                 this.openUpdate = false;
@@ -230,17 +226,10 @@
                     }
                 })
             },
-            cancel(){
+            cancel(name){
                 this.openAddNew = false;
                 this.openUpdate = false;
-                this.newJobLvl.name = '';
-                this.newJobLvl.remark = '';
-            },
-            updateCancel(flag){
-                if(flag == false){
-                    this.joblvl.name = '';
-                    this.joblvl.remark = '';
-                }
+                this.$refs[name].resetFields();
             },
             deleteJobLvl(id){
                 this.$Modal.confirm({

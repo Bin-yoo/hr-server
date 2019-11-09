@@ -16,9 +16,9 @@
             <Col span="24">
                 <Table  border  :columns="columns1" :data="roles" :loading="loading">
                     <template slot-scope="{ row, index }" slot="action">
-                            <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑信息</Button>
+                            <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" :disabled="row.id === 2 ? true : false">编辑信息</Button>
                             <Button type="primary" style="margin-right: 5px" @click="getMenuTree(row.id)">编辑权限</Button>
-                            <Button type="error" style="margin-right: 5px" @click="deleteRole(row.id)">删除</Button>
+                            <Button type="error" style="margin-right: 5px" @click="deleteRole(row.id)" :disabled="row.id === 2 ? true : false">删除</Button>
                     </template>
                 </Table>
             </Col>
@@ -45,7 +45,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('newRole')">取消</Button>
                 <Button type="primary" @click="addNewRole('newRole')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -55,8 +55,7 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="编辑角色信息"
-            @on-visible-change='updateCancel'>
+            title="编辑角色信息">
             <Row>
                 <Col span="21">
                     <Form :model="role" :rules="newRoleRules" :label-width="80" ref="role">
@@ -70,7 +69,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel">取消</Button>
+                <Button @click="cancel('role')">取消</Button>
                 <Button type="primary" @click="updateRole('role')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -214,8 +213,7 @@
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getRoleList();
-                                this.newRole.name = '';
-                                this.newRole.remark = '';
+                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
                                 this.openAddNew = false;
@@ -249,9 +247,7 @@
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getRoleList();
-                                this.role.id = 0;
-                                this.role.name = '';
-                                this.role.remark = '';
+                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
                                 this.openUpdate = false;
@@ -263,18 +259,11 @@
                     }
                 })
             },
-            cancel(){
+            cancel(name){
                 this.openAddNew = false;
                 this.openUpdate = false;
                 this.openRole = false;
-                this.newRole.name = '';
-                this.newRole.remark = '';
-            },
-            updateCancel(flag){
-                if(flag == false){
-                    this.role.name = '';
-                    this.role.remark = '';
-                }
+                this.$refs[name].resetFields();
             },
             deleteRole(id){
                 this.$Modal.confirm({
