@@ -112,7 +112,6 @@
     export default{
         data(){
             return {
-                date: new Date(),
                 columns1: [
                     {
                         title: '角色名称',

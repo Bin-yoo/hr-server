@@ -30,7 +30,8 @@
         </Row>
         <Modal
             v-model="openAddNew"
-            title="添加新职位">
+            title="添加新职位"
+            @on-visible-change="cancel">
             <Row>
                 <Col span="21">
                     <Form :model="newPosition" :rules="newPositionRules" :label-width="80" ref="newPosition">
@@ -44,7 +45,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel('newPosition')">取消</Button>
+                <Button @click="openAddNew=false">取消</Button>
                 <Button type="primary" @click="addNewPosition('newPosition')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -54,7 +55,8 @@
         </Modal>
         <Modal
             v-model="openUpdate"
-            title="编辑角色信息">
+            title="编辑角色信息"
+            @on-visible-change="cancel">
             <Row>
                 <Col span="21">
                     <Form :model="position" :rules="newPositionRules" :label-width="80" ref="position">
@@ -68,7 +70,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel('position')">取消</Button>
+                <Button @click="openUpdate=false">取消</Button>
                 <Button type="primary" @click="updatePosition('position')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -83,7 +85,6 @@
     export default{
         data(){
             return {
-                date: new Date(),
                 columns1: [
                     {
                         title: '职位名称',
@@ -227,10 +228,11 @@
                 })
                 var check = /\s/;
             },
-            cancel(name){
-                this.openAddNew = false;
-                this.openUpdate = false;
-                this.$refs[name].resetFields();
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['position'].resetFields();
+                    this.$refs['newPosition'].resetFields();
+                }
             },
             deletePosition(id){
                 this.$Modal.confirm({

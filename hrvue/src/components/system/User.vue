@@ -34,6 +34,7 @@
                     </template>
                     <template slot-scope="{ row, index }" slot="action">
                         <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" :disabled="row.id === 1 ? true : false">编辑</Button>
+                        <Button type="warning" style="margin-right: 5px" @click="beforeUpdatePsw(index)" :disabled="row.id === 1 ? true : false">重置密码</Button>
                         <Button type="error" style="margin-right: 5px" @click="deleteUser(row.id)" :disabled="row.id === 1 ? true : false">删除</Button>
                     </template>
                 </Table>
@@ -47,7 +48,8 @@
         </Row>
         <Modal
             v-model="openAddNew"
-            title="添加新用户">
+            title="添加新用户"
+            @on-visible-change="cancel">
             <Row>
                 <Col span="21">
                     <Form :model="user" :rules="newUserRules" :label-width="80" ref="newUser">
@@ -92,7 +94,7 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="cancel('newUser')">取消</Button>
+                <Button @click="openAddNew=false">取消</Button>
                 <Button type="primary" @click="addNewUser('newUser')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
@@ -103,82 +105,82 @@
         <Modal
             v-model="openUpdate"
             title="编辑"
-            footer-hide
-            @on-visible-change="cancelUpdate">
-            <Tabs size="small">
-                <TabPane label="修改用户信息">
-                    <Row>
-                        <Col span="22">
-                            <Form :model="user" :rules="newUserRules" :label-width="80" ref="user">
-                                <FormItem label="当前头像:" prop="userface">
-                                    <img src="https://wwc.alicdn.com/avatar/getAvatar.do?userId=822908364&width=80&height=80&type=sns" :style="{width:'128px',height:'128px',borderRadius: '50%'}">
-                                    <Upload
-                                        ref="upload"
-                                        :show-upload-list="false"
-                                        :format="['jpg','jpeg','png']"
-                                        :max-size="2048"
-                                        multiple
-                                        type="drag"
-                                        action="//jsonplaceholder.typicode.com/posts/"
-                                        style="width:128px;">
-                                        <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传头像</Button>
-                                    </Upload>
-                                </FormItem>
-                                <FormItem label="用户名:" prop="username">
-                                    <Input v-model="user.username" disabled placeholder="用户名..."></Input>
-                                </FormItem>
-                                <FormItem label="个人姓名:" prop="name">
-                                    <Input v-model="user.name" placeholder="个人姓名..."></Input>
-                                </FormItem>
-                                <FormItem label="手机号:" prop="phone">
-                                    <Input v-model="user.phone" placeholder="手机号..."></Input>
-                                </FormItem>
-                                <FormItem label="联系地址:" prop="address">
-                                    <Input v-model="user.address" type="textarea" placeholder="联系地址..."></Input>
-                                </FormItem>
-                                <FormItem label="用户角色:" prop="roles">
-                                    <Select v-model="user.roles" multiple @on-change="selectchange">
-                                        <Option v-for="item in rolelist" :value="item.id" :key="item.id" :disabled="item.id == 2 ? true : false">{{ item.name }}</Option>
-                                    </Select>
-                                </FormItem>
-                                <FormItem label="备注:" prop="remark">
-                                    <Input v-model="user.remark" type="textarea" placeholder="备注..."></Input>
-                                </FormItem>
-                            </Form>
-                        </Col>
-                    </Row>
-                    <Row type="flex" justify="center">
-                        <Col span="18">
-                            <Button type="primary" long @click="updateUser('user')">保存</Button>
-                        </Col>
-                    </Row>
-                </TabPane>
-                <TabPane label="重置密码">
-                    <Row>
-                        <Col span="22">
-                            <Form :model="user" :rules="newUserRules" :label-width="80" ref="password">
-                                <FormItem label="用户名:" prop="username">
-                                    <span>{{user.username}}</span>
-                                </FormItem>
-                                <FormItem label="旧密码:" prop="oldpassword">
-                                    <Input v-model="user.oldpassword" placeholder="旧密码"></Input>
-                                </FormItem>
-                                <FormItem label="新密码:" prop="password">
-                                    <Input v-model="user.password" type="textarea" placeholder="新密码"></Input>
-                                </FormItem>
-                                <FormItem label="重复新密码:" prop="strPassword">
-                                    <Input v-model="user.strPassword" type="textarea" placeholder="重复新密码"></Input>
-                                </FormItem>
-                            </Form>
-                        </Col>
-                    </Row>
-                    <Row type="flex" justify="center">
-                        <Col span="18">
-                            <Button type="primary" long @click="updatePassword('password')">确认修改</Button>
-                        </Col>
-                    </Row>
-                </TabPane>
-            </Tabs>
+            @on-visible-change="cancel">
+            <Row>
+                <Col span="22">
+                    <Form :model="user" :rules="newUserRules" :label-width="80" ref="user">
+                        <FormItem label="当前头像:" prop="userface">
+                            <img src="https://wwc.alicdn.com/avatar/getAvatar.do?userId=822908364&width=80&height=80&type=sns" :style="{width:'128px',height:'128px',borderRadius: '50%'}">
+                            <Upload
+                                ref="upload"
+                                :show-upload-list="false"
+                                :format="['jpg','jpeg','png']"
+                                :max-size="2048"
+                                multiple
+                                type="drag"
+                                action="//jsonplaceholder.typicode.com/posts/"
+                                style="width:128px;">
+                                <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传头像</Button>
+                            </Upload>
+                        </FormItem>
+                        <FormItem label="用户名:" prop="username">
+                            <Input v-model="user.username" disabled placeholder="用户名..."></Input>
+                        </FormItem>
+                        <FormItem label="个人姓名:" prop="name">
+                            <Input v-model="user.name" placeholder="个人姓名..."></Input>
+                        </FormItem>
+                        <FormItem label="手机号:" prop="phone">
+                            <Input v-model="user.phone" placeholder="手机号..."></Input>
+                        </FormItem>
+                        <FormItem label="联系地址:" prop="address">
+                            <Input v-model="user.address" type="textarea" placeholder="联系地址..."></Input>
+                        </FormItem>
+                        <FormItem label="用户角色:" prop="roles">
+                            <Select v-model="user.roles" multiple @on-change="selectchange">
+                                <Option v-for="item in rolelist" :value="item.id" :key="item.id" :disabled="item.id == 2 ? true : false">{{ item.name }}</Option>
+                            </Select>
+                        </FormItem>
+                        <FormItem label="备注:" prop="remark">
+                            <Input v-model="user.remark" type="textarea" placeholder="备注..."></Input>
+                        </FormItem>
+                    </Form>
+                </Col>
+            </Row>
+            <div slot="footer">
+                <Button @click="openUpdate=false">取消</Button>
+                <Button type="primary" @click="updateUser('user')">保存</Button>
+            </div>
+            <Spin fix v-if="spinShow">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
+        </Modal>
+        <Modal
+            v-model="openUpdatePsw"
+            title="编辑"
+            @on-visible-change="cancel">
+            <Row>
+                <Col span="22">
+                    <Form :model="user" :rules="newUserRules" :label-width="80" ref="password">
+                        <FormItem label="用户名:" prop="username">
+                            <span>{{user.username}}</span>
+                        </FormItem>
+                        <FormItem label="旧密码:" prop="oldpassword">
+                            <Input v-model="user.oldpassword" type="password" placeholder="旧密码"></Input>
+                        </FormItem>
+                        <FormItem label="新密码:" prop="password">
+                            <Input v-model="user.password" type="password" placeholder="新密码"></Input>
+                        </FormItem>
+                        <FormItem label="重复密码:" prop="strPassword">
+                            <Input v-model="user.strPassword" type="password" placeholder="重复密码"></Input>
+                        </FormItem>
+                    </Form>
+                </Col>
+            </Row>
+            <div slot="footer">
+                <Button @click="openUpdatePsw=false">取消</Button>
+                <Button type="primary" @click="updatePsw('password')">保存</Button>
+            </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
                 <div>Loading</div>
@@ -191,7 +193,6 @@
     export default{
         data(){
             return {
-                date: new Date(),
                 columns1: [
                     {
                         title: '用户名(登录账号)',
@@ -225,7 +226,7 @@
                     {
                         title: '操作',
                         slot: 'action',
-                        width: '180',
+                        width: '250',
                         align: 'center'
                     }
                 ],
@@ -239,6 +240,7 @@
                 spinShow: false,
                 openAddNew : false,
                 openUpdate: false,
+                openUpdatePsw: false,
                 newUserRules: {
                     username: [
                         {required: true, message: '用户名不能为空', trigger: 'blur' },
@@ -260,7 +262,13 @@
                     ],
                     remark: [
                         { type: 'string', max: 50, message: '备注长度不能超过50个字符'}
-                    ]
+                    ],
+                    strPassword: [
+                        { required: true, validator: this.validExit, trigger: 'blur'}
+                    ],
+                    oldpassword: [
+                        { required: true, message: '旧密码不能为空!', trigger: 'blur'}
+                    ],
                 },
                 user: {
                     id: 0,
@@ -268,6 +276,7 @@
                     username: '',
                     password: '',
                     strPassword: '',
+                    oldpassword: '',
                     phone: '',
                     address: '',
                     userface: '',
@@ -372,6 +381,11 @@
                 this.user.address = this.users[index].address;
                 this.user.userface = this.users[index].userface;
                 this.user.remark = this.users[index].remark;
+                var roles = [];
+                this.users[index].roles.forEach(element => {
+                    roles.push(element.id)
+                });
+                this.user.roles = roles;
             },
             updateUser(name){
                 var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
@@ -385,7 +399,10 @@
                         this.putRequest("/system/user/updateUser", {
                             id: this.user.id,
                             name: this.user.name,
-                            remark: this.user.remark
+                            phone: this.user.phone,
+                            address: this.user.address,
+                            remark: this.user.remark,
+                            rolesKey: this.user.roles,
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
                                 this.getUserList();
@@ -401,13 +418,45 @@
                     }
                 })
             },
-            cancel(name){
-                this.openAddNew = false;
-                this.openUpdate = false;
-                this.$refs[name].resetFields();
+            beforeUpdatePsw(index){
+                this.openUpdatePsw = true;
+                this.user.id = this.users[index].id;
+                this.user.username = this.users[index].username;
             },
-            cancelUpdate(flag){
-                if(flag == fasle){
+            updatePsw(name){
+                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+                this.$refs[name].validate((valid) => {
+                    if (check.test(this.user.name)){
+                        this.$Message.error("个人姓名存在特殊字符");
+                        return;
+                    }
+                    if (valid) {
+                        this.spinShow = true;
+                        this.putRequest("/system/user/updateUser", {
+                            id: this.user.id,
+                            name: this.user.name,
+                            phone: this.user.phone,
+                            address: this.user.address,
+                            remark: this.user.remark,
+                            rolesKey: this.user.roles,
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getUserList();
+                                this.$refs[name].resetFields();
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                this.openUpdate = false;
+                            } else {
+                                this.$Message.error(resp.data.message);
+                                this.spinShow = false;
+                            }
+                        })
+                    }
+                })
+            },
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['newUser'].resetFields();
                     this.$refs['user'].resetFields();
                     this.$refs['password'].resetFields();
                 }
@@ -432,6 +481,15 @@
                     },
                 });
             },
+            validExit(rule, value, callback){
+                if(value == null || value == ''){
+                    return callback(new Error("不能为空"));
+                }
+                if(value != this.user.password){
+                    return callback(new Error("两次密码不一致!"));
+                }
+                callback();
+            }
         }
     }
 </script>
