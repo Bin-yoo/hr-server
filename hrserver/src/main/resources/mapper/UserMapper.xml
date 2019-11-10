@@ -57,4 +57,7 @@
 		address = #{address,jdbcType=VARCHAR}, userface = #{userface,jdbcType=VARCHAR}, remark = #{remark,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
+    <update id="updatePasswordByID" parameterType="com.cn.ncvt.entity.User" >
+		update user set password = #{password,jdbcType=VARCHAR},salt = #{salt,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+	</update>
 	</mapper>
