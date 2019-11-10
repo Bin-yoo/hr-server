@@ -22,6 +22,7 @@ public class User {
     private String address;
     private String username;
     private String password;
+    private String oldPassword;
     private String salt;
     private String userface;
     private boolean enabled = true;
@@ -131,5 +132,13 @@ public class User {
 
     public void setRolesKey(int[] rolesKey) {
         this.rolesKey = rolesKey;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 }

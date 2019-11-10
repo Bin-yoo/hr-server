@@ -53,4 +53,10 @@ public class SystemUserController {
         return userBiz.changeUserEnabledState(user);
     }
 
+    @PutMapping("/password")
+    @ApiOperation(value = "禁用或启用账号", notes = "根据用户id和enable进行修改")
+    public Result updatePassword(@RequestBody User user){
+        return userBiz.updatePassword(user);
+    }
+
 }
