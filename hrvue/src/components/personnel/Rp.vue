@@ -136,7 +136,7 @@
             </Row>
             <br>
             <Row type="flex" justify="center">
-                <Page :total="empTotal"  show-elevator show-total @on-change="pageChange"  @on-page-size-change="onPageSizeChange"/>
+                <Page :total="empTotal" :page-size="pageSize" show-elevator show-total @on-change="empPageChange"  @on-page-size-change="onEmpPageSizeChange"/>
             </Row>
             <div slot="footer">
                 <Button>返回</Button>
@@ -232,6 +232,7 @@
                     empTotal: 100,
                     limit: 10,
                     empLimit: 5,
+                    pageSize: 5,
                     dropDownList: [],
                     rpList: {
                         id: '',
@@ -377,10 +378,14 @@
         methods: {
             onPageSizeChange(index){
                 this.limit = index;
-                this.empLimit = index;
             },
             pageChange(index){
                 this.page = index;
+            },
+            onEmpPageSizeChange(index){
+                this.empLimit = index;
+            },
+            empPageChange(index){
                 this.empPage = index;
             },
             getDropDownList(){
@@ -489,28 +494,7 @@
             empLimit: "getEmpLists",
 
         },
-        methods: {
-            getRpList() {
-                this.getRequest("/rp/allRp", {
-                    page: this.page,
-                    limit: this.limit
-                }).then(resp => {
-                    console.log(resp)
-                    this.rpList = resp.data.data.list;
-                    this.total = resp.data.data.total;
-                })
-            },
-            ok() {
-                this.$Message.info('Clicked ok');
-            },
-            cancel() {
-                this.$Message.info('Clicked cancel');
-            },
-            update(index) {
-                this.updateModal = true;
-                console.log(index);
-            },
-        }
+        
     }
 </script>
 
