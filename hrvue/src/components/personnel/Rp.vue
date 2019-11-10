@@ -28,7 +28,7 @@
             <Table border ref="selection" :columns="columns" :data="rpLists">
                 <template slot-scope="{ row, index }" slot="action">
                     <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑</Button>
-                    <Button type="error" @click="remove(index)">删除</Button>
+                    <Button type="error" @click="remove(row.id)">删除</Button>
                 </template>
             </Table>
         </Row>
@@ -41,72 +41,77 @@
             title="添加奖惩记录"
             width=30%>
             
-            <Form :model="rpList" :label-width="80">
-                <Row  type="flex" justify="end">
-                    <Col span="4">
-                        <Button type="primary" style="margin-right: 5px" @click="selectEmp">选择员工</Button>
+            <Form ref="rpList" :model="rpList" :rules="rpRules" :label-width="90">
+                <Row>
+                    <Col span="12">
+                        <FormItem label="选择员工：" prop="eid">
+                            <Button type="primary" style="margin-right: 5px" @click="selectEmp">选择</Button>
+                        </FormItem>
                     </Col>
                 </Row>
-                <br>
                 <Row>
                     <Col span="12">
                         <FormItem label="姓名：">
-                            {{empList.name}}
+                            {{rpList.name}}
                         </FormItem>
                     </Col>
-                    <Col span="12">
+                    <Col span="6">
                         <FormItem label="工号：">
-                            {{empList.workId}}
+                            {{rpList.workId}}
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="12">
                         <FormItem label="所属部门：">
-                            {{empList.departmentName}}
+                            {{rpList.departmentName}}
                         </FormItem>
                     </Col>
                     <Col span="12">
                         <FormItem label="职位：">
-                            {{empList.positionName}}
+                            {{rpList.positionName}}
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="12">
-                        <FormItem label="奖惩类型：">
+                        <FormItem label="奖惩类型：" prop="type">
                             <RadioGroup v-model="rpList.type">
-                                    <Radio label="0">奖励</Radio>
-                                    <Radio label="1">惩罚</Radio>
-                                </RadioGroup>
+                                <Radio label="奖励">奖励</Radio>
+                                <Radio label="惩罚">惩罚</Radio>
+                            </RadioGroup>
                         </FormItem>
                     </Col>
                     <Col span="12">
-                        <FormItem label="奖惩日期：">
+                        <FormItem label="奖惩日期：" prop="date">
                             <DatePicker type="date" placeholder="选择奖惩日期" v-model="rpList.date"></DatePicker>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="12">
-                        <FormItem label="奖惩分数：">
+                        <FormItem label="奖惩分数：" prop="point">
                             <Input v-model="rpList.point" placeholder="请输入..."></Input>
                         </FormItem>
                     </Col>
                     <Col span="12">
-                        <FormItem label="奖惩原因：">
+                        <FormItem label="奖惩原因：" prop="reason">
                             <Input v-model="rpList.reason" placeholder="请输入..."></Input>
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="24">
-                        <FormItem label="备注：">
+                        <FormItem label="备注：" prop="remark">
                             <Input v-model="rpList.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
                         </FormItem>
                     </Col>
                 </Row>
             </Form>
+            <div slot="footer">
+                <Button @click="addhandleReset('rpList')">重置</Button>
+                <Button type="primary" @click="addRp('rpList')">保存</Button>
+            </div>
         </Modal>
         <Modal
             v-model="selectEmpModal"
@@ -357,6 +362,9 @@
                         }
                     ],
                     rpRules:{
+                        eid: [
+                            {required: true, message: '请选择员工', trigger: 'change'}
+                        ],
                         type: [
                             {required: true, message: '类型不能为空', trigger: 'change'}
                         ],
@@ -405,6 +413,37 @@
                     this.total = resp.data.data.total;
                 })
             },
+            addRp(name){
+                this.$refs[name].validate((valid) => {
+                    if(valid) {
+                        this.postRequest("/rp/addRp",{
+                            date: this.rpList.date,
+                            eid: this.rpList.eid,
+                            point: this.rpList.point,
+                            reason: this.rpList.reason,
+                            remark: this.rpList.remark,
+                            type: this.rpList.type
+                        }).then(resp=> {
+                            if (resp.data.error == false && resp.data.code == 200) {
+                                this.getRpList();
+                                this.$Message.success(resp.data.data);
+                                this.addModal = false;
+
+                                //初始化字段
+                                this.$refs[name].resetFields();
+
+                                this.rpList.eid = "";
+                                this.rpList.name = "";
+                                this.rpList.workId = "";
+                                this.rpList.departmentName = "";
+                                this.rpList.positionName = ""
+                            } else {
+                                this.$Message.error(resp.data.message);
+                            }
+                        })
+                    }
+                })
+            },
             selectEmp() {
                 this.selectEmpModal = true;
                 this.getEmpLists();
@@ -423,11 +462,11 @@
                 })
             },
             selected(index) {
-                this.empList.id = this.empLists[index].id;
-                this.empList.name = this.empLists[index].name;
-                this.empList.workId = this.empLists[index].workId;
-                this.empList.departmentName = this.empLists[index].departmentName;
-                this.empList.positionName = this.empLists[index].positionName;
+                this.rpList.eid = this.empLists[index].id;
+                this.rpList.name = this.empLists[index].name;
+                this.rpList.workId = this.empLists[index].workId;
+                this.rpList.departmentName = this.empLists[index].departmentName;
+                this.rpList.positionName = this.empLists[index].positionName;
                 this.selectEmpModal = false;
             },
             beforeUpdate (index) {
@@ -479,6 +518,28 @@
                     }
                 })
             },
+            remove(id){
+                this.$Modal.confirm({
+                    title: '你正在进行删除操作',
+                    content: '<p>你确定要删除该奖惩记录吗?</p>',
+                    onOk: () => {
+                        var _this = this;
+                        this.deleteRequest("/rp/deleteRp/" + id).then(resp=> {
+                            this.$Message.success(resp.data.data);
+                            this.spinShow = false;
+                            _this.getRpList();
+                        })
+                    },
+                });
+            },
+            addhandleReset(name){
+                this.rpList.eid = "";
+                this.rpList.name = "";
+                this.rpList.workId = "";
+                this.rpList.departmentName = "";
+                this.rpList.positionName = "";
+                this.$refs[name].resetFields();
+            },
             handleReset (name) {
                 this.$refs[name].resetFields();
             },
@@ -494,7 +555,6 @@
             empLimit: "getEmpLists",
 
         },
-        
     }
 </script>
 
