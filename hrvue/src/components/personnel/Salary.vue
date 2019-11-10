@@ -19,7 +19,6 @@
                     </Col>
                 </Row>
             </Col>
-            <Col span="2"><Button type="primary" @click="addModal = true">添加档案</Button></Col>
         </Row>
         <br>
         <Row>
@@ -82,7 +81,6 @@
                 v-model="selectModal"
                 title="调薪记录"
                 width=60%
-                @on-ok="ok"
                 @on-cancel="cancel">
             <Row :style="{margin: '0 0 15px 0'}">
                 <Col span="2"><p>姓名：{{name}}</p></Col>
@@ -94,8 +92,8 @@
             </Row>
             <Row>
                 <Col>
-                    <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange"
-                          @on-page-size-change="onPageSizeChange"/>
+                    <Page :total="total" show-sizer show-elevator show-total @on-change="onSelectModalPageChange"
+                          @on-page-size-change="onSelectModalPageSizeChange"/>
                 </Col>
             </Row>
         </Modal>
@@ -113,6 +111,9 @@
                 page: 1,
                 total: 100,
                 limit: 10,
+                selectModalPage: 1,
+                selectModalTotal: 100,
+                selectModalLimit: 10,
                 name: '',
                 workId: '',
                 loading: false,
@@ -247,7 +248,12 @@
             },
             pageChange(index){
                 this.page = index;
-                console.log(page)
+            },
+            onSelectModalPageSizeChange(index){
+                this.selectModalLimit = index;
+            },
+            onSelectModalPageChange(index){
+                this.selectModalPage = index;
             },
             getEmpSalaryList() {
                 this.loading = true;
@@ -293,9 +299,6 @@
                     }
                 })
             },
-            ok() {
-                this.$Message.info('Clicked ok');
-            },
             cancel() {
                 this.$Message.info('Clicked cancel');
             },
@@ -308,18 +311,11 @@
                 this.salary.baseSalary = ''+this.employeeSalarylist[index].baseSalary;
                 this.salary.meritSalary = ''+this.employeeSalarylist[index].meritSalary;
             },
-            onPageSizeChange(index) {
-                this.limit = index;
-            },
-            pageChange(index) {
-                this.page = index;
-            },
             select(eid, name, workId) {
                 this.selectModal = true;
-                console.log(eid);
                 this.getRequest("/salary/salary_log/" + eid, {
-                    page: this.page,
-                    limit: this.limit,
+                    page: this.selectModalPage,
+                    limit: this.selectModalLimit,
                 }).then(resp => {
                     console.log(resp)
                     this.loading = false;

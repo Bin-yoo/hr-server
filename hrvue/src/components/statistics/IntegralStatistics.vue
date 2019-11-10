@@ -46,7 +46,8 @@
             </Table>
             <br>
             <Row :style="{textAlign: 'center'}">
-                <Page :total="100" show-elevator/>
+                <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange"
+                      @on-page-size-change="onPageSizeChange"/>
             </Row>
         </Modal>
     </div>
