@@ -45,7 +45,8 @@
         <Modal
             v-model="addModal"
             title="添加员工档案"
-            width=55%>
+            width=55%
+            @on-visible-change="cancel">
 
             <Form ref="newEmployee" :model="newEmployee" :rules="newEmployeeRules" :label-width="100">
                 <Row>
@@ -150,27 +151,6 @@
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="所属部门：" prop="departmentId">
-                            <treeselect v-model="newEmployee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="职称：" prop="jobLevelId">
-                            <Select v-model="newEmployee.jobLevelId" clearable>
-                                <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id" :label="item.name"></Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="职位：" prop="positionId">
-                            <Select v-model="newEmployee.positionId" clearable>
-                                <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id" :label="item.name"></Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
                         <FormItem label="学历：" prop="titopDegree">
                             <Select v-model="newEmployee.titopDegree" clearable>
                                 <Option value="小学">小学</Option>
@@ -194,6 +174,28 @@
                             <Input v-model="newEmployee.specialty" placeholder="请输入"></Input>
                         </FormItem>
                     </Col> 
+                </Row>
+                <Divider :style="{margin: '0 0 24px 0'}" />
+                <Row>
+                    <Col span="8">
+                        <FormItem label="所属部门：" prop="departmentId">
+                            <treeselect v-model="newEmployee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="职称：" prop="jobLevelId">
+                            <Select v-model="newEmployee.jobLevelId" clearable>
+                                <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id" :label="item.name"></Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="职位：" prop="positionId">
+                            <Select v-model="newEmployee.positionId" clearable>
+                                <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id" :label="item.name"></Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
                 </Row>
                 <Row>
                     <Col span="8">
@@ -248,7 +250,8 @@
         <Modal
             v-model="updateModal"
             title="编辑员工档案"
-            width=55%>
+            width=55%
+            @on-visible-change="cancel">
 
             <Form ref="employee" :model="employee" :rules="newEmployeeRules" :label-width="100" >
                 <Row>
@@ -354,27 +357,6 @@
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem label="所属部门：" prop="departmentId">
-                            <treeselect v-model="employee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="职称：" prop="jobLevelId">
-                            <Select v-model="employee.jobLevelId">
-                                <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id" :label="item.name"></Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col span="8">
-                        <FormItem label="职位：" prop="positionId">
-                            <Select v-model="employee.positionId">
-                                <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id" :label="item.name"></Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
                         <FormItem label="学历：" prop="titopDegree">
                             <Select v-model="employee.titopDegree">
                                 <Option value="小学">小学</Option>
@@ -398,6 +380,28 @@
                             <Input v-model="employee.specialty" placeholder="请输入"></Input>
                         </FormItem>
                     </Col> 
+                </Row>
+                <Divider :style="{margin: '0 0 24px 0'}" />
+                <Row>
+                    <Col span="8">
+                        <FormItem label="所属部门：" prop="departmentId">
+                            <treeselect v-model="employee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="职称：" prop="jobLevelId">
+                            <Select v-model="employee.jobLevelId">
+                                <Option v-for="item in dropDownList.jobLevelList" :value="item.id" :key="item.id" :label="item.name"></Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <FormItem label="职位：" prop="positionId">
+                            <Select v-model="employee.positionId">
+                                <Option v-for="item in dropDownList.positionList" :value="item.id" :key="item.id" :label="item.name"></Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
                 </Row>
                 <Row>
                     <Col span="8">
@@ -749,16 +753,6 @@
                     ],
                     phone: [
                         {required: true, message: '联系方式不能为空', trigger: 'blur'}
-                    ],
-                    nativePlace: [
-                        {required: true, message: '籍贯不能为空', trigger: 'blur'}
-                    ],
-                    email: [
-                        {required: true, message: '邮箱不能为空', trigger: 'blur'},
-                        { type: 'email', message: '邮箱格式不正确'}
-                    ],
-                    address: [
-                        {required: true, message: '居住地址不能为空', trigger: 'blur'}
                     ],
                     departmentId: [
                         {required: true, type: 'number', message: '请选择所属部门', trigger: 'change'}
@@ -1221,6 +1215,12 @@
             show(index) {
                 this.showModal = true;
                 this.index = index;
+            },
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['newEmployee'].resetFields();
+                    this.$refs['employee'].resetFields();
+                }
             },
         },
         mounted: function (){

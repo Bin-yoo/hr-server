@@ -4,9 +4,7 @@
             <Col span="22">
                 <Row :gutter="6">
                     <Col span="3">
-                        <treeselect class="departDown" v-model="souformItem.departmentId"
-                                    :options="dropDownList.departmentList" :default-expand-level="1"
-                                    placeholder="请选择部门"/>
+                        <treeselect class="departDown" v-model="souformItem.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
                     </Col>
                     <Col span="2">
                         <Select v-model="souformItem.positionId" placeholder="职位" clearable>
@@ -19,7 +17,7 @@
                         <Input v-model="souformItem.name" clearable placeholder="请输入姓名..."/>
                     </Col>
                     <Col span="1">
-                        <Button icon="ios-search" @click="">搜索</Button>
+                        <Button icon="ios-search" @click="getEmpIntegerList">搜索</Button>
                     </Col>
                 </Row>
             </Col>
@@ -37,11 +35,12 @@
                   @on-page-size-change="onPageSizeChange"/>
         </Row>
         <Modal
-                v-model="showModal"
-                title="查看详情"
-                width=55%
-                @on-ok="ok"
-                @on-cancel="cancel">
+            v-model="showModal"
+            title="查看详情"
+            width=55%
+            @on-ok="ok"
+            @on-cancel="cancel">
+
             <Table border ref="selection" :columns="showColumns" :data="empRpList">
             </Table>
             <br>
@@ -209,7 +208,6 @@
                     page: this.page,
                     limit: this.limit,
                 }).then(resp => {
-                    console.log(resp);
                     this.empRpList = resp.data.data.list;
                     this.total = resp.data.data.total;
                 })
@@ -222,7 +220,6 @@
                     positionId: this.souformItem.positionId,
                     name: this.souformItem.name,
                 }).then(resp => {
-                    console.log(resp);
                     this.empIntegerList = resp.data.data.list;
                     this.total = resp.data.data.total;
                 })

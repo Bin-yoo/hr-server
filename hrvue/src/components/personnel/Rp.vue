@@ -39,7 +39,8 @@
         <Modal
             v-model="addModal"
             title="添加奖惩记录"
-            width=30%>
+            width=30%
+            @on-visible-change="cancel">
             
             <Form ref="rpList" :model="rpList" :rules="rpRules" :label-width="90">
                 <Row>
@@ -150,7 +151,8 @@
         <Modal
             v-model="updateModal"
             title="修改奖惩记录"
-            width=30%>
+            width=30%
+            @on-visible-change="cancel">
             
             <Form ref="rpList" :model="rpList" :rules="rpRules" :label-width="90" >
                 <Row>
@@ -542,6 +544,16 @@
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
+            },
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['rpList'].resetFields();
+                    this.rpList.eid = "";
+                    this.rpList.name = "";
+                    this.rpList.workId = "";
+                    this.rpList.departmentName = "";
+                    this.rpList.positionName = "";
+                }
             },
         },
         mounted: function (){
