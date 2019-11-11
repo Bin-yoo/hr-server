@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
         next();
         return;
     }
-    if (store.state.user.name == "未登录") { // 通过vuex state获取当前的token是否存在
+    if (store.state.user == null) { // 通过vuex state获取当前的token是否存在
         if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
             next({
                 path: '/',
