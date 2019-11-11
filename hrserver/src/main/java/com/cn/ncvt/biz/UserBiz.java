@@ -130,6 +130,19 @@ public class UserBiz {
         }
     }
 
+    public Result resetPassword(User user) {
+        Map<String,String> map = this.encodedPassword(user.getPassword());
+        user.setSalt(map.get("salt"));
+        user.setPassword(map.get("encodedPassword"));
+        try {
+            userMapper.updatePasswordByID(user);
+            return ResultFactory.buildSuccessResult("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("修改失败");
+        }
+    }
+
     public Result updatePassword(User user) {
         User checkpsw = userMapper.selectByID(user.getId());
         String password = user.getOldPassword();    //用户传进来的旧密码
