@@ -1,7 +1,7 @@
 <template>
     <div>
         <Divider orientation="left" ><Icon type="ios-people" />&nbsp;&nbsp;员工统计</Divider>
-        <Row type="flex" justify="center">
+        <Row>
             <Col span="2">
                 <Row>
                     <Icon type="ios-folder-outline" size="60"/>
@@ -29,20 +29,20 @@
         </Row>
         <br>
         <Row>
-            <Col span="12">
+            <Col span="6">
                 <div id="genderStatisticsPie" style="width:100%; height:400px;"></div>
             </Col>
-            <Col span="12">
+            <Col span="6">
                 <div id="wedlockStatisticsPie" style="width:100%; height:400px;"></div>
+            </Col>
+            <Col span="12">
+                <div id="titopDegreeStatisticsBar" style="width:100%; height:400px;"></div>
             </Col>
         </Row>
         <br>
         <br>
         <br>
         <Row>
-            <Col span="12">
-                <div id="titopDegreeStatisticsBar" style="width:100%; height:400px;"></div>
-            </Col>
             <Col span="12">
                 <Tabs type="card">
                     <TabPane label="标签一">
@@ -69,7 +69,6 @@
 
 <script>
     import echarts from 'echarts'
-
     export default {
         data() {
             return {
@@ -126,7 +125,7 @@
                     legend: {
                         orient: 'vertical',
                         bottom: 'bottom',
-                        data: ['男性人数', '女性人数']
+                        data: ['男性', '女性']
                     },
                     series: [
                         {
@@ -134,8 +133,8 @@
                             radius: '55%',
                             center: ['50%', '60%'],
                             data: [
-                                { value: 3, name: '男性人数' },
-                                { value: 4, name: '女性人数' },
+                                { value: 3, name: '男性' },
+                                { value: 4, name: '女性' },
                             ],
                             itemStyle: {
                                 emphasis: {
@@ -146,6 +145,7 @@
                             },
                             label: {
                                 normal: {
+                                    position: 'inner',
                                     formatter: '  {b|{b}：}{c}人  {per|{d}%}  ',
                                     backgroundColor: '#eee',
                                     borderColor: '#aaa',
@@ -173,6 +173,10 @@
                         text: '婚姻状况',
                         x: 'center'
                     },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{b} : {c} 人"
+                    },
                     legend: {
                         orient: 'vertical',
                         bottom: 'bottom',
@@ -184,9 +188,9 @@
                             radius: '55%',
                             center: ['50%', '60%'],
                             data: [
-                                { value: 3, name: '未婚' },
-                                { value: 3, name: '已婚' },
-                                { value: 4, name: '离异' },
+                                { value: 70, name: '未婚' },
+                                { value: 30, name: '已婚' },
+                                { value: 3, name: '离异' },
                             ],
                             itemStyle: {
                                 emphasis: {
@@ -197,6 +201,7 @@
                             },
                             label: {
                                 normal: {
+                                    position: 'inner',
                                     formatter: '  {b|{b}：}{c}人  {per|{d}%}  ',
                                     backgroundColor: '#eee',
                                     borderColor: '#aaa',
@@ -204,6 +209,7 @@
                                     borderRadius: 4,
                                     rich: {
                                         b: {
+                                            color: '#fff',
                                             lineHeight: 25
                                         },
                                         per: {
@@ -231,7 +237,7 @@
                         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                             type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                         },
-                        formatter: "{a} <br/>{b} : {c} 人"
+                        formatter: "{b} : {c} 人"
                     },
                     xAxis: {
                         type: 'value',
@@ -242,7 +248,6 @@
                     },
                     series: [
                         {
-                            name: '部门人数',
                             type: 'bar',
                             data: [100,12,13,14,15,16,17,18],
                         }

@@ -165,9 +165,6 @@
                         <FormItem label="用户名:" prop="username">
                             <span>{{user.username}}</span>
                         </FormItem>
-                        <FormItem label="旧密码:" prop="oldpassword">
-                            <Input v-model="user.oldpassword" type="password" placeholder="旧密码"></Input>
-                        </FormItem>
                         <FormItem label="新密码:" prop="password">
                             <Input v-model="user.password" type="password" placeholder="新密码"></Input>
                         </FormItem>
@@ -266,9 +263,6 @@
                     strPassword: [
                         { required: true, validator: this.validExit, trigger: 'blur'}
                     ],
-                    oldpassword: [
-                        { required: true, message: '旧密码不能为空!', trigger: 'blur'}
-                    ],
                 },
                 user: {
                     id: 0,
@@ -276,7 +270,6 @@
                     username: '',
                     password: '',
                     strPassword: '',
-                    oldpassword: '',
                     phone: '',
                     address: '',
                     userface: '',
