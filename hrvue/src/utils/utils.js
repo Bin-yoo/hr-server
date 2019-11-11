@@ -41,7 +41,7 @@ export const formatRoutes = (routes)=> {
         if (path.startsWith("/home")) {
           require(['../views/' + component + '.vue'], resolve)
         } else if (path.startsWith("/employee")) {
-          require(['../components/' + component + '.vue'], resolve)
+          require(['../components/emp/' + component + '.vue'], resolve)
         } else if (path.startsWith("/per")) {
           require(['../components/personnel/' + component + '.vue'], resolve)
         } else if (path.startsWith("/statistics")) {
