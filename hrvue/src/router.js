@@ -4,6 +4,7 @@ import Login from './views/Login.vue'
 import Home from './views/Home.vue'
 import store from './store'
 import {initMenu} from './utils/utils'
+import Employee from './components/emp/Employee.vue'
 
 Vue.use(Router)
 
@@ -24,7 +25,12 @@ const router = new Router({
             meta: {
                 requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             },
-            children: []
+            children: [
+                {
+                    path: '',
+                    component: Employee
+                },
+            ]
         },
     ]
 })

@@ -25,8 +25,8 @@
                 <Menu width="auto" :style="{height: '100%'}">
                     <template v-for="(item,index) in this.routes">
                         <MenuItem
-                            :key="item.path"
-                            :name="item.path"
+                            :key="item.name"
+                            :name="item.name"
                             :to="item.children[0].path"
                             v-if="item.children.length == 1"
                         >
