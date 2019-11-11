@@ -36,11 +36,10 @@
         </Row>
 
         <Modal
-                v-model="updateModal"
-                title="调薪"
-                width=35%
-                @on-ok="updateSalary('salary')"
-                @on-cancel="cancel">
+            v-model="updateModal"
+            title="调薪"
+            width=35%
+            @on-visible-change="cancel">
 
             <Form :model="salary" :label-width="80"  :rules="newSalaryRules"  ref="salary">
                 <Row>
@@ -76,12 +75,16 @@
                     </Col>
                 </Row>
             </Form>
+            <div slot="footer">
+                <Button @click="handleReset('salary')">重置</Button>
+                <Button type="primary" @click="updateSalary('salary')">保存</Button>
+            </div>
         </Modal>
         <Modal
-                v-model="selectModal"
-                title="调薪记录"
-                width=60%
-                @on-cancel="cancel">
+            v-model="selectModal"
+            title="调薪记录"
+            width=60%>
+
             <Row :style="{margin: '0 0 15px 0'}">
                 <Col span="2"><p>姓名：{{name}}</p></Col>
                 <Col span="5"><p>工号：{{workId}}</p></Col>
@@ -96,6 +99,9 @@
                           @on-page-size-change="onSelectModalPageSizeChange"/>
                 </Col>
             </Row>
+            <div slot="footer">
+                <Button @click="selectModal = false">返回</Button>
+            </div>
         </Modal>
     </div>
 </template>
@@ -299,9 +305,6 @@
                     }
                 })
             },
-            cancel() {
-                this.$Message.info('Clicked cancel');
-            },
             beforeupdate(index) {
                 this.updateModal = true;
                 this.salary.id = this.employeeSalarylist[index].id;      
@@ -324,6 +327,18 @@
                     this.workId = workId;
                     this.total = resp.data.data.total;
                 })
+            },
+            handleReset (name) {
+                this.$refs[name].resetFields();
+                this.rpList.name = "";
+                this.rpList.workId = "";
+            },
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['rpList'].resetFields();
+                    this.rpList.name = "";
+                    this.rpList.workId = "";
+                }
             },
         }
     }

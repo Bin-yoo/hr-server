@@ -40,7 +40,8 @@
         <Modal
             v-model="addModal"
             title="添加考核项目"
-            width=30%>
+            width=30%
+            @on-visible-change="cancel">
             
                 <Form ref="newAssessment" :model="newAssessment" :rules="rules" :label-width="100">
                     <Row>
@@ -62,7 +63,8 @@
         <Modal
             v-model="updateModal"
             title="修改考核项目"
-            width=30%>
+            width=30%
+            @on-visible-change="cancel">
             
                 <Form ref="assessment" :model="assessment" :rules="rules" :label-width="100">
                     <Row>
@@ -282,11 +284,14 @@
                     }
                 })
             },
-            ok() {
-                this.$Message.info('Clicked ok');
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['newAssessment'].resetFields();
+                    this.$refs['assessment'].resetFields();
+                }
             },
-            cancel() {
-                this.$Message.info('Clicked cancel');
+            handleReset (name) {
+                this.$refs[name].resetFields();
             },
         },
         mounted: function (){
