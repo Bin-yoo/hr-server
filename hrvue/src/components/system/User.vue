@@ -34,7 +34,7 @@
                     </template>
                     <template slot-scope="{ row, index }" slot="action">
                         <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" :disabled="row.id === 1 ? true : false">编辑</Button>
-                        <Button type="warning" style="margin-right: 5px" @click="beforeUpdatePsw(index)" :disabled="row.id === 1 ? true : false">重置密码</Button>
+                        <Button type="warning" style="margin-right: 5px" @click="beforeResetPsw(index)" :disabled="row.id === 1 ? true : false">重置密码</Button>
                         <Button type="error" style="margin-right: 5px" @click="deleteUser(row.id)" :disabled="row.id === 1 ? true : false">删除</Button>
                     </template>
                 </Table>
@@ -156,8 +156,8 @@
             </Spin>
         </Modal>
         <Modal
-            v-model="openUpdatePsw"
-            title="编辑"
+            v-model="openResetPsw"
+            title="重置密码"
             @on-visible-change="cancel">
             <Row>
                 <Col span="22">
@@ -178,8 +178,8 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="openUpdatePsw=false">取消</Button>
-                <Button type="primary" @click="updatePsw('password')">保存</Button>
+                <Button @click="openResetPsw=false">取消</Button>
+                <Button type="primary" @click="resetPsw('password')">保存</Button>
             </div>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -240,7 +240,7 @@
                 spinShow: false,
                 openAddNew : false,
                 openUpdate: false,
-                openUpdatePsw: false,
+                openResetPsw: false,
                 newUserRules: {
                     username: [
                         {required: true, message: '用户名不能为空', trigger: 'blur' },
@@ -418,34 +418,23 @@
                     }
                 })
             },
-            beforeUpdatePsw(index){
-                this.openUpdatePsw = true;
+            beforeResetPsw(index){
+                this.openResetPsw = true;
                 this.user.id = this.users[index].id;
                 this.user.username = this.users[index].username;
             },
-            updatePsw(name){
-                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+            resetPsw(name){
                 this.$refs[name].validate((valid) => {
-                    if (check.test(this.user.name)){
-                        this.$Message.error("个人姓名存在特殊字符");
-                        return;
-                    }
                     if (valid) {
                         this.spinShow = true;
-                        this.putRequest("/system/user/updateUser", {
+                        this.putRequest("/system/user/resetpsw", {
                             id: this.user.id,
-                            name: this.user.name,
-                            phone: this.user.phone,
-                            address: this.user.address,
-                            remark: this.user.remark,
-                            rolesKey: this.user.roles,
+                            password: this.user.password,
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
-                                this.getUserList();
-                                this.$refs[name].resetFields();
                                 this.$Message.success(resp.data.data);
                                 this.spinShow = false;
-                                this.openUpdate = false;
+                                this.openResetPsw = false;
                             } else {
                                 this.$Message.error(resp.data.message);
                                 this.spinShow = false;

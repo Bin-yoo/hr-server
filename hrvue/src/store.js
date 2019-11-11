@@ -5,12 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user:{
-        name: window.sessionStorage.getItem('user' || '[]') == null ? '未登录' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).name,
-        userface: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).userface,
-        username: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).username,
-        // roles: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).roles
-    },
+    user: window.sessionStorage.getItem('user') == null ? null : JSON.parse(window.sessionStorage.getItem('user')),
     token: window.sessionStorage.getItem('token') == null ? '' : window.sessionStorage.getItem('token'),
     sessionId: window.sessionStorage.getItem('sessionId') == null ? '' : window.sessionStorage.getItem('sessionId'),
     routes: [],
@@ -32,7 +27,7 @@ export default new Vuex.Store({
         window.sessionStorage.removeItem('user');
         window.sessionStorage.removeItem('token');
         window.sessionStorage.removeItem('sessionId');
-        state.user = [];
+        state.user = null;
         state.token = "";
         state.sessionId = "";
         state.routes = [];

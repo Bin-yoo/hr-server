@@ -28,7 +28,7 @@
                             :key="item.path"
                             :name="item.path"
                             :to="item.children[0].path"
-                            v-if="item.name=='员工档案'"
+                            v-if="item.children.length == 1"
                         >
                             <Icon :type="item.children[0].iconCls" />
                             {{item.children[0].name}}

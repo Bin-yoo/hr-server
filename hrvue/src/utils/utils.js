@@ -16,12 +16,9 @@ export const initMenu = (router, store)=> {
     return;
   }
   getRequest("/sysmenu").then(resp=> {
-    if (resp && resp.status == 200) {
-      console.log("开始请求获取菜单");
       var fmtRoutes = formatRoutes(resp.data.data);
       router.addRoutes(fmtRoutes);
       store.commit('initMenu', fmtRoutes);
-    }
   })
 }
 export const formatRoutes = (routes)=> {
