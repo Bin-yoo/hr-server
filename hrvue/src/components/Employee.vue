@@ -32,7 +32,7 @@
                 <template slot-scope="{ row, index }" slot="action">
                     <Button style="margin-right: 5px" @click="show(index)">查看</Button>
                     <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)">编辑</Button>
-                    <Button type="error" @click="remove(index)">删除</Button>
+                    <Button type="error" @click="remove(row.id)">删除</Button>
                 </template>
             </Table>
         </Row>
@@ -606,20 +606,20 @@
                     <Tabs type="card">
                         <TabPane label="奖惩资料">
                             <Table :columns="rewPunColumns" :data="rewPunData"></Table>
-                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
-                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
+                                <Col  ><Page :total="100" show-elevator /></Col>
                             </Row>
                         </TabPane>
                         <TabPane label="考核资料">
                             <Table :columns="assColumns" :data="assData"></Table>
-                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
-                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            <Row type="flex" justify="center" :style="{margin: '10px 0 0 0'}">
+                                <Col><Page :total="100" show-elevator /></Col>
                             </Row>
                         </TabPane>
                         <TabPane label="调动资料">
                             <Table :columns="transferColumns" :data="transferdata"></Table>
-                            <Row justify="center" align="middle" :style="{margin: '10px 0 0 0'}">
-                                <Col  offset="5"><Page :total="100" show-elevator /></Col>
+                            <Row type="flex" justify="center" :style="{margin: '10px 0 0 0'}">
+                                <Col><Page :total="100" show-elevator /></Col>
                             </Row>
                         </TabPane>
                     </Tabs>
@@ -632,7 +632,6 @@
 <script>
     import Treeselect from '@riophae/vue-treeselect'
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-    import {isNotNullORBlank} from '../utils/utils'
     import moment from "moment"
     export default {
         components: { Treeselect },
@@ -1202,6 +1201,21 @@
                     } else {
                         this.$Message.error('必填项不能为空');
                     }
+                })
+            },
+            remove(id){
+                this.$Modal.confirm({
+                    title: '你正在进行删除操作',
+                    content: '<p>你确定要删除该员工档案吗?</p>',
+                    onOk: () => {
+                        console.log(id);
+                        var _this = this;
+                        this.deleteRequest("/employee/deleteEmp/" + id).then(resp=> {
+                            console.log(id+'1111111111111111');
+                            this.$Message.success(resp.data.data);
+                            _this.getEmployeeList();
+                        })
+                    },
                 })
             },
             show(index) {
