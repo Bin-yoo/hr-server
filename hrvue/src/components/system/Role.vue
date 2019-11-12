@@ -271,9 +271,13 @@
                     onOk: () => {
                         var _this = this;
                         this.deleteRequest("/system/role/role/" + id).then(resp=> {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            _this.getRoleList();
+                            if(resp.data.code != 400){
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getRoleList();
+                            }else{
+                                this.$Message.error(resp.data.message);
+                            }
                         })
                     },
                 });

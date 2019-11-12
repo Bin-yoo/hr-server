@@ -1067,16 +1067,16 @@
                                 this.addModal = false;
                                 this.getEmployeeList();
 
-                                //初始化字段
-                                this.$refs[name].resetFields();
-
-                                //初始化
-                                this.formatDate.birthday = '';
-                                this.formatDate.beginDate = '';
-                                this.formatDate.conversionTime = '';
-                                this.formatDate.beginContract = '';
-                                this.formatDate.endContract = '';
-                                this.formatDate.quitTime = '';
+                                // //初始化字段
+                                // this.$refs[name].resetFields();
+                                //
+                                // //初始化
+                                // this.formatDate.birthday = '';
+                                // this.formatDate.beginDate = '';
+                                // this.formatDate.conversionTime = '';
+                                // this.formatDate.beginContract = '';
+                                // this.formatDate.endContract = '';
+                                // this.formatDate.quitTime = '';
                             } else {
                                 this.$Message.error(resp.data.message);
                             }
@@ -1205,9 +1205,13 @@
                         console.log(id);
                         var _this = this;
                         this.deleteRequest("/employee/deleteEmp/" + id).then(resp=> {
-                            console.log(id+'1111111111111111');
-                            this.$Message.success(resp.data.data);
-                            _this.getEmployeeList();
+                            if(resp.data.code != 400){
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getEmployeeList();
+                            }else{
+                                this.$Message.error(resp.data.message);
+                            }
                         })
                     },
                 })
@@ -1216,12 +1220,12 @@
                 this.showModal = true;
                 this.index = index;
             },
-            cancel(flag){
-                if(flag == false){
-                    this.$refs['newEmployee'].resetFields();
-                    this.$refs['employee'].resetFields();
-                }
-            },
+            // cancel(flag){
+            //     if(flag == false){
+            //         this.$refs['newEmployee'].resetFields();
+            //         this.$refs['employee'].resetFields();
+            //     }
+            // },
         },
         mounted: function (){
             this.getEmployeeList();

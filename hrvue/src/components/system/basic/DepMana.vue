@@ -277,9 +277,13 @@
                         onOk: () => {
                             var _this = this;
                             this.deleteRequest("/system/basic/department/" + node.node.id).then(resp=> {
-                                this.$Message.success(resp.data.data);
-                                this.spinShow = false;
-                                _this.getDeps();
+                                if(resp.data.code != 400){
+                                    this.$Message.success(resp.data.data);
+                                    this.spinShow = false;
+                                    _this.getDeps();
+                                }else{
+                                    this.$Message.error(resp.data.message);
+                                }
                             })
                         },
                     });
