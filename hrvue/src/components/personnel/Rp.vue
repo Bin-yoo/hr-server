@@ -527,9 +527,13 @@
                     onOk: () => {
                         var _this = this;
                         this.deleteRequest("/rp/deleteRp/" + id).then(resp=> {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            _this.getRpList();
+                            if(resp.data.code != 400){
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getRpList();
+                            }else{
+                                this.$Message.error(resp.data.message);
+                            }
                         })
                     },
                 });

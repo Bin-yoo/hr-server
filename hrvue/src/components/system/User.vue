@@ -456,9 +456,13 @@
                     onOk: () => {
                         var _this = this;
                         this.deleteRequest("/system/user/user/" + id).then(resp=> {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            _this.getUserList();
+                            if(resp.data.code != 400){
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getUserList();
+                            }else{
+                                this.$Message.error(resp.data.message);
+                            }
                         })
                     },
                 });

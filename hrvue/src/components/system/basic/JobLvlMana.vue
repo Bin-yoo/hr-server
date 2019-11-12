@@ -240,9 +240,13 @@
                     onOk: () => {
                         var _this = this;
                         this.deleteRequest("/system/basic/jobLvl/" + id).then(resp=> {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            _this.getjoblvlList();
+                            if(resp.data.code != 400){
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getjoblvlList();
+                            }else{
+                                this.$Message.error(resp.data.message);
+                            }
                         })
                     },
                 });

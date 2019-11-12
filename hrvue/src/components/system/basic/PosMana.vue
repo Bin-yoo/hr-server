@@ -241,9 +241,13 @@
                     onOk: () => {
                         var _this = this;
                         this.deleteRequest("/system/basic/position/" + id).then(resp=> {
-                            this.$Message.success(resp.data.data);
-                            this.spinShow = false;
-                            _this.getPositionList();
+                            if(resp.data.code != 400){
+                                this.$Message.success(resp.data.data);
+                                this.spinShow = false;
+                                _this.getPositionList();
+                            }else{
+                                this.$Message.error(resp.data.message);
+                            }
                         })
                     },
                 });
