@@ -43,6 +43,7 @@ public class DepartmentBiz {
             departmentMapper.insert(department);
             return ResultFactory.buildSuccessResult("添加成功");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResultFactory.buildFailResult("添加失败");
         }
     }
@@ -64,6 +65,7 @@ public class DepartmentBiz {
             departmentMapper.updateByIDSelective(department);
             return ResultFactory.buildSuccessResult("修改成功");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResultFactory.buildFailResult("修改失败");
         }
     }
@@ -73,6 +75,7 @@ public class DepartmentBiz {
             departmentMapper.deleteByID(id);
             return ResultFactory.buildSuccessResult("删除成功");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResultFactory.buildFailResult("删除失败");
         }
     }
