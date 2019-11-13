@@ -248,11 +248,13 @@
         watch: {
             page: "getEmpSalaryList",
             limit: "getEmpSalaryList",
+            selectModalPage: "select",
+            selectModalLimit: "select",
         },
         methods: {
             getDropDownList(){
                 this.getRequest("/employee/init").then(resp=> {
-                    this.dropDownList = resp.data.data;
+                   this.dropDownList = resp.data.data;
                 })
             },
             onPageSizeChange(index){

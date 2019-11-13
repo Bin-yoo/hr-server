@@ -446,11 +446,6 @@
                             <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="employee.quitTime"></DatePicker>
                         </FormItem>
                     </Col>
-                    <Col span="8">
-                        <FormItem label="工号：" prop="workId">
-                            <Input v-model="employee.workId" placeholder="请输入"></Input>
-                        </FormItem>
-                    </Col>
                 </Row>
             </Form>
             <div slot="footer">
@@ -1088,16 +1083,16 @@
                                 this.addModal = false;
                                 this.getEmployeeList();
 
-                                //初始化字段
-                                this.$refs[name].resetFields();
-
-                                //初始化
-                                this.formatDate.birthday = '';
-                                this.formatDate.beginDate = '';
-                                this.formatDate.conversionTime = '';
-                                this.formatDate.beginContract = '';
-                                this.formatDate.endContract = '';
-                                this.formatDate.quitTime = '';
+                                // //初始化字段
+                                // this.$refs[name].resetFields();
+                                //
+                                // //初始化
+                                // this.formatDate.birthday = '';
+                                // this.formatDate.beginDate = '';
+                                // this.formatDate.conversionTime = '';
+                                // this.formatDate.beginContract = '';
+                                // this.formatDate.endContract = '';
+                                // this.formatDate.quitTime = '';
                             } else {
                                 this.$Message.error(resp.data.message);
                             }
@@ -1242,12 +1237,12 @@
                 this.index = index;
                 this.getEmpRp(this.employees[index].id);
             },
-            cancel(flag){
-                if(flag == false){
-                    this.$refs['newEmployee'].resetFields();
-                    this.$refs['employee'].resetFields();
-                }
-            },
+            // cancel(flag){
+            //     if(flag == false){
+            //         this.$refs['newEmployee'].resetFields();
+            //         this.$refs['employee'].resetFields();
+            //     }
+            // },
         },
         mounted: function (){
             this.getEmployeeList();
