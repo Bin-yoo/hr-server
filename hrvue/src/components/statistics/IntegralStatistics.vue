@@ -26,7 +26,7 @@
         <Row>
             <Table border ref="selection" :columns="columns" :data="empIntegerList">
                 <template slot-scope="{ row }" slot="action">
-                    <Button type="primary" style="margin-right: 5px" @click="getEmpRpList(row.eid)">查看</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="getEmpRpList(row.eid)">查看奖惩记录</Button>
                 </template>
             </Table>
         </Row>
@@ -45,8 +45,8 @@
             </Table>
             <br>
             <Row :style="{textAlign: 'center'}">
-                <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange"
-                      @on-page-size-change="onPageSizeChange"/>
+                <Page :total="total" show-sizer show-elevator show-total @on-change="onShowModalPageChange"
+                      @on-page-size-change="onShowModalPageSizeChange"/>
             </Row>
         </Modal>
     </div>
@@ -63,6 +63,9 @@
                 page: 1,
                 total: 100,
                 limit: 10,
+                showModalPage: 1,
+                showModalTotal: 100,
+                showModalLimit: 10,
                 dropDownList: [],
                 souformItem: {
                     departmentId: null,
@@ -117,7 +120,7 @@
                     {
                         title: '操作',
                         slot: 'action',
-                        width: 100,
+                        width: 140,
                         align: 'center'
                     }
                 ],
@@ -159,12 +162,12 @@
                     },
                     {
                         title: '奖惩类型',
-                        width: 90,
+                        width: 80,
                         key: 'type'
                     },
                     {
                         title: '奖惩分数',
-                        width: 90,
+                        width: 80,
                         key: 'point'
                     },
                     {
@@ -181,6 +184,8 @@
         watch: {
             page: "getEmpIntegerList",
             limit: "getEmpIntegerList",
+            showModalLimit:"getEmpRpList",
+            onShowModalPageChange:"getEmpRpList",
         },
         mounted() {
             this.getEmpIntegerList();
@@ -194,20 +199,24 @@
             },
             pageChange(index) {
                 this.page = index;
-                console.log(page)
             },
             onPageSizeChange(index) {
                 this.limit = index;
             },
-            onPageSizeChange(index) {
-                this.limit = index;
+            onShowModalPageSizeChange(index){
+                this.showModalLimit = index;
+            },
+            onShowModalPageChange(index){
+                this.showModalPage = index;
             },
             getEmpRpList(eid) {
                 this.showModal = true;
-                this.getRequest("/integral/rp/" + eid, {
+                this.getRequest("/rp/empRp/" + eid, {
                     page: this.page,
                     limit: this.limit,
                 }).then(resp => {
+                    console.log(eid)
+                    console.log(resp)
                     this.empRpList = resp.data.data.list;
                     this.total = resp.data.data.total;
                 })

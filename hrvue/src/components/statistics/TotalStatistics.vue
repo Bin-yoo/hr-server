@@ -44,12 +44,17 @@
         <br>
         <Row>
             <Col span="12">
-                <Tabs type="card">
-                    <TabPane label="标签一">
-                        <Table :columns="columns1" :data="data1"></Table>
+                <div id="RpStatisticsLine" style="width:100%; height:400px;"></div>                
+            </Col>
+            <Col span="12">
+                <Tabs type="card" :animated="false">
+                    <span slot="extra"><h2>职位结构</h2></span>
+                    <TabPane label="职位">
+                        <Table :columns="columns1" :data="data1" height="300"></Table>
                     </TabPane>
-                    <TabPane label="标签二">标签二的内容</TabPane>
-                    <TabPane label="标签三">标签三的内容</TabPane>
+                    <TabPane label="职称">
+                        <Table :columns="columns1" :data="data1" height="300"></Table>
+                    </TabPane>
                 </Tabs>
             </Col>
         </Row>
@@ -74,42 +79,58 @@
             return {
                 columns1: [
                     {
-                        title: 'Name',
+                        title: '名称',
                         key: 'name'
                     },
                     {
-                        title: 'Age',
-                        key: 'age'
+                        title: '人数',
+                        key: 'count'
                     },
                     {
-                        title: 'Address',
-                        key: 'address'
+                        title: '占比',
+                        key: 'Proportion'
                     }
                 ],
                 data1: [
                     {
                         name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        date: '2016-10-03'
+                        count: 18,
+                        Proportion: 'New York No. 1 Lake Park',
                     },
                     {
                         name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park',
-                        date: '2016-10-01'
+                        count: 24,
+                        Proportion: 'London No. 1 Lake Park',
                     },
                     {
                         name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        date: '2016-10-02'
+                        count: 30,
+                        Proportion: 'Sydney No. 1 Lake Park',
                     },
                     {
                         name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        date: '2016-10-04'
+                        count: 26,
+                        Proportion: 'Ottawa No. 2 Lake Park',
+                    },
+                    {
+                        name: 'John Brown',
+                        count: 18,
+                        Proportion: 'New York No. 1 Lake Park',
+                    },
+                    {
+                        name: 'Jim Green',
+                        count: 24,
+                        Proportion: 'London No. 1 Lake Park',
+                    },
+                    {
+                        name: 'Joe Black',
+                        count: 30,
+                        Proportion: 'Sydney No. 1 Lake Park',
+                    },
+                    {
+                        name: 'Jon Snow',
+                        count: 26,
+                        Proportion: 'Ottawa No. 2 Lake Park',
                     }
                 ]
             }
@@ -245,11 +266,50 @@
                     yAxis: {
                         type: 'category',
                         data: ['其他','小学','初中','高中','大专','本科','硕士','博士'],
+                        
                     },
                     series: [
                         {
                             type: 'bar',
                             data: [100,12,13,14,15,16,17,18],
+                        }
+                    ]
+                });
+            },
+            drawRpChart() {
+                this.RpStatisticsLine = echarts.init(document.getElementById('RpStatisticsLine'));
+                this.RpStatisticsLine.setOption({
+                    title: {
+                        text: '奖惩',
+                        left: '60px'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['2019-08', '2019-09', '2019-10', '2019-11', '2019-12', '2020-01', '2020-02'],
+                        axisTick: {
+                            alignWithLabel: true
+                        },
+                        boundaryGap: false,
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    legend: {
+                        data: ['奖励', '惩罚']
+                    },
+                    series: [
+                        {
+                            name:'奖励',
+                            type:'line',
+                            data:[0, 1, 2, 1, 0, 5, 1]
+                        },
+                        {
+                            name:'惩罚',
+                            type:'line',
+                            data:[0, 0, 0, 1, 1, 0, 1]
                         }
                     ]
                 });
@@ -331,6 +391,7 @@
             drawCharts() {
                 this.drawGenderChart();
                 this.drawTitopDegreeChart();
+                this.drawRpChart();
                 this.drawDeparChart();
             },
         },

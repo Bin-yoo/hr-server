@@ -59,7 +59,6 @@
                 <router-view v-if="!this.$route.meta.keepAlive"></router-view>
             </Content>
         </Layout>
-        <Footer>Footer</Footer>
     </Layout>
 </template>
 
