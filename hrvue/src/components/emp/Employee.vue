@@ -446,11 +446,6 @@
                             <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="employee.quitTime"></DatePicker>
                         </FormItem>
                     </Col>
-                    <Col span="8">
-                        <FormItem label="工号：" prop="workId">
-                            <Input v-model="employee.workId" placeholder="请输入"></Input>
-                        </FormItem>
-                    </Col>
                 </Row>
             </Form>
             <div slot="footer">
