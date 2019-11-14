@@ -23,6 +23,24 @@ public class Assessment {
     private Timestamp endDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
+    private Integer departmentID;
+    private String departmentName;
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public Integer getDepartmentID() {
+        return departmentID;
+    }
+
+    public void setDepartmentID(Integer departmentID) {
+        this.departmentID = departmentID;
+    }
 
     public Integer getId() {
         return id;

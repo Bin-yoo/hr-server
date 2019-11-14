@@ -14,13 +14,16 @@
     id, name, remarks, state, beginDate, endDate, createDate
   </sql>
     <select id="selectAllAssessment" resultType="Assessment">
-        select * from assessment
+        SELECT a.*,d.name as departmentName from assessment a,department d where a.departmentID=d.id
         <where>
             <if test="name != null and name != '' ">
                 and name like '%${name}%'
             </if>
             <if test="state != null and state != '' ">
                 and state=#{state}
+            </if>
+            <if test="departmentID != null and departmentID != '' ">
+                and departmentID=#{departmentID}
             </if>
         </where>
     </select>
