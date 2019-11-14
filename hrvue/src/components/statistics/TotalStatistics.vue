@@ -7,7 +7,7 @@
                     <Icon type="ios-folder-outline" size="60"/>
                 </Row>
                 <Row>
-                    <h4>总档案数：14</h4>
+                    <h4>总档案数：{{basic.total}}</h4>
                 </Row>
             </Col>
             <Col span="2">
@@ -15,7 +15,7 @@
                     <Icon type="ios-people-outline" size="60"/>
                 </Row>
                 <Row>
-                    <h4>在职员工数：14</h4>
+                    <h4>在职员工数：{{basic.inwork}}</h4>
                 </Row>
             </Col>
             <Col span="2">
@@ -23,7 +23,7 @@
                     <Icon type="ios-exit-outline" size="60"/>
                 </Row>
                 <Row>
-                    <h4>已离职职工数：14</h4>
+                    <h4>已离职职工数：{{basic.leave}}</h4>
                 </Row>
             </Col>
         </Row>
@@ -50,10 +50,10 @@
                 <Tabs type="card" :animated="false">
                     <span slot="extra"><h2>职位结构</h2></span>
                     <TabPane label="职位">
-                        <Table :columns="columns1" :data="data1" height="300"></Table>
+                        <Table :columns="columns1" :data="posnumlist" height="300"></Table>
                     </TabPane>
                     <TabPane label="职称">
-                        <Table :columns="columns1" :data="data1" height="300"></Table>
+                        <Table :columns="columns1" :data="joblvlnumlist" height="300"></Table>
                     </TabPane>
                 </Tabs>
             </Col>
@@ -84,56 +84,24 @@
                     },
                     {
                         title: '人数',
-                        key: 'count'
+                        key: 'value'
                     },
                     {
                         title: '占比',
-                        key: 'Proportion'
+                        key: 'proportion'
                     }
                 ],
-                data1: [
-                    {
-                        name: 'John Brown',
-                        count: 18,
-                        Proportion: 'New York No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jim Green',
-                        count: 24,
-                        Proportion: 'London No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Joe Black',
-                        count: 30,
-                        Proportion: 'Sydney No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jon Snow',
-                        count: 26,
-                        Proportion: 'Ottawa No. 2 Lake Park',
-                    },
-                    {
-                        name: 'John Brown',
-                        count: 18,
-                        Proportion: 'New York No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jim Green',
-                        count: 24,
-                        Proportion: 'London No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Joe Black',
-                        count: 30,
-                        Proportion: 'Sydney No. 1 Lake Park',
-                    },
-                    {
-                        name: 'Jon Snow',
-                        count: 26,
-                        Proportion: 'Ottawa No. 2 Lake Park',
-                    }
-                ]
+                basic:[],
+                depnumlist:[],
+                posnumlist:[],
+                joblvlnumlist:[],
             }
+        },
+        watch:{
+            basic: 'drawCharts',
+            depnumlist: 'drawCharts',
+            posnumlist: 'drawCharts',
+            joblvlnumlist: 'drawCharts',
         },
         methods: {
             drawGenderChart() {
@@ -154,8 +122,8 @@
                             radius: '55%',
                             center: ['50%', '60%'],
                             data: [
-                                { value: 3, name: '男性' },
-                                { value: 4, name: '女性' },
+                                { value: this.basic.male, name: '男性' },
+                                { value: this.basic.female, name: '女性' },
                             ],
                             itemStyle: {
                                 emphasis: {
@@ -209,9 +177,9 @@
                             radius: '55%',
                             center: ['50%', '60%'],
                             data: [
-                                { value: 70, name: '未婚' },
-                                { value: 30, name: '已婚' },
-                                { value: 3, name: '离异' },
+                                { value: this.basic.unmarried, name: '未婚' },
+                                { value: this.basic.married, name: '已婚' },
+                                { value: this.basic.divorced, name: '离异' },
                             ],
                             itemStyle: {
                                 emphasis: {
@@ -222,7 +190,6 @@
                             },
                             label: {
                                 normal: {
-                                    position: 'inner',
                                     formatter: '  {b|{b}：}{c}人  {per|{d}%}  ',
                                     backgroundColor: '#eee',
                                     borderColor: '#aaa',
@@ -230,7 +197,6 @@
                                     borderRadius: 4,
                                     rich: {
                                         b: {
-                                            color: '#fff',
                                             lineHeight: 25
                                         },
                                         per: {
@@ -271,7 +237,7 @@
                     series: [
                         {
                             type: 'bar',
-                            data: [100,12,13,14,15,16,17,18],
+                            data: [this.basic.other, this.basic.Primary, this.basic.middle, this.basic.high, this.basic.training, this.basic.undergraduate, this.basic.master, this.basic.dr],
                         }
                     ]
                 });
@@ -327,8 +293,8 @@
                     },
                     legend: {
                         orient: 'vertical',
-                        bottom: 'bottom',
-                        data: ['人事部', '财务部', '技术部', '策划部', '营销部']
+                        left: 'left',
+                        data: this.depnumlist
                     },
                     series: [
                         {
@@ -336,13 +302,7 @@
                             type: 'pie',
                             radius: '55%',
                             center: ['50%', '60%'],
-                            data: [
-                                { value: 3, name: '人事部' },
-                                { value: 4, name: '财务部' },
-                                { value: 4, name: '技术部' },
-                                { value: 3, name: '策划部' },
-                                { value: 2, name: '营销部' }
-                            ],
+                            data: this.depnumlist,
                             itemStyle: {
                                 emphasis: {
                                     shadowBlur: 10,
@@ -354,6 +314,10 @@
                     ]
                 });
                 this.deparStatisticsBar = echarts.init(document.getElementById('deparStatisticsBar'));
+                var depname = [];
+                this.depnumlist.forEach(element => {
+                    depname.push(element.name);
+                });
                 this.deparStatisticsBar.setOption({
                     title: {
                         text: '部门人数统计',
@@ -371,22 +335,25 @@
                     },
                     yAxis: {
                         type: 'category',
-                        data: ['人事部', '财务部', '技术部', '策划部', '营销部'],
+                        data: depname
                     },
                     series: [
                         {
                             name: '部门人数',
                             type: 'bar',
-                            data: [
-                                { value: 3, name: '人事部' },
-                                { value: 4, name: '财务部' },
-                                { value: 4, name: '技术部' },
-                                { value: 3, name: '策划部' },
-                                { value: 2, name: '营销部' }
-                            ],
+                            data: this.depnumlist,
                         }
                     ]
                 });
+            },
+            getTotalStatistics(){
+                this.getRequest("/statistics/totalfile").then(resp=> {
+                    console.log(resp.data.data)
+                    this.basic = resp.data.data.basic;
+                    this.depnumlist = resp.data.data.depnumlist;
+                    this.posnumlist = resp.data.data.posnumlist;
+                    this.joblvlnumlist = resp.data.data.joblvlnumlist;
+                })
             },
             drawCharts() {
                 this.drawGenderChart();
@@ -396,7 +363,7 @@
             },
         },
         mounted: function () {
-            this.drawCharts();
+            this.getTotalStatistics();
         },
     }
 </script>
