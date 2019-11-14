@@ -3,6 +3,9 @@
         <Row>
             <Col span="22">
                 <Row :gutter="6">
+                    <Col span="3">
+                        <treeselect class="departDown" v-model="souFormItem.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>                            
+                    </Col>
                     <Col span="2">
                         <Select v-model="souFormItem.state" placeholder="考核状态" clearable>
                             <Option value="未开始">未开始</Option>
@@ -50,6 +53,11 @@
                         </FormItem>
                     </Row>
                     <Row>
+                        <FormItem label="考核部门"  prop="departmentId">
+                            <treeselect class="departDown" v-model="newAssessment.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
+                        </FormItem>
+                    </Row>
+                    <Row>
                         <FormItem label="备注" prop="remark">
                             <Input v-model="newAssessment.remark" type="textarea" placeholder="备注"></Input>
                         </FormItem>
@@ -86,8 +94,11 @@
     </div>
 </template>
 <script>
+    import Treeselect from '@riophae/vue-treeselect'
+    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
     import moment from "moment"
     export default {
+        components: { Treeselect },
         data() {
             return {
                 addModal: false,
@@ -99,6 +110,7 @@
                 endDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
                 newAssessment: {
                     name: '',
+                    departmentId: null,
                     state: '未开始',
                     remarks: '',
                 },
@@ -111,16 +123,21 @@
                     endDate: '',
                     remarks: '',
                 },
+                dropDownList: [],
                 assessments:[],
                 rules: {
                     name: [
                         {required: true, message: '姓名不能为空', trigger: 'blur'}
+                    ],
+                    departmentId :[
+                        {required: true, type: 'number', message: '考核部门不能为空', trigger: 'change'}
                     ],
                     remark: [
                         {type: 'string', max: 50, message: '备注长度不能超过50个字符'}
                     ]
                 },
                 souFormItem: {
+                    departmentId: null,
                     state: '',
                     name: ''
                 },
@@ -132,6 +149,10 @@
                     {
                         title: '考核名称',
                         key: 'name'
+                    },
+                    {
+                        title: '考核部门',
+                        key: 'departmentName'
                     },
                     {
                         title: '状态',
@@ -195,10 +216,16 @@
                     }
                 })
             },
+            getDropDownList(){
+                this.getRequest("/employee/init").then(resp=> {
+                    this.dropDownList = resp.data.data;
+                })
+            },
             getAssessment() {
                 this.getRequest("/assessment/allAssesment",{
                     page: this.page,
                     limit: this.limit,
+                    did: this.souFormItem.departmentId,
                     state: this.souFormItem.state,
                     name: this.souFormItem.name,
                 }).then(resp=>{
@@ -207,34 +234,48 @@
                 })
             },
             startASS(id,index){
-                this.putRequest("/assessment/updateAssesmentState",{
-                    id: id,
-                    name: this.assessments[index].name,
-                    state: "已开始",
-                    beginDate: this.beginDate,
-                }).then(resp => {
-                    if (resp.data.code != 400) {
-                        this.$Message.success(resp.data.data);
-                        this.getAssessment();
-                    } else {
-                        this.$Message.error(resp.data.message);
-                    }
-                })
+                this.$Modal.confirm({
+                    title: '开始考核',
+                    content: '<p>你确定要开始该考核吗?</p>',
+                    onOk: () => {
+                        var _this = this;
+                        this.putRequest("/assessment/updateAssesmentState",{
+                            id: id,
+                            name: this.assessments[index].name,
+                            state: "已开始",
+                            beginDate: this.beginDate,
+                        }).then(resp => {
+                            if (resp.data.code != 400) {
+                                this.$Message.success(resp.data.data);
+                                _this.getAssessment();
+                            } else {
+                                this.$Message.error(resp.data.message);
+                            }
+                        })
+                    },
+                });
             },
             overAss(id,index){
-                this.putRequest("/assessment/updateAssesmentState",{
-                    id: id,
-                    name: this.assessments[index].name,
-                    state: "已结束",
-                    endDate: this.endDate,
-                }).then(resp => {
-                    if (resp.data.code != 400) {
-                        this.$Message.success(resp.data.data);
-                        this.getAssessment();
-                    } else {
-                        this.$Message.error(resp.data.message);
-                    }
-                })
+                this.$Modal.confirm({
+                    title: '结束考核',
+                    content: '<p>你确定要结束该考核吗?</p>',
+                    onOk: () => {
+                        var _this = this;
+                        this.putRequest("/assessment/updateAssesmentState",{
+                            id: id,
+                            name: this.assessments[index].name,
+                            state: "已结束",
+                            endDate: this.endDate,
+                        }).then(resp => {
+                            if (resp.data.code != 400) {
+                                this.$Message.success(resp.data.data);
+                                _this.getAssessment();
+                            } else {
+                                this.$Message.error(resp.data.message);
+                            }
+                        })
+                    },
+                });
             },
             remove(id) {
                 this.$Modal.confirm({
@@ -300,6 +341,7 @@
             },
         },
         mounted: function (){
+            this.getDropDownList();
             this.getAssessment();
         },
         watch: {
