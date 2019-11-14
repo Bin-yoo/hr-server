@@ -80,9 +80,9 @@ public class EmployeeController {
         return employeeBiz.getAllDownMenu();
     }
 
-    @GetMapping("/initUpdate/{id}")
-    @ApiOperation(value = "初始化修改信息", notes = "")
-    public Result beforeUpdateEmployeeFile(@PathVariable Integer id){
-        return employeeBiz.beforeUpdateEmployeeFile(id);
+    @GetMapping("/myfile")
+    @ApiOperation(value = "获取个人档案", notes = "")
+    public Result getMyFile(){
+        return employeeBiz.getMyFile();
     }
 }

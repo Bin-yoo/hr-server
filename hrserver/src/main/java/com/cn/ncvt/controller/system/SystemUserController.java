@@ -53,4 +53,16 @@ public class SystemUserController {
         return userBiz.changeUserEnabledState(user);
     }
 
+    @PutMapping("/resetpsw")
+    @ApiOperation(value = "重置密码", notes = "仅管理员可用")
+    public Result resetPassword(@RequestBody User user){
+        return userBiz.resetPassword(user);
+    }
+
+    @PutMapping("/password")
+    @ApiOperation(value = "修改密码", notes = "传入旧密码和新密码")
+    public Result updatePassword(@RequestBody User user){
+        return userBiz.updatePassword(user);
+    }
+
 }

@@ -14,7 +14,7 @@
     id, name, remarks, state, beginDate, endDate, createDate
   </sql>
     <select id="selectAllAssessment" resultType="Assessment">
-        SELECT a.*,d.name as departmentName from assessment a,department d where a.departmentID=d.id
+        SELECT a.*,d.name as departmentName from assessment a,department d where a.did=d.id
         <where>
             <if test="name != null and name != '' ">
                 and name like '%${name}%'
@@ -22,8 +22,8 @@
             <if test="state != null and state != '' ">
                 and state=#{state}
             </if>
-            <if test="departmentID != null and departmentID != '' ">
-                and departmentID=#{departmentID}
+            <if test="did != null and did != '' ">
+                and did=#{did}
             </if>
         </where>
     </select>
@@ -38,10 +38,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="assessment">
-    insert into assessment ( name, remarks, 
+    insert into assessment ( did, name, remarks,
       state, beginDate, endDate, createDate
       )
-    values ( #{name,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+    values ( #{did,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
       #{state,jdbcType=CHAR}, #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>

@@ -82,14 +82,10 @@ public class UserBiz {
     }
 
     public Result addNewUser(User user) {
-        String password = user.getPassword();
-        String salt = new SecureRandomNumberGenerator().nextBytes().toString();    //生成加密盐
-        int times = 2;    //加密两次
-        String algorithmName = "md5";     //使用md5算法
-        String encodedPassword = new SimpleHash(algorithmName,password,salt,times).toString();    //生成加密后的密码
+        Map<String,String> map = this.encodedPassword(user.getPassword());
 
-        user.setPassword(encodedPassword);
-        user.setSalt(salt);
+        user.setSalt(map.get("salt"));
+        user.setPassword(map.get("encodedPassword"));
 
         try {
             userMapper.insertFun(user);
@@ -134,4 +130,47 @@ public class UserBiz {
         }
     }
 
+    public Result resetPassword(User user) {
+        Map<String,String> map = this.encodedPassword(user.getPassword());
+        user.setSalt(map.get("salt"));
+        user.setPassword(map.get("encodedPassword"));
+        try {
+            userMapper.updatePasswordByID(user);
+            return ResultFactory.buildSuccessResult("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("修改失败");
+        }
+    }
+
+    public Result updatePassword(User user) {
+        User checkpsw = userMapper.selectByID(user.getId());
+        String password = user.getOldPassword();    //用户传进来的旧密码
+        String salt = checkpsw.getSalt();    //数据库里的加密盐
+        String encodedPassword = new SimpleHash("md5",password,salt,2).toString();    //使用md5算法,加密两次,生成加密后的密码
+        if (!checkpsw.getPassword().equals(encodedPassword)){    //加密后与数据库内密文进行对比
+            return ResultFactory.buildFailResult("旧密码错误!!!");
+        }
+
+        Map<String,String> map = this.encodedPassword(user.getPassword());
+        user.setSalt(map.get("salt"));
+        user.setPassword(map.get("encodedPassword"));
+
+        try {
+            userMapper.updatePasswordByID(user);
+            return ResultFactory.buildSuccessResult("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultFactory.buildFailResult("修改失败");
+        }
+    }
+
+    private Map<String,String> encodedPassword(String password){
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        String encodedPassword = new SimpleHash("md5",password,salt,2).toString();    //使用md5算法,加密两次,生成加密后的密码
+        Map<String,String> map = new HashMap<>();
+        map.put("salt", salt);
+        map.put("encodedPassword", encodedPassword);
+        return map;
+    }
 }

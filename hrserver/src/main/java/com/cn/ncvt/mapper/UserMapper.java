@@ -25,4 +25,6 @@ public interface UserMapper {
     void updateByEnabled(User user);
 
     List<User> selectUserByCondition(@Param("name") String name);
+
+    void updatePasswordByID(User user);
 }

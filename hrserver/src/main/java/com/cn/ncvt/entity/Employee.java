@@ -53,6 +53,8 @@ public class Employee {
     private String picture;
     private double baseSalary;
 
+    private Timestamp transferdate;
+
 
     public Integer getPositionId() {
         return positionId;
@@ -308,5 +310,13 @@ public class Employee {
 
     public void setBaseSalary(double baseSalary) {
         this.baseSalary = baseSalary;
+    }
+
+    public Timestamp getTransferdate() {
+        return transferdate;
+    }
+
+    public void setTransferdate(Timestamp transferdate) {
+        this.transferdate = transferdate;
     }
 }
