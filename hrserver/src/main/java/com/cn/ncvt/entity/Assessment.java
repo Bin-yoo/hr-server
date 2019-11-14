@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 public class Assessment {
 
     private Integer id;
+    private Integer did;
     private String name;
     private String remarks;
     private String state;
@@ -30,6 +31,14 @@ public class Assessment {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getDid() {
+        return did;
+    }
+
+    public void setDid(Integer did) {
+        this.did = did;
     }
 
     public String getName() {

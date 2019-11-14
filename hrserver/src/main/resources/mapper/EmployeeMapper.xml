@@ -21,6 +21,7 @@
           <if test="jobLevelId != null and jobLevelId != '' " >
             and e.jobLevelId=#{jobLevelId}
           </if>
+            order by e.id desc
 	    </select>
         <insert id="insert" statementType="CALLABLE">
             call addEmp(#{emp.workId,mode=IN,jdbcType=BIGINT}, #{emp.name,mode=IN,jdbcType=VARCHAR},

@@ -22,6 +22,9 @@
             <if test="state != null and state != '' ">
                 and state=#{state}
             </if>
+            <if test="did != null and did != '' ">
+                and did=#{did}
+            </if>
         </where>
     </select>
     <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -35,10 +38,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="assessment">
-    insert into assessment ( name, remarks, 
+    insert into assessment ( did, name, remarks,
       state, beginDate, endDate, createDate
       )
-    values ( #{name,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+    values ( #{did,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
       #{state,jdbcType=CHAR}, #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
