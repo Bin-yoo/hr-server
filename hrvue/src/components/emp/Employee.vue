@@ -650,7 +650,7 @@
                 rpPage:1,
                 rpTotal: 100,
                 rpLimit: 3,
-                rpPageSize: 5,
+                rpPageSize: 3,
                 loading: false,
                 index: 1,
                 empRpLists: [],
@@ -1018,10 +1018,11 @@
                     this.total = resp.data.data.total;
                 })
             },
-            getEmpRp(id){
+            getEmpRp(){
+                var id = this.employees[this.index].id;
                 this.getRequest("/rp/empRp/" + id,{
-                    page: this.page,
-                    limit: this.limit,
+                    page: this.rpPage,
+                    limit: this.rpLimit,
                 }).then(resp=>{
                     this.empRpLists = resp.data.data.list;
                     this.rpTotal = resp.data.data.total;
@@ -1235,14 +1236,14 @@
             show(index) {
                 this.showModal = true;
                 this.index = index;
-                this.getEmpRp(this.employees[index].id);
+                this.getEmpRp();
             },
-            // cancel(flag){
-            //     if(flag == false){
-            //         this.$refs['newEmployee'].resetFields();
-            //         this.$refs['employee'].resetFields();
-            //     }
-            // },
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['newEmployee'].resetFields();
+                    this.$refs['employee'].resetFields();
+                }
+            },
         },
         mounted: function (){
             this.getEmployeeList();
@@ -1251,8 +1252,7 @@
         watch: {
             page: "getEmployeeList",
             limit: "getEmployeeList",
-            rpPage: "empRpLists",
-            rpLimit: "empRpLists",
+            rpPage: "getEmpRp",
         },
     }
 </script>
