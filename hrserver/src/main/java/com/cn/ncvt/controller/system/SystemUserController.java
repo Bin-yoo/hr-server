@@ -3,10 +3,13 @@ package com.cn.ncvt.controller.system;
 import com.cn.ncvt.biz.UserBiz;
 import com.cn.ncvt.entity.User;
 import com.cn.ncvt.result.Result;
+import com.cn.ncvt.result.ResultFactory;
+import com.cn.ncvt.util.UploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @version : V1.0
@@ -63,6 +66,13 @@ public class SystemUserController {
     @ApiOperation(value = "修改密码", notes = "传入旧密码和新密码")
     public Result updatePassword(@RequestBody User user){
         return userBiz.updatePassword(user);
+    }
+
+    @PostMapping("/userface")
+    @ApiOperation(value = "上传头像", notes = "")
+    public Result uploadUserFace(@RequestParam("picture") MultipartFile picture){
+        UploadUtil uploadUtil = new UploadUtil();
+        return ResultFactory.buildSuccessResult(uploadUtil.upload(picture, "user"));
     }
 
 }
