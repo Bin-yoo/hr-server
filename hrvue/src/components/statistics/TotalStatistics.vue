@@ -95,13 +95,17 @@
                 depnumlist:[],
                 posnumlist:[],
                 joblvlnumlist:[],
+                time:[],
+                rewards:[],
+                punishments:[],
             }
         },
         watch:{
-            basic: 'drawCharts',
-            depnumlist: 'drawCharts',
-            posnumlist: 'drawCharts',
-            joblvlnumlist: 'drawCharts',
+            // basic: 'drawCharts',
+            // depnumlist: 'drawCharts',
+            // posnumlist: 'drawCharts',
+            // joblvlnumlist: 'drawCharts',
+            punishments : 'drawCharts',
         },
         methods: {
             drawGenderChart() {
@@ -251,7 +255,7 @@
                     },
                     xAxis: {
                         type: 'category',
-                        data: ['2019-08', '2019-09', '2019-10', '2019-11', '2019-12', '2020-01', '2020-02'],
+                        data: this.time,
                         axisTick: {
                             alignWithLabel: true
                         },
@@ -264,18 +268,24 @@
                         type: 'value'
                     },
                     legend: {
-                        data: ['奖励', '惩罚']
+                        data: ['奖励', '惩罚'],
                     },
                     series: [
                         {
                             name:'奖励',
                             type:'line',
-                            data:[0, 1, 2, 1, 0, 5, 1]
+                            data: this.rewards,
+                            lineStyle:{ 
+                                color:'#DC143C' //改变折线颜色
+                            }
                         },
                         {
                             name:'惩罚',
                             type:'line',
-                            data:[0, 0, 0, 1, 1, 0, 1]
+                            data: this.punishments,
+                            lineStyle:{ 
+                                color:'#000' //改变折线颜色
+                            }
                         }
                     ]
                 });
@@ -294,7 +304,8 @@
                     legend: {
                         orient: 'vertical',
                         left: 'left',
-                        data: this.depnumlist
+                        data: this.depnumlist,
+                        type:'scroll'
                     },
                     series: [
                         {
@@ -353,6 +364,12 @@
                     this.depnumlist = resp.data.data.depnumlist;
                     this.posnumlist = resp.data.data.posnumlist;
                     this.joblvlnumlist = resp.data.data.joblvlnumlist;
+                    var rp = resp.data.data.rp;
+                    rp.forEach(element => {
+                        this.time.unshift(element.time);
+                        this.rewards.unshift(element.rewards);
+                        this.punishments.unshift(element.punishments);
+                    });
                 })
             },
             drawCharts() {
