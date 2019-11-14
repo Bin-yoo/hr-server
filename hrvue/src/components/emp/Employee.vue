@@ -446,11 +446,6 @@
                             <DatePicker type="date" placeholder="请选择离职日期" format="yyyy-MM-dd" v-model="employee.quitTime"></DatePicker>
                         </FormItem>
                     </Col>
-                    <Col span="8">
-                        <FormItem label="工号：" prop="workId">
-                            <Input v-model="employee.workId" placeholder="请输入"></Input>
-                        </FormItem>
-                    </Col>
                 </Row>
             </Form>
             <div slot="footer">
@@ -463,6 +458,7 @@
                 v-model="showModal"
                 title="员工档案详情"
                 width=40%>
+
                 <Row>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
@@ -488,6 +484,10 @@
                     </Col>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>工号：</p></Col>
+                            <Col span="11"><p>{{employees[index].workId}}</p></Col>
+                        </Row>
+                        <Row :style="{margin: '0 0 15px 0'}">
                             <Col span="9"><p>民族：</p></Col>
                             <Col span="11"><p>{{employees[index].nationName}}</p></Col>
                         </Row>
@@ -503,10 +503,6 @@
                             <Col span="9"><p>联系方式：</p></Col>
                             <Col span="11"><p>{{employees[index].phone}}</p></Col>
                         </Row>
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>邮箱：</p></Col>
-                            <Col span="11"><p>{{employees[index].email}}</p></Col>
-                        </Row>
                     </Col>
                     <Col span="5">
                         <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
@@ -515,14 +511,49 @@
                 <Row>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>邮箱：</p></Col>
+                            <Col span="11"><p>{{employees[index].email}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
                             <Col span="9"><p>居住地址：</p></Col>
                             <Col span="11"><p>{{employees[index].address}}</p></Col>
                         </Row>
                     </Col>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>学历：</p></Col>
+                            <Col span="11"><p>{{employees[index].titopDegree}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>毕业院校：</p></Col>
+                            <Col span="11"><p>{{employees[index].school}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>专业：</p></Col>
+                            <Col span="11"><p>{{employees[index].specialty}}</p></Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Divider :style="{margin: '0 0 24px 0'}" />
+                <Row>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
                             <Col span="9"><p>所属部门：</p></Col>
                             <Col span="11"><p>{{employees[index].departmentName}}</p></Col>
+                        </Row>
+                    </Col>
+                    <Col span="8">
+                        <Row :style="{margin: '0 0 15px 0'}">
+                            <Col span="9"><p>职位：</p></Col>
+                            <Col span="11"><p>{{employees[index].positionName}}</p></Col>
                         </Row>
                     </Col>
                     <Col span="8">
@@ -533,32 +564,6 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="8">
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>职位：</p></Col>
-                            <Col span="11"><p>{{employees[index].positionName}}</p></Col>
-                        </Row>
-                    </Col>
-                    <Col span="8">
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>学历：</p></Col>
-                            <Col span="11"><p>{{employees[index].titopDegree}}</p></Col>
-                        </Row>
-                    </Col>
-                    <Col span="8">
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>毕业院校：</p></Col>
-                            <Col span="11"><p>{{employees[index].school}}</p></Col>
-                        </Row>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="8">
-                        <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>专业：</p></Col>
-                            <Col span="11"><p>{{employees[index].specialty}}</p></Col>
-                        </Row>
-                    </Col>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
                             <Col span="9"><p>就职日期：</p></Col>
@@ -575,14 +580,14 @@
                 <Row>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>是否正式员工：</p></Col>
-                            <Col span="11"><p>{{employees[index].conversionTime == null||'' ? "实习" : "正式"}}</p></Col>
+                            <Col span="9"><p>转正日期：</p></Col>
+                            <Col span="11"><p>{{employees[index].conversionTime}}</p></Col>
                         </Row>
                     </Col>
                     <Col span="8">
                         <Row :style="{margin: '0 0 15px 0'}">
-                            <Col span="9"><p>转正日期：</p></Col>
-                            <Col span="11"><p>{{employees[index].conversionTime}}</p></Col>
+                            <Col span="9"><p>是否正式员工：</p></Col>
+                            <Col span="11"><p>{{employees[index].conversionTime == null||'' ? "实习" : "正式"}}</p></Col>
                         </Row>
                     </Col>
                 </Row>
@@ -609,21 +614,15 @@
                 <Row>
                     <Tabs type="card">
                         <TabPane label="奖惩资料">
-                            <Table :columns="rewPunColumns" :data="rewPunData"></Table>
+                            <Table :columns="rewPunColumns" :data="empRpLists"></Table>
                             <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
-                                <Col  ><Page :total="100" show-elevator /></Col>
+                                <Col  ><Page :total="rpTotal" :page-size="rpPageSize" show-elevator show-total @on-change="rpPageChange" @on-page-size-change="onRpPageSizeChange"/></Col>
                             </Row>
                         </TabPane>
                         <TabPane label="考核资料">
                             <Table :columns="assColumns" :data="assData"></Table>
                             <Row type="flex" justify="center" :style="{margin: '10px 0 0 0'}">
-                                <Col><Page :total="100" show-elevator /></Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane label="调动资料">
-                            <Table :columns="transferColumns" :data="transferdata"></Table>
-                            <Row type="flex" justify="center" :style="{margin: '10px 0 0 0'}">
-                                <Col><Page :total="100" show-elevator /></Col>
+                                <Col><Page :total="1" show-elevator /></Col>
                             </Row>
                         </TabPane>
                     </Tabs>
@@ -648,8 +647,13 @@
                 page:1,
                 total: 100,
                 limit: 10,
+                rpPage:1,
+                rpTotal: 100,
+                rpLimit: 3,
+                rpPageSize: 3,
                 loading: false,
                 index: 1,
+                empRpLists: [],
                 dropDownList: [],
                 department:{
                     id: null,
@@ -894,7 +898,7 @@
                     },
                     {
                         title: '奖惩分数',
-                        key: 'grade'
+                        key: 'point'
                     },
                     {
                         title: '奖惩原因',
@@ -935,7 +939,7 @@
                 assData: [
                     {
                         date: "2019年10月21日",
-                        content: "带薪拉屎",
+                        content: "2019年第一季度考核",
                         result: "完成",
                         remark: "完成",
                     },
@@ -990,13 +994,18 @@
             pageChange(index){
                 this.page = index;
             },
+            onRpPageSizeChange(index){
+                this.rpLimit = index;
+            },
+            rpPageChange(index){
+                this.rpPage = index;
+            },
             getDropDownList(){
                 this.getRequest("/employee/init").then(resp=> {
                     this.dropDownList = resp.data.data;
                 })
             },
             getEmployeeList() {
-                this.loading = true;
                 this.getRequest("/employee/allEmp",{
                     page: this.page,
                     limit: this.limit,
@@ -1005,10 +1014,18 @@
                     positionId: this.souformItem.positionId,
                     name: this.souformItem.name,
                 }).then(resp=>{
-                    console.log(resp);
-                    this.loading = false;
                     this.employees = resp.data.data.list;
                     this.total = resp.data.data.total;
+                })
+            },
+            getEmpRp(){
+                var id = this.employees[this.index].id;
+                this.getRequest("/rp/empRp/" + id,{
+                    page: this.rpPage,
+                    limit: this.rpLimit,
+                }).then(resp=>{
+                    this.empRpLists = resp.data.data.list;
+                    this.rpTotal = resp.data.data.total;
                 })
             },
             handleReset (name) {
@@ -1219,13 +1236,14 @@
             show(index) {
                 this.showModal = true;
                 this.index = index;
+                this.getEmpRp();
             },
-            // cancel(flag){
-            //     if(flag == false){
-            //         this.$refs['newEmployee'].resetFields();
-            //         this.$refs['employee'].resetFields();
-            //     }
-            // },
+            cancel(flag){
+                if(flag == false){
+                    this.$refs['newEmployee'].resetFields();
+                    this.$refs['employee'].resetFields();
+                }
+            },
         },
         mounted: function (){
             this.getEmployeeList();
@@ -1234,6 +1252,7 @@
         watch: {
             page: "getEmployeeList",
             limit: "getEmployeeList",
+            rpPage: "getEmpRp",
         },
     }
 </script>

@@ -93,7 +93,7 @@
             <Row :style="{marginBottom:'10px'}">
                 <Table border ref="selection" :columns="columns2" :data="employeeSalarylogList"></Table>
             </Row>
-            <Row>
+            <Row type="flex" justify="center">
                 <Col>
                     <Page :total="total" show-sizer show-elevator show-total @on-change="onSelectModalPageChange"
                           @on-page-size-change="onSelectModalPageSizeChange"/>
@@ -129,6 +129,10 @@
                 dropDownList: [],
                 employeeSalarylist: [],
                 employeeSalarylogList: [],
+                beforSalary:{
+                    beforBasics: '', 
+                    beforMerit: '',
+                },
                 salary: {
                     id:0,
                     eid: 0,
@@ -150,10 +154,12 @@
                 newSalaryRules: {
                     baseSalary: [
                         {required: true, message: '基础工资不能为空', trigger: 'blur' },
+                        {validator: this.beforBasics, trigger: 'blur'}
                     ],
                     meritSalary: [
-                        {required: true, message: '绩效工资不能为空', trigger: 'blur' }
-                    ]
+                        {required: true, message: '绩效工资不能为空', trigger: 'blur' },
+                        {validator: this.beforMerit, trigger: 'blur'}
+                    ],
                 },
                 souformItem:{
                     departmentId: null,
@@ -315,6 +321,8 @@
                 this.salary.workId = this.employeeSalarylist[index].employee.workId;
                 this.salary.baseSalary = ''+this.employeeSalarylist[index].baseSalary;
                 this.salary.meritSalary = ''+this.employeeSalarylist[index].meritSalary;
+
+                this.beforSalary.beforBasics = ''+this.employeeSalarylist[index].baseSalary;
             },
             select(eid, name, workId) {
                 this.selectModal = true;
@@ -341,6 +349,18 @@
                     this.rpList.name = "";
                     this.rpList.workId = "";
                 }
+            },
+            beforBasics(rule, value, callback) {
+                if(value == this.beforSalary.beforBasics){
+                    return callback(new Error("修改后的基础工资不能和修改前一样"));
+                }
+                callback();
+            },
+            beforMerit(rule, value, callback) {
+                if(value == this.beforSalary.beforMerit){
+                    return callback(new Error("修改后的绩效工资不能和修改前一样"));
+                }
+                callback();
             },
         }
     }
