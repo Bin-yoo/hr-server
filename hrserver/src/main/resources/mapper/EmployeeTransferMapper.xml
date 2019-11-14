@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.ncvt.mapper.EmployeeTransferMapper" >
+  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeTransfer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="befDep" property="befDep" jdbcType="VARCHAR" />
+    <result column="afterDep" property="afterDep" jdbcType="VARCHAR" />
+    <result column="befJobLvl" property="befJobLvl" jdbcType="VARCHAR" />
+    <result column="afterJobLvl" property="afterJobLvl" jdbcType="VARCHAR" />
+    <result column="befPos" property="befPos" jdbcType="VARCHAR" />
+    <result column="afterPos" property="afterPos" jdbcType="VARCHAR" />
+    <result column="Date" property="date" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, eid, befDep, afterDep, befJobLvl, afterJobLvl, befPos, afterPos, date
+  </sql>
+  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from employee_transfer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByID" parameterType="java.lang.Integer" >
+    delete from employee_transfer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cn.ncvt.entity.EmployeeTransfer" >
+    insert into employee_transfer (id, eid, befDep, 
+      afterDep, befJobLvl, afterJobLvl, 
+      befPos, afterPos, date
+      )
+    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{befDep,jdbcType=VARCHAR},
+      #{afterDep,jdbcType=VARCHAR}, #{befJobLvl,jdbcType=VARCHAR}, #{afterJobLvl,jdbcType=VARCHAR},
+      #{befPos,jdbcType=VARCHAR}, #{afterPos,jdbcType=VARCHAR}, #{date,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cn.ncvt.entity.EmployeeTransfer" >
+    insert into employee_transfer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="eid != null" >
+        eid,
+      </if>
+      <if test="befDep != null" >
+        befDep,
+      </if>
+      <if test="afterDep != null" >
+        afterDep,
+      </if>
+      <if test="befJobLvl != null" >
+        befJobLvl,
+      </if>
+      <if test="afterJobLvl != null" >
+        afterJobLvl,
+      </if>
+      <if test="befPos != null" >
+        befPos,
+      </if>
+      <if test="afterPos != null" >
+        afterPos,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="eid != null" >
+        #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="befDep != null" >
+        #{befDep,jdbcType=VARCHAR},
+      </if>
+      <if test="afterDep != null" >
+        #{afterDep,jdbcType=VARCHAR},
+      </if>
+      <if test="befJobLvl != null" >
+        #{befJobLvl,jdbcType=VARCHAR},
+      </if>
+      <if test="afterJobLvl != null" >
+        #{afterJobLvl,jdbcType=VARCHAR},
+      </if>
+      <if test="befPos != null" >
+        #{befPos,jdbcType=VARCHAR},
+      </if>
+      <if test="afterPos != null" >
+        #{afterPos,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.EmployeeTransfer" >
+    update employee_transfer
+    <set >
+      <if test="eid != null" >
+        eid = #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="befDep != null" >
+        befDep = #{befDep,jdbcType=VARCHAR},
+      </if>
+      <if test="afterDep != null" >
+        afterDep = #{afterDep,jdbcType=VARCHAR},
+      </if>
+      <if test="befJobLvl != null" >
+        befJobLvl = #{befJobLvl,jdbcType=VARCHAR},
+      </if>
+      <if test="afterJobLvl != null" >
+        afterJobLvl = #{afterJobLvl,jdbcType=VARCHAR},
+      </if>
+      <if test="befPos != null" >
+        befPos = #{befPos,jdbcType=VARCHAR},
+      </if>
+      <if test="afterPos != null" >
+        afterPos = #{afterPos,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByID" parameterType="com.cn.ncvt.entity.EmployeeTransfer" >
+    update employee_transfer
+    set eid = #{eid,jdbcType=INTEGER},
+      befDep = #{befDep,jdbcType=VARCHAR},
+      afterDep = #{afterDep,jdbcType=VARCHAR},
+      befJobLvl = #{befJobLvl,jdbcType=VARCHAR},
+      afterJobLvl = #{afterJobLvl,jdbcType=VARCHAR},
+      befPos = #{befPos,jdbcType=VARCHAR},
+      afterPos = #{afterPos,jdbcType=VARCHAR},
+      date = #{date,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

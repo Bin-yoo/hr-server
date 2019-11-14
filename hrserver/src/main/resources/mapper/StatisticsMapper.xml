@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.ncvt.mapper.StatisticsMapper">
+    <select id="selectAllEmpFile" resultType="map">
+        select count(*) as total, sum(if(workState='在职', 1, 0)) as 'inwork',
+        sum(if(workState='离职', 1, 0)) as 'leave', sum(if(sex='男', 1, 0)) as 'male', sum(if(sex='女', 1, 0)) as 'female',
+        sum(if(wedlock='已婚', 1, 0)) as 'married', sum(if(wedlock='未婚', 1, 0)) as 'unmarried', sum(if(wedlock='离异', 1, 0)) as 'divorced',
+        sum(if(titopDegree='博士', 1, 0)) as 'dr', sum(if(titopDegree='硕士', 1, 0)) as 'master', sum(if(titopDegree='本科', 1, 0)) as 'undergraduate',
+        sum(if(titopDegree='大专', 1, 0)) as 'training', sum(if(titopDegree='高中', 1, 0)) as 'high', sum(if(titopDegree='初中', 1, 0)) as 'middle',
+        sum(if(titopDegree='小学', 1, 0)) as 'Primary', sum(if(titopDegree='其他', 1, 0)) as 'other' from employee
+    </select>
+    <select id="selectDepMemberNum" resultType="com.cn.ncvt.entity.Statistics">
+        select d.name, count(*) as value from employee e,department d where e.departmentId=d.id group by d.name
+    </select>
+    <select id="selectPosMemberNum" resultType="com.cn.ncvt.entity.Statistics">
+        select p.name, count(*) as value from employee e,position p where e.positionId=p.id group by p.name
+    </select>
+    <select id="selectJobLvlMemberNum" resultType="com.cn.ncvt.entity.Statistics">
+        select j.name, count(*) as value from employee e,job_level j where e.jobLevelId=j.id group by j.name
+    </select>
+</mapper>
