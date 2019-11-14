@@ -7,6 +7,7 @@ import com.cn.ncvt.result.ResultFactory;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,12 +100,10 @@ public class EmployeeBiz {
     }
 
     public Result selectByIdEmployeeFile(Integer id) {
-        List<Employee> fileList =employeeMapper.selectByIdFun(id);
-        if (fileList != null){
-            //包装map返回前端
-            Map map = new HashMap();
-            map.put("list", fileList);
-            return ResultFactory.buildSuccessResult(map);
+        Employee employee =employeeMapper.selectByIdFun(id);
+        System.out.println(employee.getBirthday());
+        if (employee != null){
+            return ResultFactory.buildSuccessResult(employee);
         } else {
             return ResultFactory.buildFailResult("获取失败");
         }
@@ -132,14 +131,12 @@ public class EmployeeBiz {
         }
     }
 
-    public Result beforeUpdateEmployeeFile(Integer id) {
-        try{
-            List<Employee> fileList=employeeMapper.selectByIdFun(id);
-            Map map = new HashMap();
-            map.put("list", fileList);
-            return ResultFactory.buildSuccessResult(map);
-        }catch (Exception e){
-            e.printStackTrace();
+    public Result getMyFile() {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Employee employee = employeeMapper.selectByIdFun(user.getEid());
+        if (employee != null){
+            return ResultFactory.buildSuccessResult(employee);
+        } else {
             return ResultFactory.buildFailResult("获取失败");
         }
     }
