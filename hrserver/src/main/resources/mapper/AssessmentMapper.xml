@@ -14,7 +14,7 @@
     id, name, remarks, state, beginDate, endDate, createDate
   </sql>
     <select id="selectAllAssessment" resultType="Assessment">
-        select * from assessment
+        SELECT a.*,d.name as departmentName from assessment a,department d where a.did=d.id
         <where>
             <if test="name != null and name != '' ">
                 and name like '%${name}%'
