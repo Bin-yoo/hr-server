@@ -18,4 +18,11 @@
     <select id="selectJobLvlMemberNum" resultType="com.cn.ncvt.entity.Statistics">
         select j.name, count(*) as value from employee e,job_level j where e.jobLevelId=j.id group by j.name
     </select>
+    <select id="selectRp" resultType="com.cn.ncvt.entity.Statistics">
+        SELECT CONVERT (t2.year_month_str, CHAR) time, sum(if(type='奖励', 1, 0)) as rewards, sum(if(type='惩罚', 1, 0)) as punishments FROM (
+SELECT @rownum :=@rownum + 1 AS num, date_format(DATE_SUB(now(), INTERVAL @rownum MONTH),'%Y-%m') AS year_month_str FROM (SELECT @rownum := - 1) AS r_init, ( SELECT c.id FROM menu c LIMIT 6 ) AS c_init
+ ) t2
+LEFT JOIN `rp` on DATE_FORMAT(rp.date, '%Y-%m')=t2.year_month_str
+GROUP BY t2.year_month_str
+    </select>
 </mapper>

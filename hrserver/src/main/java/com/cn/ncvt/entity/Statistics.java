@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @version : V1.0
  * @ClassName: Statistics
@@ -7,11 +9,16 @@ package com.cn.ncvt.entity;
  * @Auther: Bin
  * @Date: 2019/11/13 15:23
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Statistics {
 
     private Long value;
     private String name;
     private String proportion;
+
+    private String time;
+    private Long rewards;
+    private Long punishments;
 
     public Statistics() {
     }
@@ -44,5 +51,29 @@ public class Statistics {
 
     public void setProportion(String proportion) {
         this.proportion = proportion;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Long getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(Long rewards) {
+        this.rewards = rewards;
+    }
+
+    public Long getPunishments() {
+        return punishments;
+    }
+
+    public void setPunishments(Long punishments) {
+        this.punishments = punishments;
     }
 }

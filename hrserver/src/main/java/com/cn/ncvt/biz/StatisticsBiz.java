@@ -45,10 +45,12 @@ public class StatisticsBiz {
             String format = numberFormat.format( (float) s.getValue() / (float) total * 100);
             s.setProportion(format+"%");
         }
+        List<Statistics> rp = statisticsMapper.selectRp();
         resultmap.put("basic",basic);
         resultmap.put("depnumlist",depnumlist);
         resultmap.put("posnumlist",posnumlist);
         resultmap.put("joblvlnumlist",joblvlnumlist);
+        resultmap.put("rp",rp);
         return ResultFactory.buildSuccessResult(resultmap);
     }
 }
