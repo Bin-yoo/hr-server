@@ -15,12 +15,12 @@
                         <Input v-model="souFormItem.name" clearable placeholder="请输入考核名称"/>
                     </Col>
                     <Col span="1">
-                        <Button icon="ios-search" @click="getAssessment" >搜索</Button>
+                        <Button icon="ios-search" @click="getMyAssessment" >搜索</Button>
                     </Col>
                 </Row>
             </Col>
             <Col span="2">
-                <Button type="primary" @click="addModal = true">提交考核</Button>
+                <Button type="primary" @click="addAss">提交考核</Button>
             </Col>
         </Row>
         <br>
@@ -34,7 +34,7 @@
                 </template>
             </Table>
             <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
-                <Col><Page :total="rpTotal" :page-size="rpPageSize" show-elevator show-total @on-change="rpPageChange" @on-page-size-change="onRpPageSizeChange"/></Col>
+                <!-- <Col><Page :total="rpTotal" :page-size="rpPageSize" show-elevator show-total @on-change="rpPageChange" @on-page-size-change="onRpPageSizeChange"/></Col> -->
             </Row>
         </Row>
         <Modal
@@ -43,22 +43,22 @@
             @on-visible-change="cancel">
             <Row>
                 <Col span="22">
-                    <Form :model="myAssessmentList" :rules="rules" :label-width="80" ref="myAssessmentList">
+                    <Form :model="myAssessmentList" :rules="rules" :label-width="100" ref="myAssessmentList">
+                        <FormItem label="选择考核项目:" prop="name">
+                            <Button @click="selectAss">选择</Button>
+                        </FormItem>
                         <FormItem label="考核项目:" prop="name">
-                            <Select v-model="myAssessmentList.name" placeholder="请选择考核项目" clearable>
-                                <Option value="1">2019第一季度考核</Option>
-                                <Option value="2">2019第二季度考核</Option>
-                                <Option value="3">2019第三季度考核</Option>
-                                <Option value="4">2019第四季度考核</Option>
-                            </Select>
+                            {{myAssessmentList.name}}
                         </FormItem>
                         <FormItem label="附件:" prop="data">
                             <Upload
-                                :before-upload="handleUpload"
-                                action="//jsonplaceholder.typicode.com/posts/">
+                                ref="upload"
+                                :on-success="uploadSuccess"
+                                name="picture"
+                                action="http://111.230.141.100:8080/hrserver/empAssessment/data">
                                 <Button icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
-                            <div v-if="myAssessmentList.data !== null">已选择的文件: {{ myAssessmentList.data.name }}</div>
+                            <div v-if="file !== null">已选择的文件: {{ file.name }}</div>
                         </FormItem>
                         <FormItem label="说明:" prop="remark">
                             <Input v-model="myAssessmentList.remark" type="textarea" placeholder="请输入考核说明"></Input>
@@ -67,8 +67,44 @@
                 </Col>
             </Row>
             <div slot="footer">
-                <Button @click="openResetPsw=false">取消</Button>
-                <Button type="primary" @click="resetPsw('password')">保存</Button>
+                <Button @click="handleReset('myAssessmentList')">重置</Button>
+                <Button type="primary" @click="addMyAss('myAssessmentList')">保存</Button>
+            </div>
+        </Modal>
+        <Modal
+            v-model="selectAssModal"
+            title="选择考核项目"
+            width=70%>
+            <Row :gutter="6">
+                <Col span="3">
+                    <Select v-model="souAssItem.state" placeholder="考核状态" clearable>
+                        <Option value="未开始">未开始</Option>
+                        <Option value="已开始">已开始</Option>
+                        <Option value="已结束">已结束</Option>
+                    </Select>
+                </Col>
+                <Col span="5">
+                    <Input v-model="souAssItem.name" clearable placeholder="请输入考核名称"/>
+                </Col>
+                <Col span="2">
+                    <Button icon="ios-search" @click="getDepartAss" >搜索</Button>
+                </Col>
+            </Row>
+            <br>
+            <Row>
+                <Table border ref="selection" :columns="departAssColumns" :data="departAssLists">
+                    <template slot-scope="{ row, index }" slot="action">
+                        <Button type="primary" style="margin-right: 5px" @click="selected(index)" v-if="row.state == '已结束'" disabled>选择</Button>
+                        <Button type="primary" style="margin-right: 5px" @click="selected(index)" v-else>选择</Button>
+                    </template>
+                </Table>
+            </Row>
+            <br>
+            <Row type="flex" justify="center">
+                <Page :total="departAssTotal" :page-size="departAssPageSize" show-elevator show-total @on-change="departAssPageChange"/>
+            </Row>
+            <div slot="footer">
+                <Button @click="selectAssModal=false">返回</Button>
             </div>
         </Modal>
     </div>
@@ -78,14 +114,23 @@
     export default {
         data() {
             return {
+                file: '',
                 addModal: false,
                 updateModal: false,
+                selectAssModal: false,
+                departAssPage: 1,
+                departAssTotal: 100,
+                departAssLimit: 5,
+                departAssPageSize: 5,
                 page:1,
                 total: 100,
                 limit: 10,
+                perEmpList: {},
+                departAssLists: [],
                 beginDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
                 myAssessmentList:{
                     aid: '',
+                    name: '',
                     data: '',
                     remark: '',
                 },
@@ -98,10 +143,50 @@
                         {type: 'string', max: 50, message: '备注长度不能超过50个字符'}
                     ]
                 },
+                souAssItem:{
+                    state: '',
+                    name: '',
+                },
                 souFormItem: {
                     result: '',
                     name: ''
                 },
+                departAssColumns: [
+                    {
+                        title: '考核名称',
+                        key: 'name'
+                    },
+                    {
+                        title: '考核部门',
+                        key: 'departmentName'
+                    },
+                    {
+                        title: '状态',
+                        key: 'state'
+                    },
+                    {
+                        title: '创建时间',
+                        key: 'createDate'
+                    },
+                    {
+                        title: '开始时间',
+                        key: 'beginDate'
+                    },
+                    {
+                        title: '结束时间',
+                        key: 'endDate'
+                    },
+                    {
+                        title: '备注',
+                        key: 'remarks'
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        width: 100,
+                        align: 'center'
+                    }
+                ],
                 columns: [
                     {
                         title: '考核名称',
@@ -144,7 +229,7 @@
         },
         methods: {
             handleUpload (file) {
-                this.myAssessmentList.data = file;
+                this.file = file;
                 return false;
             },
             onPageSizeChange(index){
@@ -153,137 +238,77 @@
             pageChange(index){
                 this.page = index;
             },
-            addAssessment(name) {
-                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
+            departAssPageChange(index){
+                this.departAssPage = index;
+            },
+            addAss(){
+                this.addModal = true;
+            },
+            getPerEmp(){
+                this.getRequest("/employee/myfile").then(resp=>{
+                    this.perEmpList = resp.data.data;
+                })
+            },
+            getDepartAss() {
+                this.getRequest("/assessment/myAssesment/" + this.perEmpList.departmentId,{
+                    limit: this.departAssLimit,
+                    page: this.departAssPage,
+                    name: this.souAssItem.name,
+                    state: this.souAssItem.state,
+                }).then(resp => {
+                    this.departAssLists = resp.data.data.list;
+                    this.departAssTotal = resp.data.data.total;
+                })
+            },
+            selectAss(){
+                this.selectAssModal = true;
+                this.getDepartAss();
+            },
+            selected(index){
+                this.myAssessmentList.aid = this.departAssLists[index].id;
+                this.myAssessmentList.name = this.departAssLists[index].name;
+                this.selectAssModal = false;
+            },
+            addMyAss(name){
                 this.$refs[name].validate((valid) => {
-                    if (check.test(this.newAssessment.name)){
-                        this.$Message.error("考核名称存在特殊字符");
-                        return;
-                    }
-                    if(valid) {
-                        this.postRequest("/assessment/addAssesment",{
-                            name: this.newAssessment.name,
-                            state: this.newAssessment.state,
-                            remark: this.newAssessment.remark
-                        }).then(resp=> {
-                            if (resp.data.error == false && resp.data.code == 200) {
-                                this.newAssessment.name = '';
-                                this.newAssessment.remark = '';
+                    if(valid){
+                        this.postRequest("/empAssessment/addEmployeeAssessment",{
+                            aid: this.myAssessmentList.aid,
+                            data: this.myAssessmentList.data,
+                            eid: this.$store.state.user.eid,
+                            remark: this.myAssessmentList.remark,
+                        }).then(resp => {
+                            if(resp.data.error == false && resp.data.code == 200){
+                                this.getMyAssessment();
                                 this.$Message.success(resp.data.data);
                                 this.addModal = false;
-                                this.getAssessment();
-                            } else {
-                                this.$Message.error(resp.data.message);
-                            }
-                        })
-                    }
-                })
-            },
-            getAssessment() {
-                this.getRequest("/assessment/allAssesment",{
-                    page: this.page,
-                    limit: this.limit,
-                    state: this.souFormItem.state,
-                    name: this.souFormItem.name,
-                }).then(resp=>{
-                    this.assessments = resp.data.data.list;
-                    this.total = resp.data.data.total;
-                })
-            },
-            startASS(id,index){
-                this.putRequest("/assessment/updateAssesmentState",{
-                    id: id,
-                    name: this.assessments[index].name,
-                    state: "已开始",
-                    beginDate: this.beginDate,
-                }).then(resp => {
-                    if (resp.data.code != 400) {
-                        this.$Message.success(resp.data.data);
-                        this.getAssessment();
-                    } else {
-                        this.$Message.error(resp.data.message);
-                    }
-                })
-            },
-            overAss(id,index){
-                this.putRequest("/assessment/updateAssesmentState",{
-                    id: id,
-                    name: this.assessments[index].name,
-                    state: "已结束",
-                    endDate: this.endDate,
-                }).then(resp => {
-                    if (resp.data.code != 400) {
-                        this.$Message.success(resp.data.data);
-                        this.getAssessment();
-                    } else {
-                        this.$Message.error(resp.data.message);
-                    }
-                })
-            },
-            remove(id) {
-                this.$Modal.confirm({
-                    title: '你正在进行删除操作',
-                    content: '<p>你确定要删除该考核吗?</p>',
-                    onOk: () => {
-                        var _this = this;
-                        this.deleteRequest("/assessment/deleteAssesment/" + id).then(resp=> {
-                            this.$Message.success(resp.data.data);
-                            _this.getAssessment();
-                        })
-                    },
-                })
-            },
-            beforeUpdate(index) {
-                this.updateModal = true;
-                this.assessment.id = this.assessments[index].id;
-                this.assessment.name = this.assessments[index].name;
-                this.assessment.remarks = this.assessments[index].remarks;
-            },
-            update(name){
-                var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
-                this.$refs[name].validate((valid) =>{
-                    if (check.test(this.newAssessment.name)){
-                        this.$Message.error("考核名称存在特殊字符");
-                        return;
-                    }
-                    if (valid) {
-                        this.putRequest("/assessment/updateAssesment",{
-                            id: this.assessment.id,
-                            name: this.assessment.name,
-                            remarks: this.assessment.remarks
-                        }).then(resp => {
-                            if (resp.data.code != 400) {
-                                this.$Message.success(resp.data.data);
-                                this.updateModal = false;
-                                this.getAssessment();
-
-                                //初始化字段
                                 this.$refs[name].resetFields();
                             } else {
                                 this.$Message.error(resp.data.message);
                             }
                         })
-                    } else {
-                        this.$Message.error('考核名称不能为空');
                     }
                 })
             },
-            cancel(flag){
-                if(flag == false){
-                    this.$refs['newAssessment'].resetFields();
-                    this.$refs['assessment'].resetFields();
-                }
+            getMyAssessment(){
+
+            },
+            cancel(){
+
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
             },
+            uploadSuccess (resp, file){
+                this.myAssessmentList.data = resp.data;
+                this.$Message.success("文件上传成功");
+            }
         },
         mounted: function (){
-            this.getAssessment();
+            this.getPerEmp();
         },
         watch: {
-            page: "getAssessment",
-            limit: "getAssessment",
+            departAssPage: "getDepartAss",
         },
     }
 </script>
