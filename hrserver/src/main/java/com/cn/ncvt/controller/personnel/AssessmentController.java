@@ -62,4 +62,9 @@ public class AssessmentController {
     }
 
 
+    @GetMapping("/myAssesment/{did}")
+    @ApiOperation(value = "获取我的考核", notes = "用did作为查询条件")
+    public Result myAssesmentFile(@PathVariable Integer did,Integer page, Integer limit,String state,String name){
+        return assessmentBiz.getMyAssessmentFile(did,page,limit,state,name);
+    }
 }

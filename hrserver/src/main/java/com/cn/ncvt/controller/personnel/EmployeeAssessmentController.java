@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2019/10/23
  **/
 @RestController
-@RequestMapping("/employeeassessment")
-@Api(tags = "员工考核状况")
+@RequestMapping("/empAssessment")
+@Api(tags = "员工考核（我的考核）")
 public class EmployeeAssessmentController {
     @Autowired
     EmployeeAssessmentBiz employeeAssessmentBiz;
 
-    @GetMapping("/allEmployeeAssessment")
-    @ApiOperation(value = "查看所有提交上来的考核", notes = "返回全部考核")
-    public Result allEmployeeFile(int page, int limit){
-        return employeeAssessmentBiz.getAllAssessmentFile(page, limit);
+    @GetMapping("/allEmpAssessment/{aid}")
+    @ApiOperation(value = "员工考核", notes = "通过aid来查询这个考核中所有员工提交的考核")
+    public Result allEmployeeFile(@PathVariable Integer aid,Integer page, Integer limit){
+        return employeeAssessmentBiz.getAllAssessmentFile(aid,page,limit);
     }
 
     @PostMapping("/addEmployeeAssessment")
-    @ApiOperation(value = "添加员工考核信息", notes = "添加考核项目")
+    @ApiOperation(value = "添加员工考核信息", notes = "提交考核，不要给result,isCheck传参")
     public Result addAssessmentFile(@RequestBody EmployeeAssessment employeeAssessment){
         return employeeAssessmentBiz.addEmployeeAssessmentFile(employeeAssessment);
     }
 
     @PostMapping("/updateEmployeeAssessment")
-    @ApiOperation(value = "修改考核项目", notes = "修改考核")
+    @ApiOperation(value = "修改考核项目", notes = "选择需要的字段修改，比如说只修改审批状态")
     public Result updateAssessmentFile(@RequestBody EmployeeAssessment employeeAssessment){
         return employeeAssessmentBiz.updateEmployeeAssessmentFile(employeeAssessment);
     }
