@@ -54,15 +54,18 @@
                 <Col span="21">
                     <Form :model="user" :rules="newUserRules" :label-width="80" ref="newUser">
                         <FormItem label="当前头像:" prop="userface">
-                            <img src="https://wwc.alicdn.com/avatar/getAvatar.do?userId=822908364&width=80&height=80&type=sns" :style="{width:'128px',height:'128px',borderRadius: '50%'}">
+                            <img src="../../assets/avatar.png" :style="{width:'128px',height:'128px',borderRadius: '50%'}" v-if="user.userface=='' || null ? true : false">
+                            <img :src="user.userface" :style="{width:'128px',height:'128px',borderRadius: '50%'}" v-else>
                             <Upload
                                 ref="upload"
+                                name='picture'
                                 :show-upload-list="false"
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
+                                :on-success="uploadSuccess"
                                 multiple
                                 type="drag"
-                                action="//jsonplaceholder.typicode.com/posts/"
+                                action="http://111.230.141.100:8080/hrserver/system/user/userface"
                                 style="width:128px;">
                                 <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传头像</Button>
                             </Upload>
@@ -110,15 +113,18 @@
                 <Col span="22">
                     <Form :model="user" :rules="newUserRules" :label-width="80" ref="user">
                         <FormItem label="当前头像:" prop="userface">
-                            <img src="https://wwc.alicdn.com/avatar/getAvatar.do?userId=822908364&width=80&height=80&type=sns" :style="{width:'128px',height:'128px',borderRadius: '50%'}">
+                            <img src="../../assets/avatar.png" :style="{width:'128px',height:'128px',borderRadius: '50%'}" v-if="user.userface=='' || user.userface==null ? true : false">
+                            <img :src="user.userface" :style="{width:'128px',height:'128px',borderRadius: '50%'}" v-else>
                             <Upload
                                 ref="upload"
+                                name='picture'
                                 :show-upload-list="false"
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
+                                :on-success="uploadSuccess"
                                 multiple
                                 type="drag"
-                                action="//jsonplaceholder.typicode.com/posts/"
+                                action="http://111.230.141.100:8080/hrserver/system/user/userface"
                                 style="width:128px;">
                                 <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传头像</Button>
                             </Upload>
@@ -337,6 +343,7 @@
                             phone: this.user.phone,
                             address: this.user.address,
                             remark: this.user.remark,
+                            userface: this.user.userface,
                             rolesKey: this.user.roles,
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
@@ -395,6 +402,7 @@
                             phone: this.user.phone,
                             address: this.user.address,
                             remark: this.user.remark,
+                            userface: this.user.userface,
                             rolesKey: this.user.roles,
                         }).then(resp=> {
                             if (resp.data.error == false && resp.data.code == 200) {
@@ -475,6 +483,9 @@
                     return callback(new Error("两次密码不一致!"));
                 }
                 callback();
+            },
+            uploadSuccess(resp, file){
+                this.user.userface = resp.data;
             }
         }
     }
