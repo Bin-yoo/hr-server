@@ -13,8 +13,9 @@
     <sql id="Base_Column_List">
     id, name, remarks, state, beginDate, endDate, createDate
   </sql>
+
     <select id="selectAllAssessment" resultType="Assessment">
-        SELECT a.*,d.name as departmentName from assessment a,department d where a.did=d.id
+        SELECT a.*,d.name as departmentName from assessment a,department d where a.departmentID=d.id
         <where>
             <if test="name != null and name != '' ">
                 and name like '%${name}%'
@@ -27,11 +28,14 @@
             </if>
         </where>
     </select>
-    <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from assessment
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectMyAssessmentByDid" resultType="Assessment">
+        select * from assessment where state!="未开始" and did=#{did}
+            <if test="name != null and name != '' ">
+                and name like '%${name}%'
+            </if>
+            <if test="state != null and state != '' ">
+                and state=#{state}
+            </if>
     </select>
     <delete id="deleteByID" parameterType="java.lang.Integer">
     delete from assessment

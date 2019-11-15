@@ -22,10 +22,10 @@ import java.util.Map;
 public class EmployeeAssessmentBiz {
     @Autowired
     EmployeeAssessmentMapper employeeAssessmentMapper;
-    public Result getAllAssessmentFile(int page, int limit) {
+    public Result getAllAssessmentFile(Integer aid, Integer page, Integer limit) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
-        List<EmployeeAssessment> fileList = employeeAssessmentMapper.selectAllAssessmentFile();
+        List<EmployeeAssessment> fileList = employeeAssessmentMapper.selectAllAssessmentByEid(aid);
 
         if (fileList != null){
             //用PageInfo对结果进行包装,获取分页信息

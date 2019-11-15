@@ -21,4 +21,6 @@ public interface AssessmentMapper {
     int updateAssessmentStateByID(Assessment assessment);
 
     List<Assessment> selectAllAssessment(@Param("state") String state, @Param("name") String name, @Param("did") Integer did);
+
+    List<Assessment> selectMyAssessmentByDid(@Param("did") Integer did,@Param("state") String state,@Param("name") String name);
 }

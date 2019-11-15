@@ -86,4 +86,26 @@ public class AssessmentBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public Result getMyAssessmentFile(Integer did, Integer page, Integer limit, String state, String name) {
+        //紧跟着的第一个查询方法会被分页
+        PageHelper.startPage(page, limit);
+        List<Assessment> fileList = assessmentMapper.selectMyAssessmentByDid(did,state,name);
+
+        if (fileList != null){
+            //用PageInfo对结果进行包装,获取分页信息
+            PageInfo pageInfo = new PageInfo(fileList);
+
+            //包装map返回前端
+            Map map = new HashMap();
+            map.put("total", pageInfo.getTotal());
+            map.put("totalPage" , pageInfo.getPages());
+            map.put("page" , pageInfo.getPageNum());
+            map.put("list", fileList);
+
+            return ResultFactory.buildSuccessResult(map);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
 }
