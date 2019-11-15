@@ -3,10 +3,13 @@ package com.cn.ncvt.controller.personnel;
 import com.cn.ncvt.biz.EmployeeAssessmentBiz;
 import com.cn.ncvt.entity.EmployeeAssessment;
 import com.cn.ncvt.result.Result;
+import com.cn.ncvt.result.ResultFactory;
+import com.cn.ncvt.util.UploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @ClassName: EmployeeAssessmentController
@@ -42,5 +45,12 @@ public class EmployeeAssessmentController {
     @ApiOperation(value = "删除考核项目", notes = "删除考核项目")
     public Result deleteAssessmentFile(@PathVariable Integer id){
         return employeeAssessmentBiz.deleteEmployeeAssessmentFile(id);
+    }
+
+    @PostMapping("/data")
+    @ApiOperation(value = "上传考核附件", notes = "")
+    public Result uploadUserFace(@RequestParam("picture") MultipartFile picture){
+        UploadUtil uploadUtil = new UploadUtil();
+        return ResultFactory.buildSuccessResult(uploadUtil.upload(picture, "assessment"));
     }
 }

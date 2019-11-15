@@ -3,10 +3,13 @@ package com.cn.ncvt.controller;
 import com.cn.ncvt.biz.EmployeeBiz;
 import com.cn.ncvt.entity.Employee;
 import com.cn.ncvt.result.Result;
+import com.cn.ncvt.result.ResultFactory;
+import com.cn.ncvt.util.UploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @version : V1.0
@@ -84,5 +87,12 @@ public class EmployeeController {
     @ApiOperation(value = "获取个人档案", notes = "")
     public Result getMyFile(){
         return employeeBiz.getMyFile();
+    }
+
+    @PostMapping("/picture")
+    @ApiOperation(value = "上传员工图片", notes = "")
+    public Result uploadUserFace(@RequestParam("picture") MultipartFile picture){
+        UploadUtil uploadUtil = new UploadUtil();
+        return ResultFactory.buildSuccessResult(uploadUtil.upload(picture, "emp"));
     }
 }
