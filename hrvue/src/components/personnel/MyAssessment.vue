@@ -4,13 +4,14 @@
             <Col span="22">
                 <Row :gutter="6">
                     <Col span="2">
-                        <Select v-model="souFormItem.state" placeholder="考核状态" clearable>
-                            <Option value="未开始">未开始</Option>
-                            <Option value="已开始">已开始</Option>
-                            <Option value="已结束">已结束</Option>
+                        <Select v-model="souFormItem.result" placeholder="审批结果" clearable>
+                            <Option value="优秀">优秀</Option>
+                            <Option value="良好">良好</Option>
+                            <Option value="及格">及格</Option>
+                            <Option value="不及格">不及格</Option>
                         </Select>
                     </Col>
-                    <Col span="5">
+                    <Col span="3">
                         <Input v-model="souFormItem.name" clearable placeholder="请输入考核名称"/>
                     </Col>
                     <Col span="1">
@@ -19,69 +20,56 @@
                 </Row>
             </Col>
             <Col span="2">
-                <Button type="primary" @click="addModal = true">添加考核</Button>
+                <Button type="primary" @click="addModal = true">提交考核</Button>
             </Col>
         </Row>
         <br>
         <Row>
-            <Table border ref="selection" :columns="columns" :data="assessments">
+            <Table ref="selection" :columns="columns" :data="data">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Button type="primary" style="margin-right: 5px" @click="startASS(row.id,index)" v-if="row.state == '未开始'">开始考核</Button>
-                    <Button type="primary" style="margin-right: 5px" @click="overAss(row.id,index)" v-else-if="row.state == '已开始'">结束考核</Button>
-                    <Button type="primary" style="margin-right: 5px" v-else disabled>考核结束</Button>
-                    <Button type="primary" style="margin-right: 5px"  @click="beforeUpdate(index)">编辑</Button>
-                    <Button type="error" @click="remove(row.id)">删除</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" v-if="row.check == '否'">编辑</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" v-else disabled>编辑</Button>
+                    <Button type="error" @click="remove(row.id)" v-if="row.check == '否'">删除</Button>
+                    <Button type="error" @click="remove(row.id)" v-else disabled>删除</Button>
                 </template>
             </Table>
-        </Row>
-        <Row :style="{margin: '20px 0 0 0'}">
-            <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="onPageSizeChange"/>
+            <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
+                <Col><Page :total="rpTotal" :page-size="rpPageSize" show-elevator show-total @on-change="rpPageChange" @on-page-size-change="onRpPageSizeChange"/></Col>
+            </Row>
         </Row>
         <Modal
             v-model="addModal"
-            title="添加考核项目"
-            width=30%
+            title="提交考核"
             @on-visible-change="cancel">
-            
-                <Form ref="newAssessment" :model="newAssessment" :rules="rules" :label-width="100">
-                    <Row>
-                        <FormItem label="考核名称"  prop="name">
-                            <Input v-model="newAssessment.name" placeholder="请输入"></Input>
+            <Row>
+                <Col span="22">
+                    <Form :model="myAssessmentList" :rules="rules" :label-width="80" ref="myAssessmentList">
+                        <FormItem label="考核项目:" prop="name">
+                            <Select v-model="myAssessmentList.name" placeholder="请选择考核项目" clearable>
+                                <Option value="1">2019第一季度考核</Option>
+                                <Option value="2">2019第二季度考核</Option>
+                                <Option value="3">2019第三季度考核</Option>
+                                <Option value="4">2019第四季度考核</Option>
+                            </Select>
                         </FormItem>
-                    </Row>
-                    <Row>
-                        <FormItem label="备注" prop="remark">
-                            <Input v-model="newAssessment.remark" type="textarea" placeholder="备注"></Input>
+                        <FormItem label="附件:" prop="data">
+                            <Upload
+                                :before-upload="handleUpload"
+                                action="//jsonplaceholder.typicode.com/posts/">
+                                <Button icon="ios-cloud-upload-outline">上传文件</Button>
+                            </Upload>
+                            <div v-if="myAssessmentList.data !== null">已选择的文件: {{ myAssessmentList.data.name }}</div>
                         </FormItem>
-                    </Row>
-                </Form>
-                <div slot="footer">
-                    <Button @click="handleReset('newAssessment')">重置</Button>
-                    <Button type="primary" @click="addAssessment('newAssessment')">保存</Button>
-                </div>
-        </Modal>
-        <Modal
-            v-model="updateModal"
-            title="修改考核项目"
-            width=30%
-            @on-visible-change="cancel">
-            
-                <Form ref="assessment" :model="assessment" :rules="rules" :label-width="100">
-                    <Row>
-                        <FormItem label="考核名称"  prop="name">
-                            <Input v-model="assessment.name" placeholder="请输入"></Input>
+                        <FormItem label="说明:" prop="remark">
+                            <Input v-model="myAssessmentList.remark" type="textarea" placeholder="请输入考核说明"></Input>
                         </FormItem>
-                    </Row>
-                    <Row>
-                        <FormItem label="备注" prop="remark">
-                            <Input v-model="assessment.remark" type="textarea" placeholder="备注"></Input>
-                        </FormItem>
-                    </Row>
-                </Form>
-                <div slot="footer">
-                    <Button @click="handleReset('assessment')">重置</Button>
-                    <Button type="primary" @click="update('assessment')">保存</Button>
-                </div>
+                    </Form>
+                </Col>
+            </Row>
+            <div slot="footer">
+                <Button @click="openResetPsw=false">取消</Button>
+                <Button type="primary" @click="resetPsw('password')">保存</Button>
+            </div>
         </Modal>
     </div>
 </template>
@@ -96,22 +84,12 @@
                 total: 100,
                 limit: 10,
                 beginDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
-                endDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
-                newAssessment: {
-                    name: '',
-                    state: '未开始',
-                    remarks: '',
+                myAssessmentList:{
+                    aid: '',
+                    data: '',
+                    remark: '',
                 },
-                assessment:{
-                    id: '',
-                    name: '',
-                    state: '',
-                    createDate: '',
-                    beginDate: '',
-                    endDate: '',
-                    remarks: '',
-                },
-                assessments:[],
+                myAssessmentLists:[],
                 rules: {
                     name: [
                         {required: true, message: '姓名不能为空', trigger: 'blur'}
@@ -121,37 +99,25 @@
                     ]
                 },
                 souFormItem: {
-                    state: '',
+                    result: '',
                     name: ''
                 },
                 columns: [
-                    {
-                        title: '考核编号',
-                        key: 'id'
-                    },
                     {
                         title: '考核名称',
                         key: 'name'
                     },
                     {
-                        title: '状态',
-                        key: 'state'
+                        title: '说明',
+                        key: 'remark'
                     },
                     {
-                        title: '创建时间',
-                        key: 'createDate'
+                        title: '考核结果',
+                        key: 'result'
                     },
                     {
-                        title: '开始时间',
-                        key: 'beginDate'
-                    },
-                    {
-                        title: '结束时间',
-                        key: 'endDate'
-                    },
-                    {
-                        title: '备注',
-                        key: 'remarks'
+                        title: '是否查阅',
+                        key: 'check'
                     },
                     {
                         title: '操作',
@@ -160,9 +126,27 @@
                         align: 'center'
                     }
                 ],
+                data: [
+                    {
+                        name: '第一季度考核',
+                        remark: '没啥好说明的',
+                        result: '优秀',
+                        check: '是',
+                    },
+                    {
+                        name: '第二季度考核',
+                        remark: '没啥好说明的',
+                        result: '',
+                        check: '否',
+                    }
+                ]
             }
         },
         methods: {
+            handleUpload (file) {
+                this.myAssessmentList.data = file;
+                return false;
+            },
             onPageSizeChange(index){
                 this.limit = index;
             },
