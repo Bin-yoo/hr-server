@@ -15,16 +15,17 @@
   </sql>
 
     <select id="selectAllAssessment" resultType="Assessment">
-        SELECT a.*,d.name as departmentName from assessment a,department d where a.departmentID=d.id
+        SELECT a.*,d.name as departmentName from assessment a,department d
         <where>
+            a.did=d.id
             <if test="name != null and name != '' ">
-                and name like '%${name}%'
+                and a.name like '%${name}%'
             </if>
             <if test="state != null and state != '' ">
-                and state=#{state}
+                and a.state=#{state}
             </if>
             <if test="did != null and did != '' ">
-                and did=#{did}
+                and a.did=#{did}
             </if>
         </where>
     </select>
