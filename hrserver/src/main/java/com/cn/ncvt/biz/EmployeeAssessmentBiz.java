@@ -1,11 +1,17 @@
 package com.cn.ncvt.biz;
 
+import com.cn.ncvt.entity.Assessment;
+import com.cn.ncvt.entity.Employee;
 import com.cn.ncvt.entity.EmployeeAssessment;
+import com.cn.ncvt.entity.User;
+import com.cn.ncvt.mapper.AssessmentMapper;
 import com.cn.ncvt.mapper.EmployeeAssessmentMapper;
+import com.cn.ncvt.mapper.EmployeeMapper;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +28,11 @@ import java.util.Map;
 public class EmployeeAssessmentBiz {
     @Autowired
     EmployeeAssessmentMapper employeeAssessmentMapper;
+    @Autowired
+    AssessmentMapper assessmentMapper;
+    @Autowired
+    EmployeeMapper employeeMapper;
+
     public Result getAllAssessmentFile(Integer aid, Integer page, Integer limit) {
         //紧跟着的第一个查询方法会被分页
         PageHelper.startPage(page, limit);
@@ -58,7 +69,7 @@ public class EmployeeAssessmentBiz {
 
     public Result updateEmployeeAssessmentFile(EmployeeAssessment employeeAssessment) {
         try {
-            employeeAssessmentMapper.updateByID(employeeAssessment);
+            employeeAssessmentMapper.updateByIDSelective(employeeAssessment);
             return ResultFactory.buildSuccessResult("修改成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -73,6 +84,58 @@ public class EmployeeAssessmentBiz {
         }catch (Exception e){
             e.printStackTrace();
             return ResultFactory.buildFailResult("删除失败");
+        }
+    }
+
+    public Result getMyAssessment(Integer page, Integer limit, String state, String name) {
+
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Employee employee = employeeMapper.selectByIdFun(user.getEid());
+
+        PageHelper.startPage(page, limit);
+        List<Assessment> fileList = assessmentMapper.selectMyAssessment(employee.getDepartmentId(),user.getEid(), state, name);
+
+        if (fileList != null){
+            //用PageInfo对结果进行包装,获取分页信息
+            PageInfo pageInfo = new PageInfo(fileList);
+
+            //包装map返回前端
+            Map map = new HashMap();
+            map.put("total", pageInfo.getTotal());
+            map.put("totalPage" , pageInfo.getPages());
+            map.put("page" , pageInfo.getPageNum());
+            map.put("list", fileList);
+
+            return ResultFactory.buildSuccessResult(map);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
+
+    public Result viewMyAssessment(Integer aid) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        EmployeeAssessment file = employeeAssessmentMapper.selectByEIDAndAID(user.getEid(), aid);
+        return ResultFactory.buildSuccessResult(file);
+    }
+
+    public Result getAssessmentFileByAID(Integer page, Integer limit, Integer aid, String name) {
+        PageHelper.startPage(page, limit);
+        List<Employee> fileList = employeeAssessmentMapper.selectByAID(aid, name);
+
+        if (fileList != null){
+            //用PageInfo对结果进行包装,获取分页信息
+            PageInfo pageInfo = new PageInfo(fileList);
+
+            //包装map返回前端
+            Map map = new HashMap();
+            map.put("total", pageInfo.getTotal());
+            map.put("totalPage" , pageInfo.getPages());
+            map.put("page" , pageInfo.getPageNum());
+            map.put("list", fileList);
+
+            return ResultFactory.buildSuccessResult(map);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
         }
     }
 }

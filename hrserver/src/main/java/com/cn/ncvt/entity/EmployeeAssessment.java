@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.sql.Timestamp;
 
 /**
@@ -9,6 +11,7 @@ import java.sql.Timestamp;
  * @Auther: Bin
  * @Date: 2019/10/21 16:19
  **/
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class EmployeeAssessment {
 
     private Integer id;
@@ -18,6 +21,8 @@ public class EmployeeAssessment {
     private String remark;
     private String result;
     private Boolean isCheck;
+
+    private String name;
 
     public Integer getId() {
         return id;
@@ -73,5 +78,13 @@ public class EmployeeAssessment {
 
     public void setCheck(Boolean check) {
         isCheck = check;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

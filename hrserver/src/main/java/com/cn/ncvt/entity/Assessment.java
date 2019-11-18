@@ -26,6 +26,9 @@ public class Assessment {
     private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
     private String departmentName;
 
+    private boolean commit;
+
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -96,5 +99,13 @@ public class Assessment {
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    public boolean isCommit() {
+        return commit;
+    }
+
+    public void setCommit(boolean commit) {
+        this.commit = commit;
     }
 }

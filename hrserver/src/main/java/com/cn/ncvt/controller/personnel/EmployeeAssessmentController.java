@@ -7,6 +7,7 @@ import com.cn.ncvt.result.ResultFactory;
 import com.cn.ncvt.util.UploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmployeeAssessmentController {
     @Autowired
     EmployeeAssessmentBiz employeeAssessmentBiz;
+
+    @GetMapping("/myAssessment")
+    @ApiOperation(value = "个人考核", notes = "")
+    public Result getMyAssessment(Integer page, Integer limit, String state, String name){
+        return employeeAssessmentBiz.getMyAssessment(page,limit,state,name);
+    }
 
     @GetMapping("/allEmpAssessment/{aid}")
     @ApiOperation(value = "员工考核", notes = "通过aid来查询这个考核中所有员工提交的考核")
@@ -49,8 +56,14 @@ public class EmployeeAssessmentController {
 
     @PostMapping("/data")
     @ApiOperation(value = "上传考核附件", notes = "")
-    public Result uploadUserFace(@RequestParam("picture") MultipartFile picture){
+    public Result uploadData(@RequestParam("picture") MultipartFile picture){
         UploadUtil uploadUtil = new UploadUtil();
         return ResultFactory.buildSuccessResult(uploadUtil.upload(picture, "assessment"));
+    }
+
+    @GetMapping("/myAssessment/{aid}")
+    @ApiOperation(value = "查看自己的某项目提交的考核材料", notes = "")
+    public Result viewMyAssessment(@PathVariable Integer aid){
+        return employeeAssessmentBiz.viewMyAssessment(aid);
     }
 }
