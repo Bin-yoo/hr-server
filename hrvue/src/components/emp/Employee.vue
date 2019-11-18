@@ -107,26 +107,21 @@
                     </Col>
                     <Col span="4" offset="2">
                         <Row>
-                            <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
+                            <img src="../../assets/avatar.png" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-if="newEmployee.picture=='' || newEmployee.picture==null ? true : false">
+                            <img :src="newEmployee.picture" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-else>
                         </Row>
                         <Row>
-                                <!-- 上传组件相关方法
-                                :default-file-list="defaultList"
-                                :on-success="handleSuccess"
-                                :on-format-error="handleFormatError"
-                                :on-exceeded-size="handleMaxSize"
-                                :before-upload="handleBeforeUpload" -->
                             <Upload
                                 ref="upload"
+                                name='picture'
                                 :show-upload-list="false"
-                                
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
+                                :on-success="uploadNewSuccess"
                                 multiple
                                 type="drag"
-                                action="//jsonplaceholder.typicode.com/posts/"
+                                action="http://111.230.141.100:8080/hrserver/employee/picture"
                                 style="display: inline-block;width:128px;">
-
                                 <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传图片</Button>
                             </Upload>
                         </Row>
@@ -312,27 +307,21 @@
                     </Col>
                     <Col span="4" offset="2">
                         <Row>
-                            <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
+                            <img src="../../assets/avatar.png" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-if="employee.picture=='' || employee.picture==null ? true : false">
+                            <img :src="employee.picture" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-else>
                         </Row>
                         <Row>
-
-                                <!-- 上传组件相关方法
-                                :default-file-list="defaultList"
-                                :on-success="handleSuccess"
-                                :on-format-error="handleFormatError"
-                                :on-exceeded-size="handleMaxSize"
-                                :before-upload="handleBeforeUpload" -->
-
                             <Upload
                                 ref="upload"
+                                name='picture'
                                 :show-upload-list="false"
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
+                                :on-success="uploadSuccess"
                                 multiple
                                 type="drag"
-                                action="//jsonplaceholder.typicode.com/posts/"
+                                action="http://111.230.141.100:8080/hrserver/employee/picture"
                                 style="display: inline-block;width:128px;">
-
                                 <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传图片</Button>
                             </Upload>
                         </Row>
@@ -505,7 +494,7 @@
                         </Row>
                     </Col>
                     <Col span="5">
-                        <img :src="pictureItem.url" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
+                        <img :src="employees[index].picture" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
                     </Col>
                 </Row>
                 <Row>
@@ -729,7 +718,7 @@
                     beginContract: '',  //合同起始日期
                     endContract: '',    //合同结束日期
                     quitTime: '',       //离职日期
-                    workId:''           //工号
+                    workId:'',           //工号
                 },
                 newEmployeeRules: {
                     name: [
@@ -1077,12 +1066,14 @@
                             beginContract: this.formatDate.beginContract,
                             endContract: this.formatDate.endContract,
                             baseSalary: this.newEmployee.baseSalary,
-                            workId: this.newEmployee.workId
+                            workId: this.newEmployee.workId,
+                            picture: this.newEmployee.picture
                         }).then(resp=> {
                             if (resp.data.code != 400) {
                                 this.$Message.success(resp.data.data);
                                 this.addModal = false;
                                 this.getEmployeeList();
+                                this.$refs.upload.clearFiles();
 
                                 // //初始化字段
                                 // this.$refs[name].resetFields();
@@ -1197,7 +1188,7 @@
 
                                 //初始化字段
                                 this.$refs[name].resetFields();
-
+                                this.$refs.upload.clearFiles();
                                 //初始化
                                 this.formatDate.birthday = '';
                                 this.formatDate.beginDate = '';
@@ -1244,6 +1235,14 @@
                     this.$refs['employee'].resetFields();
                 }
             },
+            uploadNewSuccess(resp, file){
+                console.log(resp)
+                this.newEmployee.picture = resp.data;
+                console.log(this.newEmployee.picture)
+            },
+            uploadSuccess(resp, file){
+                this.employee.picture = resp.data;
+            }
         },
         mounted: function (){
             this.getEmployeeList();
