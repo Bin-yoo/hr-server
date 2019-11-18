@@ -16,11 +16,38 @@
     <select id="selectAllAssessmentByEid" parameterType="Integer" resultType="EmployeeAssessment">
         SELECT * from employee_assessment where aid=#{aid}
     </select>
+    <select id="selectByEIDAndAID" resultType="EmployeeAssessment">
+        SELECT ea.*,a.name from employee_assessment ea, assessment a where ea.aid = a.id and aid=#{aid} and  eid=#{eid}
+    </select>
     <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from employee_assessment
         where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <resultMap id="selectByAIDResultMap" type="com.cn.ncvt.entity.Employee">
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="dname" property="departmentName" jdbcType="VARCHAR"/>
+        <result column="pname" property="positionName" jdbcType="VARCHAR"/>
+        <association property="employeeAssessment" javaType="EmployeeAssessment">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="data" property="data" jdbcType="VARCHAR"/>
+            <result column="remark" property="remark" jdbcType="VARCHAR"/>
+            <result column="result" property="result" jdbcType="CHAR"/>
+            <result column="isCheck" property="isCheck" jdbcType="INTEGER"/>
+        </association>
+    </resultMap>
+    <select id="selectByAID" resultMap="selectByAIDResultMap">
+        select e.name, d.name as dname, p.name as pname, ea.* from assessment a
+        LEFT JOIN employee e on e.departmentId = a.did
+        LEFT JOIN department d on e.departmentId = d.id
+        LEFT JOIN position p on e.positionId = p.id
+        LEFT JOIN employee_assessment ea on e.id = ea.eid
+        where a.id = #{aid}
+        <if test="name != null and name != ''">
+            and e.name = #{name}
+        </if>
     </select>
     <delete id="deleteByID" parameterType="java.lang.Integer">
     delete from employee_assessment
@@ -37,22 +64,22 @@
     <update id="updateByIDSelective" parameterType="employeeAssessment">
         update employee_assessment
         <set>
-            <if test="eid != null">
+            <if test="eid != null and eid != ''">
                 eid = #{eid,jdbcType=INTEGER},
             </if>
-            <if test="aid != null">
+            <if test="aid != null and aid != ''">
                 aid = #{aid,jdbcType=INTEGER},
             </if>
-            <if test="data != null">
+            <if test="data != null and data != ''">
                 data = #{data,jdbcType=VARCHAR},
             </if>
-            <if test="remark != null">
+            <if test="remark != null and remark != ''">
                 remark = #{remark,jdbcType=VARCHAR},
             </if>
-            <if test="result != null">
+            <if test="result != null and result != ''">
                 result = #{result,jdbcType=CHAR},
             </if>
-            <if test="isCheck != null">
+            <if test="isCheck != null and isCheck != ''">
                 isCheck = #{isCheck,jdbcType=INTEGER},
             </if>
         </set>

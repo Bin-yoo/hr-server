@@ -1,6 +1,7 @@
 package com.cn.ncvt.controller.personnel;
 
 import com.cn.ncvt.biz.AssessmentBiz;
+import com.cn.ncvt.biz.EmployeeAssessmentBiz;
 import com.cn.ncvt.entity.Assessment;
 import com.cn.ncvt.result.Result;
 import io.swagger.annotations.Api;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 public class AssessmentController {
     @Autowired
     AssessmentBiz assessmentBiz;
+    @Autowired
+    EmployeeAssessmentBiz employeeAssessmentBiz;
 
     @GetMapping("/allAssesment")
     @ApiOperation(value = "查看所有考核", notes = "返回全部考核")
@@ -61,10 +64,9 @@ public class AssessmentController {
         return assessmentBiz.deleteAssessmentFile(id);
     }
 
-
-    @GetMapping("/myAssesment/{did}")
-    @ApiOperation(value = "获取我的考核", notes = "用did作为查询条件")
-    public Result myAssesmentFile(@PathVariable Integer did,Integer page, Integer limit,String state,String name){
-        return assessmentBiz.getMyAssessmentFile(did,page,limit,state,name);
+    @GetMapping("/{aid}/empAssessment")
+    @ApiOperation(value = "查看某考核项目的考核资料", notes = "这个是查看某考核任务下,所有员工提交的考核资料")
+    public Result employeeAssessmentFile(Integer page, Integer limit, @PathVariable("aid") Integer aid, String name){
+        return employeeAssessmentBiz.getAssessmentFileByAID(page,limit,aid,name);
     }
 }

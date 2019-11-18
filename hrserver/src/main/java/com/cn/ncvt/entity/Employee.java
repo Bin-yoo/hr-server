@@ -55,6 +55,8 @@ public class Employee {
 
     private Timestamp transferdate;
 
+    private EmployeeAssessment employeeAssessment;
+
 
     public Integer getPositionId() {
         return positionId;
@@ -318,5 +320,13 @@ public class Employee {
 
     public void setTransferdate(Timestamp transferdate) {
         this.transferdate = transferdate;
+    }
+
+    public EmployeeAssessment getEmployeeAssessment() {
+        return employeeAssessment;
+    }
+
+    public void setEmployeeAssessment(EmployeeAssessment employeeAssessment) {
+        this.employeeAssessment = employeeAssessment;
     }
 }

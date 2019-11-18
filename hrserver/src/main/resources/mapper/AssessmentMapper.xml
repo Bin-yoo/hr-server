@@ -29,14 +29,15 @@
             </if>
         </where>
     </select>
-    <select id="selectMyAssessmentByDid" resultType="Assessment">
-        select * from assessment where state!="未开始" and did=#{did}
-            <if test="name != null and name != '' ">
-                and name like '%${name}%'
-            </if>
-            <if test="state != null and state != '' ">
-                and state=#{state}
-            </if>
+    <select id="selectMyAssessment" resultType="Assessment">
+        select a.*,if((select aid from employee_assessment where eid=#{eid} and aid=a.id)=a.id,true,false) as commit
+        from assessment a where a.state!="未开始" and a.did=#{did}
+        <if test="name != null and name != '' ">
+            and a.name like '%${name}%'
+        </if>
+        <if test="state != null and state != '' ">
+            and a.state=#{state}
+        </if>
     </select>
     <delete id="deleteByID" parameterType="java.lang.Integer">
     delete from assessment

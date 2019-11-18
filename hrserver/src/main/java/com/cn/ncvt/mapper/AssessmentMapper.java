@@ -22,5 +22,7 @@ public interface AssessmentMapper {
 
     List<Assessment> selectAllAssessment(@Param("state") String state, @Param("name") String name, @Param("did") Integer did);
 
-    List<Assessment> selectMyAssessmentByDid(@Param("did") Integer did,@Param("state") String state,@Param("name") String name);
+    //List<Assessment> selectMyAssessmentByDid(@Param("did") Integer did,@Param("state") String state,@Param("name") String name);
+
+    List<Assessment> selectMyAssessment(@Param("did") Integer did, @Param("eid") Integer eid, @Param("state") String state, @Param("name") String name);
 }
