@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import store from './store'
 import {initMenu} from './utils/utils'
 import Employee from './components/emp/Employee.vue'
+import Welcome from './components/system/Welcome'
 
 Vue.use(Router)
 
@@ -28,7 +29,7 @@ const router = new Router({
             children: [
                 {
                     path: '',
-                    component: Employee
+                    component: Welcome
                 },
             ]
         },
