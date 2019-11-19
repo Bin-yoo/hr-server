@@ -32,6 +32,7 @@
                     <Button type="primary" style="margin-right: 5px" @click="startASS(row.id,index)" v-if="row.state == '未开始'">开始考核</Button>
                     <Button type="primary" style="margin-right: 5px" @click="overAss(row.id,index)" v-else-if="row.state == '已开始'">结束考核</Button>
                     <Button type="primary" style="margin-right: 5px" v-else disabled>考核结束</Button>
+                    <Button type="primary" style="margin-right: 5px" @click="examine(index)">审核</Button>
                     <Button type="primary" style="margin-right: 5px"  @click="beforeUpdate(index)">编辑</Button>
                     <Button type="error" @click="remove(row.id)">删除</Button>
                 </template>
@@ -74,22 +75,83 @@
             width=30%
             @on-visible-change="cancel">
             
-                <Form ref="assessment" :model="assessment" :rules="rules" :label-width="100">
-                    <Row>
-                        <FormItem label="考核名称"  prop="name">
-                            <Input v-model="assessment.name" placeholder="请输入"></Input>
+            <Form ref="assessment" :model="assessment" :rules="rules" :label-width="100">
+                <Row>
+                    <FormItem label="考核名称"  prop="name">
+                        <Input v-model="assessment.name" placeholder="请输入"></Input>
+                    </FormItem>
+                </Row>
+                <Row>
+                    <FormItem label="备注" prop="remark">
+                        <Input v-model="assessment.remark" type="textarea" placeholder="备注"></Input>
+                    </FormItem>
+                </Row>
+            </Form>
+            <div slot="footer">
+                <Button @click="handleReset('assessment')">重置</Button>
+                <Button type="primary" @click="update('assessment')">保存</Button>
+            </div>
+        </Modal>
+        <Modal
+            v-model="examineModal"
+            title="审核列表"
+            width=60%
+            @on-visible-change="cancel">
+            
+            <Row :gutter="6">
+                <Col span="5">
+                    <Input v-model="souExamineName" clearable placeholder="请输入考核名称"/>
+                </Col>
+                <Col span="1">
+                    <Button icon="ios-search" @click="examine" >搜索</Button>
+                </Col>
+            </Row>
+            <br>
+            <Table border ref="selection" :columns="examineColumns" :data="examineLists">
+                <template slot-scope="{ row, index }" slot="action">
+                    <Button type="primary" style="margin-right: 5px" @click="beforeExamine(index)" v-if="row.commit == '有提交'">审核</Button>
+                    <Button type="primary" style="margin-right: 5px" v-else disabled>未提交</Button>
+                </template>
+            </Table>
+            <br>
+            <Row type="flex" justify="center">
+                <Page :total="examineTotal" :page-size="examinePageSize" show-elevator show-total @on-change="examinePageChange"/>
+            </Row>
+            <div slot="footer">
+                <Button @click="examineModal = flase">返回</Button>
+            </div>
+        </Modal>
+        <Modal
+            v-model="examineingModal"
+            title="审核考核"
+            @on-visible-change="cancel">
+            
+            <Form :label-width="100" ref="beforeExamineAss" :model="beforeExamineAss" :rules="examineRules">
+                 <Row>
+                    <FormItem label="考核附件：">
+                        <a :href="beforeExamineAss.data"  target="_blank" download>{{beforeExamineAss.data|formatData}}</a>
+                    </FormItem>
+                </Row>
+                <Row>
+                    <FormItem label="提交说明：">
+                        {{beforeExamineAss.remark}}
+                    </FormItem>
+                </Row>
+                <Row>
+                    <Col span="12">
+                        <FormItem label="考核结果：" prop="result">
+                            <Select v-model="beforeExamineAss.result" clearable>
+                                <Option value="未通过">未通过</Option>
+                                <Option value="通过">已通过</Option>
+                                <Option value="打回修改">打回修改</Option>
+                            </Select>
                         </FormItem>
-                    </Row>
-                    <Row>
-                        <FormItem label="备注" prop="remark">
-                            <Input v-model="assessment.remark" type="textarea" placeholder="备注"></Input>
-                        </FormItem>
-                    </Row>
-                </Form>
-                <div slot="footer">
-                    <Button @click="handleReset('assessment')">重置</Button>
-                    <Button type="primary" @click="update('assessment')">保存</Button>
-                </div>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer">
+                <Button type="primary" @click="updateExamineAss('beforeExamineAss')">提交审核</Button>
+            </div>
         </Modal>
     </div>
 </template>
@@ -103,9 +165,17 @@
             return {
                 addModal: false,
                 updateModal: false,
+                examineModal: false,
+                examineingModal: false,
                 page:1,
                 total: 100,
                 limit: 10,
+                examinePage: 1,
+                examineTotal: 100,
+                examineLimit: 5,
+                examinePageSize: 5,
+                aid: '',
+                createDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
                 beginDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
                 endDate: moment().locale('zh-cn').format('YYYY-MM-DD HH:mm:ss'),
                 newAssessment: {
@@ -124,6 +194,15 @@
                     remarks: '',
                 },
                 dropDownList: [],
+                examineLists: [],
+                souExamineName: '',
+                examineAss:{},
+                beforeExamineAss:{
+                    id: '',
+                    data: '',
+                    remark: '',
+                    result: '',
+                },
                 assessments:[],
                 rules: {
                     name: [
@@ -134,6 +213,11 @@
                     ],
                     remark: [
                         {type: 'string', max: 50, message: '备注长度不能超过50个字符'}
+                    ]
+                },
+                examineRules: {
+                    result: [
+                        {required: true, message: '考核结果不能为空', trigger: 'change'}
                     ]
                 },
                 souFormItem: {
@@ -177,7 +261,31 @@
                     {
                         title: '操作',
                         slot: 'action',
-                        width: 280,
+                        width: 300,
+                        align: 'center'
+                    }
+                ],
+                examineColumns: [
+                    {
+                        title: '姓名',
+                        key: 'name'
+                    },
+                    {
+                        title: '部门',
+                        key: 'departmentName'
+                    },
+                    {
+                        title: '职位',
+                        key: 'positionName'
+                    },
+                    {
+                        title: '是否提交',
+                        key: 'commit'
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        width: 110,
                         align: 'center'
                     }
                 ],
@@ -190,6 +298,12 @@
             pageChange(index){
                 this.page = index;
             },
+            onExaminePageSizeChange(index){
+                this.examineLimit = index;
+            },
+            examinePageChange(index){
+                this.examinePage = index;
+            },
             addAssessment(name) {
                 var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
                 this.$refs[name].validate((valid) => {
@@ -200,6 +314,8 @@
                     if(valid) {
                         this.postRequest("/assessment/addAssesment",{
                             name: this.newAssessment.name,
+                            did: this.newAssessment.departmentId,
+                            createDate: this.createDate,
                             state: this.newAssessment.state,
                             remark: this.newAssessment.remark
                         }).then(resp=> {
@@ -231,6 +347,53 @@
                 }).then(resp=>{
                     this.assessments = resp.data.data.list;
                     this.total = resp.data.data.total;
+                })
+            },
+            examine(index) {
+                this.examineModal = true;
+                if(this.aid == null || this.aid == ''){
+                    this.aid = this.assessments[index].id;
+                }
+                this.getRequest("/assessment/"+ this.aid +"/empAssessment",{
+                    page: this.examinePage,
+                    limit: this.examineLimit,
+                    name: this.souExamineName,
+                }).then(resp=>{
+                    this.examineLists = resp.data.data.list;
+                    this.examineTotal = resp.data.data.total;
+                })
+            },
+            beforeExamine(index){
+                this.examineingModal = true;
+                this.getRequest("/assessment/empAssessment/" + this.examineLists[index].eaid).then(resp=>{
+                    console.log(resp)
+                    this.examineAss = resp.data.data;
+                    this.beforeExamineAss.id = this.examineAss.id;
+                    this.beforeExamineAss.data = this.examineAss.data;
+                    this.beforeExamineAss.remark = this.examineAss.remark;
+                    this.beforeExamineAss.result = this.examineAss.result;
+
+                })
+            },
+            updateExamineAss(name){
+                this.$refs[name].validate((valid) => {
+                    if(valid){
+                        this.postRequest("/empAssessment/updateEmployeeAssessment",{
+                            id: this.beforeExamineAss.id,
+                            result: this.beforeExamineAss.result,
+                            check: true,
+                        }).then(resp => {
+                            if(resp.data.error == false && resp.data.code == 200){
+                                this.getAssessment();
+                                this.$Message.success(resp.data.data);
+                                this.examineingModal = false;
+
+                                this.$refs[name].resetFields();
+                            } else {
+                                this.$Message.error(resp.data.message);
+                            }
+                        })
+                    }
                 })
             },
             startASS(id,index){
@@ -334,6 +497,7 @@
                 if(flag == false){
                     this.$refs['newAssessment'].resetFields();
                     this.$refs['assessment'].resetFields();
+                    this.$refs['beforeExamineAss'].resetFields();
                 }
             },
             handleReset (name) {
@@ -346,7 +510,26 @@
         },
         watch: {
             page: "getAssessment",
+            examinePage: "examine",
             limit: "getAssessment",
         },
+        filters: {
+            formatData:function(url){
+                var find = function(str,cha,num){
+                    var x=str.indexOf(cha);
+                    for(var i=0;i<num;i++){
+                        x=str.indexOf(cha,x+1);
+                    }
+                    return x;
+                }
+                if(url != '' && url != null){
+                    var index = find(url,'/',4);
+                    var varDataNmae = url.substring(index + 1);
+                    return varDataNmae;
+                } else {
+                    return '';
+                }
+            }
+        }
     }
 </script>
