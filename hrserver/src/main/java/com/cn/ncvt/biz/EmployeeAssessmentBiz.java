@@ -138,4 +138,13 @@ public class EmployeeAssessmentBiz {
             return ResultFactory.buildFailResult("获取失败");
         }
     }
+
+    public Result getEmpAssessmentFileByID(Integer id) {
+        EmployeeAssessment file =  employeeAssessmentMapper.selectByID(id);
+        if (file != null) {
+            return ResultFactory.buildSuccessResult(file);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
 }

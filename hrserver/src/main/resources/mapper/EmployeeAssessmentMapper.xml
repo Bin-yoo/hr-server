@@ -26,27 +26,16 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <resultMap id="selectByAIDResultMap" type="com.cn.ncvt.entity.Employee">
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="dname" property="departmentName" jdbcType="VARCHAR"/>
-        <result column="pname" property="positionName" jdbcType="VARCHAR"/>
-        <association property="employeeAssessment" javaType="EmployeeAssessment">
-            <id column="id" property="id" jdbcType="INTEGER"/>
-            <result column="data" property="data" jdbcType="VARCHAR"/>
-            <result column="remark" property="remark" jdbcType="VARCHAR"/>
-            <result column="result" property="result" jdbcType="CHAR"/>
-            <result column="isCheck" property="isCheck" jdbcType="INTEGER"/>
-        </association>
-    </resultMap>
-    <select id="selectByAID" resultMap="selectByAIDResultMap">
-        select e.name, d.name as dname, p.name as pname, ea.* from assessment a
+    <select id="selectByAID" resultType="Employee">
+        select e.name, d.name as departmentName, p.name as positionName, ea.id as eaid,
+        if((select aid from employee_assessment where eid=e.id and aid=a.id)=a.id,'有提交','无提交') as commit from assessment a
         LEFT JOIN employee e on e.departmentId = a.did
         LEFT JOIN department d on e.departmentId = d.id
         LEFT JOIN position p on e.positionId = p.id
-        LEFT JOIN employee_assessment ea on e.id = ea.eid
+        LEFT JOIN employee_assessment ea on e.id = ea.eid and ea.aid = a.id
         where a.id = #{aid}
         <if test="name != null and name != ''">
-            and e.name = #{name}
+            and e.name like '%${name}%'
         </if>
     </select>
     <delete id="deleteByID" parameterType="java.lang.Integer">

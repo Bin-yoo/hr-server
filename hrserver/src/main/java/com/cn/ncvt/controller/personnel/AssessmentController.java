@@ -66,7 +66,13 @@ public class AssessmentController {
 
     @GetMapping("/{aid}/empAssessment")
     @ApiOperation(value = "查看某考核项目的考核资料", notes = "这个是查看某考核任务下,所有员工提交的考核资料")
-    public Result employeeAssessmentFile(Integer page, Integer limit, @PathVariable("aid") Integer aid, String name){
+    public Result allEmployeeAssessmentFile(Integer page, Integer limit, @PathVariable("aid") Integer aid, String name){
         return employeeAssessmentBiz.getAssessmentFileByAID(page,limit,aid,name);
+    }
+
+    @GetMapping("/empAssessment/{id}")
+    @ApiOperation(value = "查看考核下某员工提交的考核资料", notes = "这个是查看某考核任务下某员工提交的考核资料")
+    public Result viewEmployeeAssessmentFile(@PathVariable("id") Integer id){
+        return employeeAssessmentBiz.getEmpAssessmentFileByID(id);
     }
 }
