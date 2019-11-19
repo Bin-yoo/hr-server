@@ -55,7 +55,8 @@ public class Employee {
 
     private Timestamp transferdate;
 
-    private EmployeeAssessment employeeAssessment;
+    private String commit;
+    private Integer eaid;
 
 
     public Integer getPositionId() {
@@ -322,11 +323,19 @@ public class Employee {
         this.transferdate = transferdate;
     }
 
-    public EmployeeAssessment getEmployeeAssessment() {
-        return employeeAssessment;
+    public String getCommit() {
+        return commit;
     }
 
-    public void setEmployeeAssessment(EmployeeAssessment employeeAssessment) {
-        this.employeeAssessment = employeeAssessment;
+    public void setCommit(String commit) {
+        this.commit = commit;
+    }
+
+    public Integer getEaid() {
+        return eaid;
+    }
+
+    public void setEaid(Integer eaid) {
+        this.eaid = eaid;
     }
 }
