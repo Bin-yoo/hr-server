@@ -101,12 +101,13 @@
                     {{updateMyAss.name}}
                 </FormItem>
                 <FormItem label="附件:">
+                    <a :href="updateMyAss.data"  target="_blank" download>{{updateMyAss.data|formatData}}</a>
                     <Upload
                         ref="upload"
                         :on-success="updateUploadSuccess"
                         name="picture"
                         action="http://111.230.141.100:8080/hrserver/empAssessment/data">
-                        <Button icon="ios-cloud-upload-outline">上传文件</Button>
+                        <Button icon="ios-cloud-upload-outline">上传新文件</Button>
                     </Upload>
                 </FormItem>
                 <FormItem label="说明:" prop="remark">
@@ -313,12 +314,8 @@
                 this.updateMyAssModal = true;
             },
             updateMyAssessment(name){
-                        console.log(name)
-
                 this.$refs[name].validate((valid) => {
-                    console.log(valid)
                     if(valid){
-                        console.log("sdfsdfsd")
                         this.postRequest("/empAssessment/updateEmployeeAssessment",{
                             id: this.updateMyAss.id,
                             data: this.updateMyAss.data,
@@ -352,7 +349,7 @@
             updateUploadSuccess(resp, file){
                 this.updateMyAss.data = resp.data;
                 this.$Message.success("文件上传成功");
-            }
+            },
         },
         mounted: function (){
             this.getPerEmp();
@@ -361,5 +358,23 @@
         watch: {
             departAssPage: "getDepartAss",
         },
+        filters: {
+            formatData:function(url){
+                var find = function(str,cha,num){
+                    var x=str.indexOf(cha);
+                    for(var i=0;i<num;i++){
+                        x=str.indexOf(cha,x+1);
+                    }
+                    return x;
+                }
+                if(url != '' && url != null){
+                    var index = find(url,'/',4);
+                    var varDataNmae = url.substring(index + 1);
+                    return varDataNmae;
+                } else {
+                    return '';
+                }
+            }
+        }
     }
 </script>
