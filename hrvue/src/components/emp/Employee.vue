@@ -1029,9 +1029,8 @@
                     this.total = resp.data.data.total;
                 })
             },
-            getEmpRp(){
-                var id = this.employees[this.index].id;
-                this.getRequest("/rp/empRp/" + id,{
+            getEmpRp(index){
+                this.getRequest("/rp/empRp/" + this.employees[index].id,{
                     page: this.rpPage,
                     limit: this.rpLimit,
                 }).then(resp=>{
@@ -1039,8 +1038,8 @@
                     this.rpTotal = resp.data.data.total;
                 })
             },
-            getDepartAss() {
-                this.getRequest("/empAssessment/myAssessment",{
+            getDepartAss(index) {
+                this.getRequest("/assessment/empAllAssessment/" + this.employees[index].id ,{
                     limit: this.departAssLimit,
                     page: this.departAssPage,
                 }).then(resp => {
@@ -1257,8 +1256,8 @@
             },
             show(index) {
                 this.showModal = true;
-                this.index = index;
-                this.getEmpRp();
+                this.getEmpRp(index);
+                this.getDepartAss(index);
             },
             cancel(flag){
                 if(flag == false){
@@ -1278,7 +1277,6 @@
         mounted: function (){
             this.getEmployeeList();
             this.getDropDownList();
-            this.getDepartAss();
         },
         watch: {
             page: "getEmployeeList",
