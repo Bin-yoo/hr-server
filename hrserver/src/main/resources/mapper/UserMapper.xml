@@ -7,4 +7,57 @@
 	    <select id="selectByUserName"  parameterType="string" resultType="User">
 			select * from user where username=#{0}
 	    </select>
+		<select id="selectByUserNameLimit"  parameterType="string" resultType="User">
+			select id, eid, name, phone, address, username, userface, enabled from user where username=#{0}
+	    </select>
+		<select id="selectAllFun"  resultType="User">
+			select id, name, phone, address, username, userface, enabled from user
+	    </select>
+
+        <resultMap id="BaseResultMap" type="User">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="VARCHAR"/>
+            <result column="address" property="address" jdbcType="VARCHAR"/>
+            <result column="username" property="username" jdbcType="VARCHAR"/>
+            <result column="userface" property="userface" jdbcType="VARCHAR"/>
+            <result column="remark" property="remark" jdbcType="VARCHAR"/>
+            <result column="enabled" property="enabled" jdbcType="BOOLEAN"/>
+            <collection property="roles" ofType="com.cn.ncvt.entity.Role" select="selectUserRoleByUID" column="id">
+            </collection>
+        </resultMap>
+		<select id="selectUserByCondition"  parameterType="string" resultMap="BaseResultMap">
+            select id, name, phone, address, username, userface, remark, enabled from user
+            <if test="name != null and name != '' " >
+                where name like '%${name}%'
+            </if>
+	    </select>
+        <resultMap id="collectionResultMap" type="Role">
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+        </resultMap>
+        <select id="selectUserRoleByUID"  parameterType="java.lang.Integer" resultMap="collectionResultMap">
+            select r.id, r.name, r.createDate from user_role ur, role r where ur.uid = #{id} and ur.rid = r.id
+        </select>
+
+        <select id="selectByID"  parameterType="java.lang.Integer" resultType="User">
+			select * from user where id = #{id,jdbcType=INTEGER}
+	    </select>
+        <select id="insertFun" statementType="CALLABLE" parameterType="User">
+          call insertUser(#{name,mode=IN,jdbcType=VARCHAR}, #{phone,mode=IN,jdbcType=VARCHAR},#{address,mode=IN,jdbcType=VARCHAR},#{username,mode=IN,jdbcType=VARCHAR}, #{password,mode=IN,jdbcType=VARCHAR}, #{salt,mode=IN,jdbcType=VARCHAR}, #{userface,mode=IN,jdbcType=VARCHAR}, #{remark,mode=IN,jdbcType=VARCHAR}, #{enabled,mode=IN,jdbcType=BOOLEAN}, #{id,mode=OUT,jdbcType=INTEGER});
+      </select>
+        <delete id="deleteFun" parameterType="java.lang.Integer" >
+            delete from user where id = #{id,jdbcType=INTEGER}
+      </delete>
+	<update id="updateByEnabled" parameterType="com.cn.ncvt.entity.User" >
+		update user set enabled = #{enabled,jdbcType=TINYINT} where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByID" parameterType="com.cn.ncvt.entity.User" >
+		update user set name = #{name,jdbcType=VARCHAR}, phone = #{phone,jdbcType=VARCHAR},
+		address = #{address,jdbcType=VARCHAR}, userface = #{userface,jdbcType=VARCHAR}, remark = #{remark,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+    <update id="updatePasswordByID" parameterType="com.cn.ncvt.entity.User" >
+		update user set password = #{password,jdbcType=VARCHAR},salt = #{salt,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+	</update>
 	</mapper>

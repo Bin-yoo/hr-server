@@ -3,10 +3,13 @@ package com.cn.ncvt.controller;
 import com.cn.ncvt.biz.EmployeeBiz;
 import com.cn.ncvt.entity.Employee;
 import com.cn.ncvt.result.Result;
+import com.cn.ncvt.result.ResultFactory;
+import com.cn.ncvt.util.UploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @version : V1.0
@@ -31,8 +34,8 @@ public class EmployeeController {
      */
     @GetMapping("/allEmp")
     @ApiOperation(value = "获取全部员工档案", notes = "page为当前页,limit为记录每页数量")
-    public Result allEmployeeFile(int page, int limit){
-        return employeeBiz.getAllEmployeeFile(page, limit);
+    public Result allEmployeeFile(Integer page, Integer limit,Integer departmentId,Integer positionId, Integer jobLevelId,String name){
+        return employeeBiz.getAllEmployeeFile(page, limit,departmentId,positionId,jobLevelId,name);
     }
 
     /**
@@ -66,5 +69,30 @@ public class EmployeeController {
     @ApiOperation(value = "删除员工资料", notes = "删除员工资料")
     public Result deleteByIdEmployeeFile(@PathVariable Integer id){
         return employeeBiz.deleteByIdEmployeeFile(id);
+    }
+
+    @GetMapping("/checkEmp/{id}")
+    @ApiOperation(value = "查看某个员工的资料", notes = "")
+    public Result selectByIdEmployeeFile(@PathVariable Integer id){
+        return employeeBiz.selectByIdEmployeeFile(id);
+    }
+
+    @GetMapping("/init")
+    @ApiOperation(value = "初始化各种下拉菜单", notes = "")
+    public Result beforeAddEmployeeFile(){
+        return employeeBiz.getAllDownMenu();
+    }
+
+    @GetMapping("/myfile")
+    @ApiOperation(value = "获取个人档案", notes = "")
+    public Result getMyFile(){
+        return employeeBiz.getMyFile();
+    }
+
+    @PostMapping("/picture")
+    @ApiOperation(value = "上传员工图片", notes = "")
+    public Result uploadUserFace(@RequestParam("picture") MultipartFile picture){
+        UploadUtil uploadUtil = new UploadUtil();
+        return ResultFactory.buildSuccessResult(uploadUtil.upload(picture, "emp"));
     }
 }

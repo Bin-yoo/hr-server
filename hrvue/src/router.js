@@ -5,7 +5,7 @@ import Home from './views/Home.vue'
 import store from './store'
 import {initMenu} from './utils/utils'
 import Employee from './components/emp/Employee.vue'
-import Welcome from './components/system/Welcome'
+import Welcome from './components/Welcome'
 
 Vue.use(Router)
 

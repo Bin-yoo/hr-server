@@ -1,5 +1,9 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
+
 /**
  * @version : V1.0
  * @ClassName: EmployeeSalary
@@ -9,24 +13,45 @@ package com.cn.ncvt.entity;
  **/
 public class EmployeeSalary {
 
-    private int id;
-    private int eid;
+    private Integer id;
+    private Integer eid;
     private double baseSalary;
     private double meritSalary;
+    private Employee employee;
+    private String remark;
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    private Timestamp date = new Timestamp(((new java.util.Date()).getTime()));
 
-    public int getId() {
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getEid() {
+    public Integer getEid() {
         return eid;
     }
 
-    public void setEid(int eid) {
+    public void setEid(Integer eid) {
         this.eid = eid;
     }
 
@@ -44,5 +69,13 @@ public class EmployeeSalary {
 
     public void setMeritSalary(double meritSalary) {
         this.meritSalary = meritSalary;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

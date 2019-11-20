@@ -1,6 +1,8 @@
 package com.cn.ncvt.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.List;
 
 /**
@@ -10,26 +12,38 @@ import java.util.List;
  * @Auther: Bin
  * @Date: 2019/9/22 16:55
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
 public class User {
 
-    private int id;
+    private Integer id;
+    private Integer eid;
     private String name;
     private String phone;
     private String address;
     private String username;
     private String password;
+    private String oldPassword;
     private String salt;
     private String userface;
-    private boolean enabled;
+    private boolean enabled = true;
     private String remark;
     private List<Role> roles;
+    private int[] rolesKey;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getEid() {
+        return eid;
+    }
+
+    public void setEid(Integer eid) {
+        this.eid = eid;
     }
 
     public String getName() {
@@ -110,5 +124,21 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public int[] getRolesKey() {
+        return rolesKey;
+    }
+
+    public void setRolesKey(int[] rolesKey) {
+        this.rolesKey = rolesKey;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 }

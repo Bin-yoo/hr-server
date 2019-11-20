@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -11,27 +13,37 @@ import java.sql.Timestamp;
  **/
 public class Rp {
 
-    private int id;
-    private int eid;
+    private Integer id;
+    private Integer eid;
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp date;
     private String type;
     private String reason;
-    private int point;
+    private Integer point;
     private String remark;
+    private Employee employee;
 
-    public int getId() {
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getEid() {
+    public Integer getEid() {
         return eid;
     }
 
-    public void setEid(int eid) {
+    public void setEid(Integer eid) {
         this.eid = eid;
     }
 
@@ -59,11 +71,11 @@ public class Rp {
         this.reason = reason;
     }
 
-    public int getPoint() {
+    public Integer getPoint() {
         return point;
     }
 
-    public void setPoint(int point) {
+    public void setPoint(Integer point) {
         this.point = point;
     }
 

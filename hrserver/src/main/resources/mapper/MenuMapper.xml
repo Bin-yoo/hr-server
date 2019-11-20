@@ -19,7 +19,7 @@
         <collection property="roles" ofType="com.cn.ncvt.entity.Role">
             <id column="rid" property="id"/>
             <result column="rname" property="name"/>
-            <result column="rnamezh" property="nameZh"/>
+                <result column="rnamezh" property="nameZh"/>
         </collection>
         <collection property="children" ofType="com.cn.ncvt.entity.Menu">
             <id column="id2" property="id"/>

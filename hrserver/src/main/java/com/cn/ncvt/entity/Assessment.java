@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -11,20 +13,44 @@ import java.sql.Timestamp;
  **/
 public class Assessment {
 
-    private int id;
+    private Integer id;
+    private Integer did;
     private String name;
     private String remarks;
     private String state;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp beginDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
+    private String departmentName;
 
-    public int getId() {
+    private boolean commit;
+
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getDid() {
+        return did;
+    }
+
+    public void setDid(Integer did) {
+        this.did = did;
     }
 
     public String getName() {
@@ -73,5 +99,13 @@ public class Assessment {
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    public boolean isCommit() {
+        return commit;
+    }
+
+    public void setCommit(boolean commit) {
+        this.commit = commit;
     }
 }

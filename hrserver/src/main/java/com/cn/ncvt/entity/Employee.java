@@ -1,6 +1,7 @@
 package com.cn.ncvt.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.sql.Timestamp;
 
@@ -11,17 +12,17 @@ import java.sql.Timestamp;
  * @Auther: Bin
  * @Date: 2019/10/21 15:52
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 public class Employee {
-
-    private int id;
+    private Integer id;
     private Long workId;
     private String name;
     private String sex;
-    private int nationId;
+    private Integer nationId;
     private String nationName;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp birthday;
-    private int politiclId;
+    private Integer politiclId;
     private String politiclName;
     private String wedlock;
     private String nativePlace;
@@ -29,30 +30,56 @@ public class Employee {
     private String email;
     private String phone;
     private String address;
-    private int departmentId;
+    private Integer departmentId;
     private String departmentName;
-    private int jobLevelId;
+    private Integer positionId;
+    private String positionName;
+    private Integer jobLevelId;
     private String jobLevelName;
     private String titopDegree;
     private String specialty;
     private String school;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp beginDate;
     private String workState;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp conversionTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp quitTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp beginContract;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Timestamp endContract;
+    private String picture;
+    private double baseSalary;
 
-    public int getId() {
+    private Timestamp transferdate;
+
+    private String commit;
+    private Integer eaid;
+
+
+    public Integer getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(Integer positionId) {
+        this.positionId = positionId;
+    }
+
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -80,11 +107,11 @@ public class Employee {
         this.sex = sex;
     }
 
-    public int getNationId() {
+    public Integer getNationId() {
         return nationId;
     }
 
-    public void setNationId(int nationId) {
+    public void setNationId(Integer nationId) {
         this.nationId = nationId;
     }
 
@@ -104,11 +131,11 @@ public class Employee {
         this.birthday = birthday;
     }
 
-    public int getPoliticlId() {
+    public Integer getPoliticlId() {
         return politiclId;
     }
 
-    public void setPoliticlId(int politiclId) {
+    public void setPoliticlId(Integer politiclId) {
         this.politiclId = politiclId;
     }
 
@@ -168,11 +195,11 @@ public class Employee {
         this.address = address;
     }
 
-    public int getDepartmentId() {
+    public Integer getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(int departmentId) {
+    public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
 
@@ -184,11 +211,11 @@ public class Employee {
         this.departmentName = departmentName;
     }
 
-    public int getJobLevelId() {
+    public Integer getJobLevelId() {
         return jobLevelId;
     }
 
-    public void setJobLevelId(int jobLevelId) {
+    public void setJobLevelId(Integer jobLevelId) {
         this.jobLevelId = jobLevelId;
     }
 
@@ -270,5 +297,45 @@ public class Employee {
 
     public void setEndContract(Timestamp endContract) {
         this.endContract = endContract;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public double getBaseSalary() {
+        return baseSalary;
+    }
+
+    public void setBaseSalary(double baseSalary) {
+        this.baseSalary = baseSalary;
+    }
+
+    public Timestamp getTransferdate() {
+        return transferdate;
+    }
+
+    public void setTransferdate(Timestamp transferdate) {
+        this.transferdate = transferdate;
+    }
+
+    public String getCommit() {
+        return commit;
+    }
+
+    public void setCommit(String commit) {
+        this.commit = commit;
+    }
+
+    public Integer getEaid() {
+        return eaid;
+    }
+
+    public void setEaid(Integer eaid) {
+        this.eaid = eaid;
     }
 }
