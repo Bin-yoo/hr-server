@@ -50,7 +50,8 @@
                     </Row>
                 </Col>
                 <Col span="2">
-                    <img :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
+                    <img src="../../assets/avatar.png" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-if="perEmpList.picture=='' || perEmpList.picture==null ? true : false">
+                            <img :src="perEmpList.picture" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-else>
                 </Col>
             </Row>
             <Row>
@@ -174,9 +175,14 @@
                         </Row>
                     </TabPane>
                     <TabPane label="考核资料">
-                        <Table></Table>
-                        <Row type="flex" justify="center" :style="{margin: '10px 0 0 0'}">
-                            <Col><Page :total="1" show-elevator /></Col>
+                        <Table border ref="selection" :columns="departAssColumns" :data="departAssLists">
+                            <template slot-scope="{ row }" slot="commit">
+                                <p v-if="row.commit">已提交</p>
+                                <p v-else>未提交</p>
+                            </template>
+                        </Table>
+                        <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
+                            <Page :total="departAssTotal" :page-size="departAssPageSize" show-elevator show-total @on-change="departAssPageChange"/>            
                         </Row>
                     </TabPane>
                 </Tabs>
@@ -246,27 +252,21 @@
                     </Col>
                     <Col span="4" offset="2">
                         <Row>
-                            <img  :style="{border:'0.2px solid black',width:'128px',height:'166px'}">
+                            <img src="../../assets/avatar.png" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-if="perEmpUpdateList.picture=='' || perEmpUpdateList.picture==null ? true : false">
+                            <img :src="perEmpUpdateList.picture" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-else>
                         </Row>
                         <Row>
-
-                                <!-- 上传组件相关方法
-                                :default-file-list="defaultList"
-                                :on-success="handleSuccess"
-                                :on-format-error="handleFormatError"
-                                :on-exceeded-size="handleMaxSize"
-                                :before-upload="handleBeforeUpload" -->
-
                             <Upload
                                 ref="upload"
+                                name='picture'
                                 :show-upload-list="false"
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
+                                :on-success="uploadSuccess"
                                 multiple
                                 type="drag"
-                                action="//jsonplaceholder.typicode.com/posts/"
+                                action="http://111.230.141.100:8080/hrserver/employee/picture"
                                 style="display: inline-block;width:128px;">
-
                                 <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传图片</Button>
                             </Upload>
                         </Row>
@@ -359,9 +359,14 @@
                 rpTotal: 100,
                 rpLimit: 4,
                 rpPageSize: 5,
+                departAssPage: 1,
+                departAssTotal: 100,
+                departAssLimit: 5,
+                departAssPageSize: 5,
                 birthday: '',
                 dropDownList: [],
                 rpByIdLists: [],
+                departAssLists: [],
                 perEmpList: {},
                 perEmpUpdateList:{
                     id: '',
@@ -432,6 +437,36 @@
                         key: 'remark'
                     },
                 ],
+                departAssColumns: [
+                    {
+                        title: '考核名称',
+                        key: 'name'
+                    },
+                    {
+                        title: '状态',
+                        key: 'state'
+                    },
+                    {
+                        title: '创建时间',
+                        key: 'createDate'
+                    },
+                    {
+                        title: '开始时间',
+                        key: 'beginDate'
+                    },
+                    {
+                        title: '结束时间',
+                        key: 'endDate'
+                    },
+                    {
+                        title: '是否提交',
+                        slot: 'commit'
+                    },
+                    {
+                        title: '备注',
+                        key: 'remarks'
+                    },
+                ],
                 empRpLists: [],
                 rewPunData: [],
                 user: this.$store.state.user,
@@ -493,6 +528,9 @@
             rpPageChange(index){
                 this.rpPage = index;
             },
+            departAssPageChange(index){
+                this.departAssPage = index;
+            },
             getDropDownList(){
                 this.getRequest("/employee/init").then(resp=> {
                     this.dropDownList = resp.data.data;
@@ -511,6 +549,15 @@
                 }).then(resp=>{
                     this.empRpLists = resp.data.data.list;
                     this.rpTotal = resp.data.data.total;
+                })
+            },
+            getDepartAss() {
+                this.getRequest("/empAssessment/myAssessment",{
+                    limit: this.departAssLimit,
+                    page: this.departAssPage,
+                }).then(resp => {
+                    this.departAssLists = resp.data.data.list;
+                    this.departAssTotal = resp.data.data.total;
                 })
             },
             beforeUpdate(){
@@ -630,14 +677,19 @@
                     this.$refs['password'].resetFields();
                 }
             },
+            uploadSuccess(resp, file){
+                this.perEmpUpdateList.picture = resp.data;
+            }
         },
         mounted: function (){
             this.getDropDownList();
             this.getPerEmp();
             this.getEmpRp();
+            this.getDepartAss();
         },
         watch: {
             rpPage: "getEmpRp",
+            departAssPage: "getDepartAss",
         },
     }
 </script>
