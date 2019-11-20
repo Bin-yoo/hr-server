@@ -75,4 +75,10 @@ public class AssessmentController {
     public Result viewEmployeeAssessmentFile(@PathVariable("id") Integer id){
         return employeeAssessmentBiz.getEmpAssessmentFileByID(id);
     }
+
+    @GetMapping("/empAllAssessment/{eid}")
+    @ApiOperation(value = "查看某员工的考核", notes = "")
+    public Result viewEmployeeAllAssessment(Integer page, Integer limit, @PathVariable("eid") Integer eid){
+        return employeeAssessmentBiz.getEmpAllAssessment(page, limit, eid);
+    }
 }

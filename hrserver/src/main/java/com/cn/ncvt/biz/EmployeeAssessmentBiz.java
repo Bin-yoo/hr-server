@@ -147,4 +147,27 @@ public class EmployeeAssessmentBiz {
             return ResultFactory.buildFailResult("获取失败");
         }
     }
+
+    public Result getEmpAllAssessment(Integer page, Integer limit, Integer eid) {
+        Employee employee = employeeMapper.selectByIdFun(eid);
+
+        PageHelper.startPage(page, limit);
+        List<Assessment> fileList = assessmentMapper.selectMyAssessment(employee.getDepartmentId(),eid, null, null);
+
+        if (fileList != null){
+            //用PageInfo对结果进行包装,获取分页信息
+            PageInfo pageInfo = new PageInfo(fileList);
+
+            //包装map返回前端
+            Map map = new HashMap();
+            map.put("total", pageInfo.getTotal());
+            map.put("totalPage" , pageInfo.getPages());
+            map.put("page" , pageInfo.getPageNum());
+            map.put("list", fileList);
+
+            return ResultFactory.buildSuccessResult(map);
+        } else {
+            return ResultFactory.buildFailResult("获取失败");
+        }
+    }
 }
