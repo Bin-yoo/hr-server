@@ -1,5 +1,9 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.List;
+
 /**
  * @version : V1.0
  * @ClassName: Department
@@ -7,19 +11,44 @@ package com.cn.ncvt.entity;
  * @Auther: Bin
  * @Date: 2019/10/21 15:50
  **/
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
+
 public class Department {
 
-    private int id;
+    private Integer id;
+    private Integer depNum;
+    private Integer orderNum;
     private String name;
-    private int parentId;
+    private Integer parentId;
     private String depPath;
+    private List<Department> children;
 
-    public int getId() {
+    private String title;
+    private String label;
+    private boolean expand = true;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getDepNum() {
+        return depNum;
+    }
+
+    public void setDepNum(Integer depNum) {
+        this.depNum = depNum;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
     }
 
     public String getName() {
@@ -30,11 +59,11 @@ public class Department {
         this.name = name;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
@@ -44,5 +73,37 @@ public class Department {
 
     public void setDepPath(String depPath) {
         this.depPath = depPath;
+    }
+
+    public List<Department> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Department> children) {
+        this.children = children;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public boolean isExpand() {
+        return expand;
+    }
+
+    public void setExpand(boolean expand) {
+        this.expand = expand;
     }
 }

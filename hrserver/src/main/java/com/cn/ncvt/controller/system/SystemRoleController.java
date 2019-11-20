@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/system/role")
-@Api(tags = "系统设置")
+@Api(tags = "角色管理")
 public class SystemRoleController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class SystemRoleController {
     MenuRoleBiz menuRoleBiz;
 
     @GetMapping("/roles")
-    @ApiOperation(value = "角色列表", notes = "返回全部角色列表,page为当前页,limit为记录每页数量")
+    @ApiOperation(value = "角色列表", notes = "返回全部角色列表,page为当前页,limit为记录每页数量,name为查询条件")
     public Result allRoles(Integer page, Integer limit, String name) {
         return roleBiz.roles(page, limit, name);
     }

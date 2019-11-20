@@ -107,8 +107,8 @@
                     </Col>
                     <Col span="4" offset="2">
                         <Row>
-                            <img src="../../assets/avatar.png" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-if="newEmployee.picture=='' || newEmployee.picture==null ? true : false">
-                            <img :src="newEmployee.picture" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-else>
+                            <img src="../../assets/avatar.png" :style="{width:'128px',height:'166px'}" v-if="newEmployee.picture=='' || newEmployee.picture==null ? true : false">
+                            <img :src="newEmployee.picture" :style="{width:'128px',height:'166px'}" v-else>
                         </Row>
                         <Row>
                             <Upload
@@ -307,8 +307,8 @@
                     </Col>
                     <Col span="4" offset="2">
                         <Row>
-                            <img src="../../assets/avatar.png" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-if="employee.picture=='' || employee.picture==null ? true : false">
-                            <img :src="employee.picture" :style="{border:'0.2px solid black',width:'128px',height:'166px'}" v-else>
+                            <img src="../../assets/avatar.png" :style="{width:'128px',height:'166px'}" v-if="employee.picture=='' || employee.picture==null ? true : false">
+                            <img :src="employee.picture" :style="{width:'128px',height:'166px'}" v-else>
                         </Row>
                         <Row>
                             <Upload
@@ -494,7 +494,7 @@
                         </Row>
                     </Col>
                     <Col span="5">
-                        <img :src="employees[index].picture" :style="{border:'0.2px solid black',width:'120px',height:'150px',margin:'0 0 0 20px'}">
+                        <img :src="employees[index].picture" :style="{width:'120px',height:'150px',margin:'0 0 0 20px'}">
                     </Col>
                 </Row>
                 <Row>

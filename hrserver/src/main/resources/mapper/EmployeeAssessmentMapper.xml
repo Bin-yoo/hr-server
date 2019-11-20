@@ -1,68 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cn.ncvt.mapper.EmployeeAssessmentMapper" >
-  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeAssessment" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="eId" property="eid" jdbcType="INTEGER" />
-    <result column="aId" property="aid" jdbcType="INTEGER" />
-    <result column="date" property="date" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="result" property="result" jdbcType="CHAR" />
-    <result column="isCheck" property="ischeck" jdbcType="INTEGER" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, eId, aId, date, remark, result, isCheck
+<mapper namespace="com.cn.ncvt.mapper.EmployeeAssessmentMapper">
+    <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.EmployeeAssessment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="eid" property="eid" jdbcType="INTEGER"/>
+        <result column="aid" property="aid" jdbcType="INTEGER"/>
+        <result column="data" property="data" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="result" property="result" jdbcType="CHAR"/>
+        <result column="isCheck" property="isCheck" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, eid, aid, data, remark, result, isCheck
   </sql>
-  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from employee_assessment
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByID" parameterType="java.lang.Integer" >
+    <select id="selectAllAssessmentByEid" parameterType="Integer" resultType="EmployeeAssessment">
+        SELECT * from employee_assessment where aid=#{aid}
+    </select>
+    <select id="selectByEIDAndAID" resultType="EmployeeAssessment">
+        SELECT ea.*,a.name from employee_assessment ea, assessment a where ea.aid = a.id and aid=#{aid} and  eid=#{eid}
+    </select>
+    <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from employee_assessment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByAID" resultType="Employee">
+        select e.name, d.name as departmentName, p.name as positionName, ea.id as eaid,
+        if((select aid from employee_assessment where eid=e.id and aid=a.id)=a.id,'有提交','无提交') as commit from assessment a
+        LEFT JOIN employee e on e.departmentId = a.did
+        LEFT JOIN department d on e.departmentId = d.id
+        LEFT JOIN position p on e.positionId = p.id
+        LEFT JOIN employee_assessment ea on e.id = ea.eid and ea.aid = a.id
+        where a.id = #{aid}
+        <if test="name != null and name != ''">
+            and e.name like '%${name}%'
+        </if>
+    </select>
+    <delete id="deleteByID" parameterType="java.lang.Integer">
     delete from employee_assessment
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.cn.ncvt.entity.EmployeeAssessment" >
-    insert into employee_assessment (id, eId, aId, 
-      date, remark, result, 
+    <insert id="insert" parameterType="employeeAssessment">
+    insert into employee_assessment (id, eid, aid,
+      data, remark, result,
       isCheck)
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, 
-      #{date,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{result,jdbcType=CHAR}, 
-      #{ischeck,jdbcType=INTEGER})
+    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER},
+      #{data,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{result,jdbcType=CHAR},
+      #{isCheck,jdbcType=INTEGER})
   </insert>
-  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.EmployeeAssessment" >
+    <update id="updateByIDSelective" parameterType="employeeAssessment">
+        update employee_assessment
+        <set>
+            <if test="eid != null and eid != ''">
+                eid = #{eid,jdbcType=INTEGER},
+            </if>
+            <if test="aid != null and aid != ''">
+                aid = #{aid,jdbcType=INTEGER},
+            </if>
+            <if test="data != null and data != ''">
+                data = #{data,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="result != null and result != ''">
+                result = #{result,jdbcType=CHAR},
+            </if>
+            <if test="isCheck != null and isCheck != ''">
+                isCheck = #{isCheck,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByID" parameterType="employeeAssessment">
     update employee_assessment
-    <set >
-      <if test="eid != null" >
-        eId = #{eid,jdbcType=INTEGER},
-      </if>
-      <if test="aid != null" >
-        aId = #{aid,jdbcType=INTEGER},
-      </if>
-      <if test="date != null" >
-        date = #{date,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="result != null" >
-        result = #{result,jdbcType=CHAR},
-      </if>
-      <if test="ischeck != null" >
-        isCheck = #{ischeck,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByID" parameterType="com.cn.ncvt.entity.EmployeeAssessment" >
-    update employee_assessment
-    set eId = #{eid,jdbcType=INTEGER},
-      aId = #{aid,jdbcType=INTEGER},
-      date = #{date,jdbcType=VARCHAR},
+    set eid = #{eid,jdbcType=INTEGER},
+      aid = #{aid,jdbcType=INTEGER},
+      data = #{data,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       result = #{result,jdbcType=CHAR},
-      isCheck = #{ischeck,jdbcType=INTEGER}
+      isCheck = #{isCheck,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

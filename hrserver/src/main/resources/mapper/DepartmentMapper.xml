@@ -1,51 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.cn.ncvt.mapper.DepartmentMapper" >
-  <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.Department" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="parentId" property="parentid" jdbcType="INTEGER" />
-    <result column="depPath" property="deppath" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, name, parentId, depPath
-  </sql>
-  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from department
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByID" parameterType="java.lang.Integer" >
-    delete from department
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.cn.ncvt.entity.Department" >
-    insert into department (id, name, parentId,
+<mapper namespace="com.cn.ncvt.mapper.DepartmentMapper">
+    <resultMap id="BaseResultMap" type="com.cn.ncvt.entity.Department">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="depNum" property="depNum" jdbcType="INTEGER"/>
+        <result column="orderNum" property="orderNum" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+        <result column="depPath" property="depPath" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id, depNum, orderNum, name, parentId, depPath
+    </sql>
+    <resultMap id="DepTreeResultMap" type="com.cn.ncvt.entity.Department">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="parentId" property="parentId"/>
+        <result column="name" property="title"/>
+        <result column="name" property="label"/>
+        <collection property="children" ofType="com.cn.ncvt.entity.Department" select="selectByPID" column="id">
+        </collection>
+    </resultMap>
+    <select id="selectByPID" resultMap="DepTreeResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from department
+        where parentId = #{pid,jdbcType=INTEGER} order by orderNum
+    </select>
+    <select id="selectByDepNum" resultType="Department" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from department
+        where depNum = #{depNum,jdbcType=INTEGER}
+    </select>
+    <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from department
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByID" parameterType="java.lang.Integer">
+      delete from department where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.cn.ncvt.entity.Department">
+    insert into department (id, depNum, orderNum, name, parentId,
       depPath)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parentid,jdbcType=INTEGER},
-      #{deppath,jdbcType=VARCHAR})
+    values (#{id,jdbcType=INTEGER}, #{depNum,jdbcType=INTEGER}, #{orderNum,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER},
+      #{depPath,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.Department" >
-    update department
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="parentid != null" >
-        parentId = #{parentid,jdbcType=INTEGER},
-      </if>
-      <if test="deppath != null" >
-        depPath = #{deppath,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByID" parameterType="com.cn.ncvt.entity.Department" >
-    update department
-    set name = #{name,jdbcType=VARCHAR},
-      parentId = #{parentid,jdbcType=INTEGER},
-      depPath = #{deppath,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.Department">
+        update department
+        <set>
+            <if test="depNum != null">
+                depNum = #{depNum,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                orderNum = #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parentId = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="depPath != null">
+                depPath = #{depPath,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

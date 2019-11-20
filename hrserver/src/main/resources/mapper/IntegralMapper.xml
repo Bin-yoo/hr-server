@@ -5,42 +5,30 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="eid" property="eid" jdbcType="INTEGER" />
     <result column="integral" property="integral" jdbcType="INTEGER" />
+    <association property="employee" javaType="Employee">
+
+      <result column="name" property="name"/>
+      <result column="workId" property="workId"/>
+      <result column="departmentName" property="departmentName"/>
+      <result column="positionName" property="positionName"/>
+      <result column="jobLevelName" property="jobLevelName"/>
+    </association>
   </resultMap>
   <sql id="Base_Column_List" >
     id, eid, integral
   </sql>
-  <select id="selectByID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from integral
-    where id = #{id,jdbcType=INTEGER}
+  <select id="selectAllIntegerFile" parameterType="string" resultMap="BaseResultMap" >
+    select i.id,i.eid,e.name,e.workId,d.name as departmentName,p.name as positionName,j.name as jobLevelName,i.integral from employee e,position p,department d,job_level j,integral i
+    where e.id=i.eid and p.id=e.positionId and d.id=e.departmentId and j.id=e.jobLevelId
+    <if test="name != null and name != '' " >
+      and e.name like '%${name}%'
+    </if>
+    <if test="departmentId != null and departmentId != '' " >
+      and e.departmentId=#{departmentId}
+    </if>
+    <if test="positionId != null and positionId != '' " >
+      and e.positionId=#{positionId}
+    </if>
   </select>
-  <delete id="deleteByID" parameterType="java.lang.Integer" >
-    delete from integral
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.cn.ncvt.entity.Integral" >
-    insert into integral (id, eid, integral
-      )
-    values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{integral,jdbcType=INTEGER}
-      )
-  </insert>
-  <update id="updateByIDSelective" parameterType="com.cn.ncvt.entity.Integral" >
-    update integral
-    <set >
-      <if test="eid != null" >
-        eid = #{eid,jdbcType=INTEGER},
-      </if>
-      <if test="integral != null" >
-        integral = #{integral,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByID" parameterType="com.cn.ncvt.entity.Integral" >
-    update integral
-    set eid = #{eid,jdbcType=INTEGER},
-      integral = #{integral,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+
 </mapper>

@@ -1,5 +1,9 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
+
 /**
  * @version : V1.0
  * @ClassName: Position
@@ -9,14 +13,17 @@ package com.cn.ncvt.entity;
  **/
 public class Position {
 
-    private int id;
+    private Integer id;
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
+    private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
+    private String remark;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -28,4 +35,19 @@ public class Position {
         this.name = name;
     }
 
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

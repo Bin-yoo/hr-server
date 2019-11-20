@@ -1,5 +1,7 @@
 package com.cn.ncvt.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.sql.Timestamp;
 
 /**
@@ -9,46 +11,49 @@ import java.sql.Timestamp;
  * @Auther: Bin
  * @Date: 2019/10/21 16:19
  **/
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class EmployeeAssessment {
 
-    private int id;
-    private int eId;
-    private int aId;
-    private Timestamp date;
+    private Integer id;
+    private Integer eid;
+    private Integer aid;
+    private String data;
     private String remark;
     private String result;
     private Boolean isCheck;
 
-    public int getId() {
+    private String name;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int geteId() {
-        return eId;
+    public Integer getEid() {
+        return eid;
     }
 
-    public void seteId(int eId) {
-        this.eId = eId;
+    public void setEid(Integer eid) {
+        this.eid = eid;
     }
 
-    public int getaId() {
-        return aId;
+    public Integer getAid() {
+        return aid;
     }
 
-    public void setaId(int aId) {
-        this.aId = aId;
+    public void setAid(Integer aid) {
+        this.aid = aid;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public String getData() {
+        return data;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setData(String data) {
+        this.data = data;
     }
 
     public String getRemark() {
@@ -73,5 +78,13 @@ public class EmployeeAssessment {
 
     public void setCheck(Boolean check) {
         isCheck = check;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
