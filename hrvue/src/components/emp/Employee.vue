@@ -609,9 +609,14 @@
                             </Row>
                         </TabPane>
                         <TabPane label="考核资料">
-                            <Table :columns="assColumns" :data="assData"></Table>
-                            <Row type="flex" justify="center" :style="{margin: '10px 0 0 0'}">
-                                <Col><Page :total="1" show-elevator /></Col>
+                            <Table border ref="selection" :columns="departAssColumns" :data="departAssLists">
+                            <template slot-scope="{ row }" slot="commit">
+                                <p v-if="row.commit">已提交</p>
+                                <p v-else>未提交</p>
+                            </template>
+                            </Table>
+                            <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
+                                <Page :total="departAssTotal" :page-size="departAssPageSize" show-elevator show-total @on-change="departAssPageChange"/>            
                             </Row>
                         </TabPane>
                     </Tabs>
@@ -640,10 +645,15 @@
                 rpTotal: 100,
                 rpLimit: 3,
                 rpPageSize: 3,
+                departAssPage: 1,
+                departAssTotal: 100,
+                departAssLimit: 3,
+                departAssPageSize: 3,
                 loading: false,
                 index: 1,
                 empRpLists: [],
                 dropDownList: [],
+                departAssLists: [],
                 department:{
                     id: null,
                     name: '',
@@ -898,13 +908,22 @@
                         key: 'remark'
                     },
                 ],
-                rewPunData: [
+                departAssColumns: [
                     {
-                        date: "2019年10月21日",
-                        type: "惩罚",
-                        grade: "-1",
-                        reason: "迟到",
-                        remark: "迟到",
+                        title: '考核名称',
+                        key: 'name'
+                    },
+                    {
+                        title: '状态',
+                        key: 'state'
+                    },
+                    {
+                        title: '是否提交',
+                        slot: 'commit'
+                    },
+                    {
+                        title: '备注',
+                        key: 'remarks'
                     },
                 ],
                 assColumns: [
@@ -983,6 +1002,9 @@
             pageChange(index){
                 this.page = index;
             },
+            departAssPageChange(index){
+                this.departAssPage = index;
+            },
             onRpPageSizeChange(index){
                 this.rpLimit = index;
             },
@@ -1015,6 +1037,15 @@
                 }).then(resp=>{
                     this.empRpLists = resp.data.data.list;
                     this.rpTotal = resp.data.data.total;
+                })
+            },
+            getDepartAss() {
+                this.getRequest("/empAssessment/myAssessment",{
+                    limit: this.departAssLimit,
+                    page: this.departAssPage,
+                }).then(resp => {
+                    this.departAssLists = resp.data.data.list;
+                    this.departAssTotal = resp.data.data.total;
                 })
             },
             handleReset (name) {
@@ -1247,11 +1278,13 @@
         mounted: function (){
             this.getEmployeeList();
             this.getDropDownList();
+            this.getDepartAss();
         },
         watch: {
             page: "getEmployeeList",
             limit: "getEmployeeList",
             rpPage: "getEmpRp",
+            departAssPage: "getDepartAss",
         },
     }
 </script>
