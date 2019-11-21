@@ -148,5 +148,8 @@
       from employee e,department d,position p,nation n,political_status ps,job_level j
       where e.id=#{id} and e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id and e.nationId=n.id
   </select>
+    <select id="selectByWorkIdFun" parameterType="Integer" resultType="Employee">
+      select * from employee where workId = #{workId}
+  </select>
 	</mapper>
 

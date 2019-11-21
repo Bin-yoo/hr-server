@@ -140,4 +140,13 @@ public class EmployeeBiz {
             return ResultFactory.buildFailResult("获取失败");
         }
     }
+
+    public Result checkWorkID(Integer workId) {
+        Employee employee = employeeMapper.selectByWorkIdFun(workId);
+        if (employee != null){
+            return ResultFactory.buildFailResult("该工号已存在");
+        } else {
+            return ResultFactory.buildSuccessResult("工号未重复");
+        }
+    }
 }
