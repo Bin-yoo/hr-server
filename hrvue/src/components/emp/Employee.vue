@@ -798,7 +798,7 @@
                         {message: '基本工资只能用数字', pattern:/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/}
                     ],
                     workId: [
-                        {required: true, message: '工号不能为空', trigger: 'blur'},
+                        {required: true, validator: this.validExit, trigger: 'blur'},
                         {message: '工号只能用纯数字', pattern: /^[0-9]*$/}
                     ],
                 },
@@ -1278,7 +1278,20 @@
             },
             uploadSuccess(resp, file){
                 this.employee.picture = resp.data;
-            }
+            },
+            validExit(rule, value, callback){
+                if(value == null || value == ''){
+                    return callback(new Error("工号不能为空"));
+                }
+                this.getRequest("/employee/checkworkid",{
+                    workId: value
+                }).then(resp=>{
+                    if(resp.data.code == 400){
+                        return callback(new Error(resp.data.message));
+                    }
+                    callback();
+                })
+            },
         },
         mounted: function (){
             this.getEmployeeList();

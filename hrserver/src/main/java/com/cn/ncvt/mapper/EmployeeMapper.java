@@ -27,4 +27,6 @@ public interface EmployeeMapper {
     Employee selectByIdFun(Integer id);
 
     List<Employee> selectAllEmployee(@Param("departmentId") Integer departmentId,@Param("positionId") Integer positionId,@Param("jobLevelId")  Integer jobLevelId,@Param("name")String name);
+
+    Employee selectByWorkIdFun(@Param("workId") Integer workId);
 }

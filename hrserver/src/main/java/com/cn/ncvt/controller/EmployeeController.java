@@ -95,4 +95,10 @@ public class EmployeeController {
         UploadUtil uploadUtil = new UploadUtil();
         return ResultFactory.buildSuccessResult(uploadUtil.upload(picture, "emp"));
     }
+
+    @GetMapping("/checkworkid")
+    @ApiOperation(value = "检查工号是否重复", notes = "")
+    public Result checkWorkID(Integer workId){
+        return employeeBiz.checkWorkID(workId);
+    }
 }
