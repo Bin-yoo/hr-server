@@ -49,6 +49,9 @@ public class UserBiz {
         try {
             subject.login(token);
             Session session = subject.getSession();
+            session.setTimeout(900000);
+            //session.setTimeout(1800000);
+
             //将部分用户信息返回到前台
             User userDB =  userMapper.selectByUserNameLimit(user.getUsername());
             //创建jwt token实例,准备派发token
@@ -60,7 +63,7 @@ public class UserBiz {
             return ResultFactory.buildSuccessResult(map);
         } catch (AuthenticationException e){
             e.printStackTrace();
-            return ResultFactory.buildPermissionFailResult("登录失败,用户名或密码错误");
+            return ResultFactory.buildFailResult("登录失败,用户名或密码错误");
         }
     }
 

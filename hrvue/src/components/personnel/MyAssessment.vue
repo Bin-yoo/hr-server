@@ -49,9 +49,10 @@
                         <FormItem label="附件:" prop="data">
                             <Upload
                                 ref="upload"
+                                :headers="headers"
                                 :on-success="uploadSuccess"
                                 name="picture"
-                                action="http://111.230.141.100:8080/hrserver/empAssessment/data">
+                                action="http://localhost:8080/hrserver/empAssessment/data">
                                 <Button icon="ios-cloud-upload-outline">上传文件</Button>
                             </Upload>
                         </FormItem>
@@ -104,9 +105,10 @@
                     <a :href="updateMyAss.data"  target="_blank" download>{{updateMyAss.data|formatData}}</a>
                     <Upload
                         ref="upload"
+                        :headers="headers"
                         :on-success="updateUploadSuccess"
                         name="picture"
-                        action="http://111.230.141.100:8080/hrserver/empAssessment/data">
+                        action="http://localhost:8080/hrserver/empAssessment/data">
                         <Button icon="ios-cloud-upload-outline">上传新文件</Button>
                     </Upload>
                 </FormItem>
@@ -125,6 +127,10 @@
     export default {
         data() {
             return {
+                headers: {
+                    'token': this.$store.state.token,
+                    'sessionId': this.$store.state.sessionId,
+                },
                 file: '',
                 addModal: false,
                 updateMyAssModal: false,

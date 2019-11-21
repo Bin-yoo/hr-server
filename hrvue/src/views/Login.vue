@@ -84,7 +84,7 @@ export default {
                             this.$store.commit("sessionId", resp.data.data.sessionId);
                             this.$Message.success("登陆成功");
                             this.spinShow = false;
-                            this.$router.push({name: 'home'})
+                            this.$router.push({path: 'home'})
                         } else {
                             this.$Message.error(resp.data.message);
                             this.spinShow = false;

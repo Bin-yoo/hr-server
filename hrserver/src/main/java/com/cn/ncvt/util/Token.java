@@ -24,7 +24,7 @@ public class Token {
             Algorithm algorithm = Algorithm.HMAC256(key);
             Map<String, Object> map = new HashMap<String, Object>();
             Date nowDate = new Date();
-            Date expireDate = getAfterDate(nowDate, 0, 0, 7, 0, 0, 10);    //获取当前时间2小时后的时间
+            Date expireDate = getAfterDate(nowDate, 0, 0, 0, 0, 15, 0);    //获取当前时间2小时后的时间
             map.put("alg", "HS256");
             map.put("typ", "JWT");
             String token = JWT.create()

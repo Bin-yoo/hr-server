@@ -38,7 +38,7 @@ public class LoginController {
     @GetMapping("/unauthorized")
     @ApiOperation(value = "未登录或token过期", notes = "后台会鉴别用户状态或token,返回提示")
     public Result unauthorized(){
-        return ResultFactory.buildResult(401,true,"用户未登录或token过期",null);
+        return ResultFactory.buildPermissionFailResult("用户未登录或token过期");
     }
 
 }

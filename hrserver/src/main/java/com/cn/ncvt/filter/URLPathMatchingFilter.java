@@ -39,10 +39,13 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         //Subject subject = new Subject.Builder().sessionId(sessionId).buildSubject();
         Subject subject = SecurityUtils.getSubject();
         System.out.println("当前用户:" + subject.getPrincipal());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        User user = (User) subject.getPrincipal();
 
+        if (headerToken==null || sessionId==null || user==null){
+            WebUtils.issueRedirect(request, response, "/unauthorized");
+            return false;
+        }
         System.out.println(user.getUsername());
-
 
         if (!subject.isAuthenticated()){
             WebUtils.issueRedirect(request, response, "/unauthorized");
