@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class UploadUtil {
 
-    private String uploadDir = "C:/uploadFiles/";
+    private String uploadDir = "D:/uploadFiles/";
 
     public String upload(@RequestParam("picture") MultipartFile picture, String dir) {
 
@@ -48,7 +48,7 @@ public class UploadUtil {
             picture.transferTo(targetFile);
             System.out.println("上传成功");
             //将文件在服务器的存储路径返回
-            return "http://111.230.141.100:8080/uploadFiles/"+dir+"/"+fileName;
+            return "http://localhost:8080/uploadFiles/"+dir+"/"+fileName;
         } catch (IOException e) {
             System.out.println("上传失败");
             e.printStackTrace();

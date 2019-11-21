@@ -263,9 +263,10 @@
                                 :format="['jpg','jpeg','png']"
                                 :max-size="2048"
                                 :on-success="uploadSuccess"
+                                :headers="headers"
                                 multiple
                                 type="drag"
-                                action="http://111.230.141.100:8080/hrserver/employee/picture"
+                                action="http://localhost:8080/hrserver/employee/picture"
                                 style="display: inline-block;width:128px;">
                                 <Button icon="ios-cloud-upload-outline" :style="{width:'120px',border:'none'}">上传图片</Button>
                             </Upload>
@@ -353,6 +354,10 @@
         name: 'PerEmp',
         data() {
             return {
+                headers: {
+                    'token': this.$store.state.token,
+                    'sessionId': this.$store.state.sessionId,
+                },
                 updateModal: false,
                 passwordModal : false,
                 rpPage:1,

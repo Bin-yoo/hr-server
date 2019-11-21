@@ -1,6 +1,8 @@
 ﻿import axios from 'axios'
 import {Message} from 'iview'
 import store from '../store'
+import Router from '../router'
+
 
 axios.interceptors.request.use(config => {
   return config;
@@ -8,15 +10,14 @@ axios.interceptors.request.use(config => {
   Message.error({message: '请求超时!'});
   // return Promise.resolve(err);
 })
-axios.interceptors.response.use(data => {
-//   if (data.status && data.status == 200) {
-//     Message.success({message: data.data.message});
-//     // return;
-//   }
-//   if (data.data.msg) {
-//     Message.success({message: data.data.message});
-//   }
-  return data;
+axios.interceptors.response.use(resp => {
+  if (resp.data.code == 401) {
+    Message.error(resp.data.message);
+    store.commit("logout");
+    Router.replace({name: 'login'})
+    // return;
+  }
+  return resp;
 }, err => {
   if (err.response.status == 504 || err.response.status == 404) {
     Message.error({message: '服务器被吃了⊙﹏⊙∥'});
@@ -33,8 +34,8 @@ axios.interceptors.response.use(data => {
   }
   // return Promise.resolve(err);
 })
-// let base = 'http://localhost:8082/hrserver';
-let base = 'http://111.230.141.100:8080/hrserver';
+let base = 'http://localhost:8080/hrserver';
+// let base = 'http://111.230.141.100:8080/hrserver';
 export const postRequest = (url, params) => {
   return axios({
     method: 'post',

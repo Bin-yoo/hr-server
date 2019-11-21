@@ -70,7 +70,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/unauthorized", "anon");
-        filterChainDefinitionMap.put("/sysmenu", "anon");
+        //filterChainDefinitionMap.put("/sysmenu", "anon");
         filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/doc.html", "anon");    //swagger所需路径
         filterChainDefinitionMap.put("/webjars/**", "anon");    //swagger静态资源所需路径
