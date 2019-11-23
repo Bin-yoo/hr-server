@@ -37,7 +37,6 @@
             </Table>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
-            <Col span="1"><Button type="error">批量删除</Button></Col>
             <Row :style="{textAlign: 'center'}">
                 <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange" @on-page-size-change="onPageSizeChange"/>
             </Row>
@@ -47,7 +46,6 @@
             title="添加员工档案"
             width=55%
             @on-visible-change="cancel">
-
             <Form ref="newEmployee" :model="newEmployee" :rules="newEmployeeRules" :label-width="100">
                 <Row>
                     <Col span="8">
@@ -175,7 +173,7 @@
                 <Row>
                     <Col span="8">
                         <FormItem label="所属部门：" prop="departmentId">
-                            <treeselect v-model="newEmployee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" placeholder="请选择部门"/>
+                            <treeselect v-model="newEmployee.departmentId" :options="dropDownList.departmentList" :default-expand-level="1" @select="depselect" placeholder="请选择部门"/>
                         </FormItem>
                     </Col>
                     <Col span="8">
@@ -656,7 +654,7 @@
                 departAssLimit: 3,
                 departAssPageSize: 3,
                 loading: false,
-                index: 1,
+                index: null,
                 empRpLists: [],
                 dropDownList: [],
                 departAssLists: [],
@@ -1262,6 +1260,7 @@
             },
             show(index) {
                 this.showModal = true;
+                this.index=index;
                 this.getEmpRp(index);
                 this.getDepartAss(index);
             },
@@ -1278,6 +1277,10 @@
             },
             uploadSuccess(resp, file){
                 this.employee.picture = resp.data;
+            },
+            depselect(node, instanceId){
+                console.log(node)
+                console.log(instanceId)
             },
             validExit(rule, value, callback){
                 if(value == null || value == ''){

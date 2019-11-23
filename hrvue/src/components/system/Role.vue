@@ -96,9 +96,9 @@
                         </Col>
                     </Row>
                 </TabPane>
-                <TabPane label="操作权限" name="CharacterMana">
-                    <!-- <user-role></user-role> -->滴滴滴
-                </TabPane>
+                <!-- <TabPane label="操作权限" name="CharacterMana">
+                    <user-role></user-role>滴滴滴
+                </TabPane> -->
             </Tabs>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
