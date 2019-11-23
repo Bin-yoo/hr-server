@@ -323,6 +323,7 @@
                 this.salary.meritSalary = ''+this.employeeSalarylist[index].meritSalary;
 
                 this.beforSalary.beforBasics = ''+this.employeeSalarylist[index].baseSalary;
+                this.beforSalary.beforMerit = ''+this.employeeSalarylist[index].meritSalary;
             },
             select(eid, name, workId) {
                 this.selectModal = true;
@@ -330,7 +331,6 @@
                     page: this.selectModalPage,
                     limit: this.selectModalLimit,
                 }).then(resp => {
-                    console.log(resp)
                     this.loading = false;
                     this.employeeSalarylogList = resp.data.data.list;
                     this.name = name;
