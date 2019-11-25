@@ -291,7 +291,6 @@
                         this.$Message.error("工资存在特殊字符");
                         return;
                     }
-
                     if (valid) {
                         this.putRequest("/salary/updateEmpSalary", {
                             id:this.salary.id,
@@ -314,28 +313,36 @@
                 })
             },
             beforeupdate(index) {
-                this.updateModal = true;
-                this.salary.id = this.employeeSalarylist[index].id;      
-                this.salary.eid = this.employeeSalarylist[index].eid;
-                this.salary.name = this.employeeSalarylist[index].employee.name;
-                this.salary.workId = this.employeeSalarylist[index].employee.workId;
-                this.salary.baseSalary = ''+this.employeeSalarylist[index].baseSalary;
-                this.salary.meritSalary = ''+this.employeeSalarylist[index].meritSalary;
+                this.getRequest("/addEmpFile",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.updateModal = true;
+                        this.salary.id = this.employeeSalarylist[index].id;      
+                        this.salary.eid = this.employeeSalarylist[index].eid;
+                        this.salary.name = this.employeeSalarylist[index].employee.name;
+                        this.salary.workId = this.employeeSalarylist[index].employee.workId;
+                        this.salary.baseSalary = ''+this.employeeSalarylist[index].baseSalary;
+                        this.salary.meritSalary = ''+this.employeeSalarylist[index].meritSalary;
 
-                this.beforSalary.beforBasics = ''+this.employeeSalarylist[index].baseSalary;
-                this.beforSalary.beforMerit = ''+this.employeeSalarylist[index].meritSalary;
+                        this.beforSalary.beforBasics = ''+this.employeeSalarylist[index].baseSalary;
+                        this.beforSalary.beforMerit = ''+this.employeeSalarylist[index].meritSalary;
+                    }
+                })
             },
             select(eid, name, workId) {
-                this.selectModal = true;
-                this.getRequest("/salary/salary_log/" + eid, {
-                    page: this.selectModalPage,
-                    limit: this.selectModalLimit,
-                }).then(resp => {
-                    this.loading = false;
-                    this.employeeSalarylogList = resp.data.data.list;
-                    this.name = name;
-                    this.workId = workId;
-                    this.total = resp.data.data.total;
+                this.getRequest("/viewSalaryLog",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.selectModal = true;
+                        this.getRequest("/salary/salary_log/" + eid, {
+                            page: this.selectModalPage,
+                            limit: this.selectModalLimit,
+                        }).then(resp => {
+                            this.loading = false;
+                            this.employeeSalarylogList = resp.data.data.list;
+                            this.name = name;
+                            this.workId = workId;
+                            this.total = resp.data.data.total;
+                        })
+                    }
                 })
             },
             handleReset (name) {

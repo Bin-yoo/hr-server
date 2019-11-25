@@ -17,6 +17,10 @@ axios.interceptors.response.use(resp => {
     Router.replace({name: 'login'})
     // return;
   }
+  if (resp.data.code == 403) {
+    Message.error(resp.data.message);
+    // return;
+  }
   return resp;
 }, err => {
   if (err.response.status == 504 || err.response.status == 404) {

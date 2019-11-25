@@ -20,7 +20,7 @@
                 </Row>
             </Col>
             <Col span="2">
-                <Button type="primary" @click="addModal = true">添加奖惩记录</Button>
+                <Button type="primary" @click="befaddRp">添加奖惩记录</Button>
             </Col>
         </Row>
         <br>
@@ -472,18 +472,22 @@
                 this.selectEmpModal = false;
             },
             beforeUpdate (index) {
-                this.updateModal = true;
-                this.rpList.id = this.rpLists[index].id;
-                this.rpList.type = this.rpLists[index].type;
-                this.rpList.reason = this.rpLists[index].reason;
-                this.rpList.point = "" + this.rpLists[index].point;
-                this.rpList.date = this.rpLists[index].date;
-                this.rpList.remark = this.rpLists[index].remark;
-                this.rpList.eid = this.rpLists[index].eid;
-                this.rpList.name = this.rpLists[index].employee.name;
-                this.rpList.positionName = this.rpLists[index].employee.positionName;
-                this.rpList.departmentName = this.rpLists[index].employee.departmentName;
-                this.rpList.workId = this.rpLists[index].employee.workId;
+                this.getRequest("/updateRp",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.updateModal = true;
+                        this.rpList.id = this.rpLists[index].id;
+                        this.rpList.type = this.rpLists[index].type;
+                        this.rpList.reason = this.rpLists[index].reason;
+                        this.rpList.point = "" + this.rpLists[index].point;
+                        this.rpList.date = this.rpLists[index].date;
+                        this.rpList.remark = this.rpLists[index].remark;
+                        this.rpList.eid = this.rpLists[index].eid;
+                        this.rpList.name = this.rpLists[index].employee.name;
+                        this.rpList.positionName = this.rpLists[index].employee.positionName;
+                        this.rpList.departmentName = this.rpLists[index].employee.departmentName;
+                        this.rpList.workId = this.rpLists[index].employee.workId;
+                    }
+                })
             },
             updateRp(name) {
                 // if(this.rpList.type == "奖励"){
@@ -521,22 +525,26 @@
                 })
             },
             remove(id){
-                this.$Modal.confirm({
-                    title: '你正在进行删除操作',
-                    content: '<p>你确定要删除该奖惩记录吗?</p>',
-                    onOk: () => {
-                        var _this = this;
-                        this.deleteRequest("/rp/deleteRp/" + id).then(resp=> {
-                            if(resp.data.code != 400){
-                                this.$Message.success(resp.data.data);
-                                this.spinShow = false;
-                                _this.getRpList();
-                            }else{
-                                this.$Message.error(resp.data.message);
-                            }
-                        })
-                    },
-                });
+                this.getRequest("/deleteRp",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.$Modal.confirm({
+                        title: '你正在进行删除操作',
+                        content: '<p>你确定要删除该奖惩记录吗?</p>',
+                        onOk: () => {
+                            var _this = this;
+                            this.deleteRequest("/rp/deleteRp/" + id).then(resp=> {
+                                if(resp.data.code != 400){
+                                    this.$Message.success(resp.data.data);
+                                    this.spinShow = false;
+                                    _this.getRpList();
+                                }else{
+                                    this.$Message.error(resp.data.message);
+                                }
+                            })
+                        },
+                    });
+                    }
+                })
             },
             addhandleReset(name){
                 this.rpList.eid = "";
@@ -559,6 +567,13 @@
                     this.rpList.positionName = "";
                 }
             },
+            befaddRp(){
+                this.getRequest("/addRp",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.addModal = true;
+                    }
+                })
+            }
         },
         mounted: function (){
             this.getDropDownList();
@@ -569,7 +584,6 @@
             limit: "getRpList",
             empPage: "getEmpLists",
             empLimit: "getEmpLists",
-
         },
     }
 </script>

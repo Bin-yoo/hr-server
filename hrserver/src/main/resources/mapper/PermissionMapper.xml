@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.ncvt.mapper.PermissionMapper">
+  <resultMap id="PermissionResultMap" type="com.cn.ncvt.entity.Permission">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <collection property="children" ofType="com.cn.ncvt.entity.Permission">
+      <id column="id2" property="id" jdbcType="INTEGER"/>
+      <result column="name2" property="name" jdbcType="VARCHAR"/>
+      <collection property="children" ofType="com.cn.ncvt.entity.Permission">
+        <id column="id3" property="id"/>
+        <result column="name3" property="name" jdbcType="VARCHAR"/>
+        <result column="checked" property="checked" jdbcType="INTEGER"/>
+      </collection>
+    </collection>
+  </resultMap>
+  <select id="selectPermissionByRid" parameterType="java.lang.Integer" resultMap="PermissionResultMap">
+    select p1.`id`,p1.`name`,p2.`id` as id2,p2.`name` as name2,p3.`id` as id3,p3.`name` as name3,
+    if((SELECT pid from role_permission WHERE rid=#{rid} and pid=p3.id)=p3.id,true,false) as checked
+    from permission p1,permission p2,permission p3 where p1.`id`=p2.`parentId` and p2.`id`=p3.`parentId`
+  </select>
+  <select id="selectAll" parameterType="java.lang.String" resultType="Permission">
+    select * from permission where url=#{url}
+  </select>
+  <select id="selectByUID" parameterType="java.lang.Integer" resultType="String">
+    SELECT p.url FROM `permission` p, role_permission rp, `user` u, user_role ur, role r where p.id=rp.pid and rp.rid = r.id and ur.rid = r.id and u.id = ur.uid and u.id=#{id}
+  </select>
+</mapper>

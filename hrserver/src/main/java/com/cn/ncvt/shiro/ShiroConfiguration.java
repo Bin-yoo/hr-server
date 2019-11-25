@@ -70,13 +70,14 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/unauthorized", "anon");
+        filterChainDefinitionMap.put("/unauthorization", "anon");
         //filterChainDefinitionMap.put("/sysmenu", "anon");
         filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/doc.html", "anon");    //swagger所需路径
         filterChainDefinitionMap.put("/webjars/**", "anon");    //swagger静态资源所需路径
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");    //swagger静态资源所需路径
         filterChainDefinitionMap.put("/v2/**", "anon");    //swagger静态资源所需路径
-        //filterChainDefinitionMap.put("/**", "url");
+        filterChainDefinitionMap.put("/**", "url");
         shiroFilterFactoryBean.setFilters(customisedFilter);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

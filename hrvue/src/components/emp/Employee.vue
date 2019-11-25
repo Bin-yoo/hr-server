@@ -27,7 +27,7 @@
                     </Col>
                 </Row>
             </Col>
-            <Col span="2"><Button type="primary" @click="addModal = true">添加档案</Button></Col>
+            <Col span="2"><Button type="primary" @click="addEmpFile">添加档案</Button></Col>
         </Row>
         <br>
         <Row>
@@ -1132,39 +1132,43 @@
                 })
             },
             beforeUpdate(index){
-                this.updateModal = true;
-                this.employee.id = this.employees[index].id;
-                this.employee.workId = '' + this.employees[index].workId;
-                this.employee.name = this.employees[index].name;
-                this.employee.sex = this.employees[index].sex;
-                this.employee.nationId = this.employees[index].nationId;
-                this.employee.nationName = this.employees[index].nationName;
-                this.employee.birthday = this.employees[index].birthday;
-                this.employee.politiclId = this.employees[index].politiclId;
-                this.employee.politiclName = this.employees[index].politiclName;
-                this.employee.wedlock = this.employees[index].wedlock;
-                this.employee.nativePlace = this.employees[index].nativePlace;
-                this.employee.idCard = this.employees[index].idCard;
-                this.employee.email = this.employees[index].email;
-                this.employee.phone = this.employees[index].phone;
-                this.employee.address = this.employees[index].address;
-                this.employee.departmentId = this.employees[index].departmentId;
-                this.employee.departmentName = this.employees[index].departmentName;
-                this.employee.positionId = this.employees[index].positionId;
-                this.employee.positionName = this.employees[index].positionName;
-                this.employee.jobLevelId = this.employees[index].jobLevelId;
-                this.employee.jobLevelName = this.employees[index].jobLevelName;
-                this.employee.titopDegree = this.employees[index].titopDegree;
-                this.employee.specialty = this.employees[index].specialty;
-                this.employee.school = this.employees[index].school;
-                this.employee.beginDate = this.employees[index].beginDate;
-                this.employee.workState = this.employees[index].workState;
-                this.employee.conversionTime = this.employees[index].conversionTime;
-                this.employee.quitTime = this.employees[index].quitTime;
-                this.employee.beginContract = this.employees[index].beginContract;
-                this.employee.endContract = this.employees[index].endContract;
-                this.employee.baseSalary = '' + this.employees[index].baseSalary;
-                this.employee.picture = this.employees[index].picture;
+                this.getRequest("/modifyEmpFile",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.updateModal = true;
+                        this.employee.id = this.employees[index].id;
+                        this.employee.workId = '' + this.employees[index].workId;
+                        this.employee.name = this.employees[index].name;
+                        this.employee.sex = this.employees[index].sex;
+                        this.employee.nationId = this.employees[index].nationId;
+                        this.employee.nationName = this.employees[index].nationName;
+                        this.employee.birthday = this.employees[index].birthday;
+                        this.employee.politiclId = this.employees[index].politiclId;
+                        this.employee.politiclName = this.employees[index].politiclName;
+                        this.employee.wedlock = this.employees[index].wedlock;
+                        this.employee.nativePlace = this.employees[index].nativePlace;
+                        this.employee.idCard = this.employees[index].idCard;
+                        this.employee.email = this.employees[index].email;
+                        this.employee.phone = this.employees[index].phone;
+                        this.employee.address = this.employees[index].address;
+                        this.employee.departmentId = this.employees[index].departmentId;
+                        this.employee.departmentName = this.employees[index].departmentName;
+                        this.employee.positionId = this.employees[index].positionId;
+                        this.employee.positionName = this.employees[index].positionName;
+                        this.employee.jobLevelId = this.employees[index].jobLevelId;
+                        this.employee.jobLevelName = this.employees[index].jobLevelName;
+                        this.employee.titopDegree = this.employees[index].titopDegree;
+                        this.employee.specialty = this.employees[index].specialty;
+                        this.employee.school = this.employees[index].school;
+                        this.employee.beginDate = this.employees[index].beginDate;
+                        this.employee.workState = this.employees[index].workState;
+                        this.employee.conversionTime = this.employees[index].conversionTime;
+                        this.employee.quitTime = this.employees[index].quitTime;
+                        this.employee.beginContract = this.employees[index].beginContract;
+                        this.employee.endContract = this.employees[index].endContract;
+                        this.employee.baseSalary = '' + this.employees[index].baseSalary;
+                        this.employee.picture = this.employees[index].picture;
+                    }
+                })
             },
             update (name) {
                 if(this.employee.birthday != ''){
@@ -1243,29 +1247,37 @@
                 })
             },
             remove(id){
-                this.$Modal.confirm({
-                    title: '你正在进行删除操作',
-                    content: '<p>你确定要删除该员工档案吗?</p>',
-                    onOk: () => {
-                        console.log(id);
-                        var _this = this;
-                        this.deleteRequest("/employee/deleteEmp/" + id).then(resp=> {
-                            if(resp.data.code != 400){
-                                this.$Message.success(resp.data.data);
-                                this.spinShow = false;
-                                _this.getEmployeeList();
-                            }else{
-                                this.$Message.error(resp.data.message);
-                            }
+                this.getRequest("/deleteEmpFile",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.$Modal.confirm({
+                            title: '你正在进行删除操作',
+                            content: '<p>你确定要删除该员工档案吗?</p>',
+                            onOk: () => {
+                                console.log(id);
+                                var _this = this;
+                                this.deleteRequest("/employee/deleteEmp/" + id).then(resp=> {
+                                    if(resp.data.code != 400){
+                                        this.$Message.success(resp.data.data);
+                                        this.spinShow = false;
+                                        _this.getEmployeeList();
+                                    }else{
+                                        this.$Message.error(resp.data.message);
+                                    }
+                                })
+                            },
                         })
-                    },
+                    }
                 })
             },
             show(index) {
-                this.showModal = true;
-                this.index=index;
-                this.getEmpRp(index);
-                this.getDepartAss(index);
+                this.getRequest("/viewEmpFile",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.showModal = true;
+                        this.index=index;
+                        this.getEmpRp(index);
+                        this.getDepartAss(index);
+                    }
+                })
             },
             cancel(flag){
                 if(flag == false){
@@ -1274,9 +1286,7 @@
                 }
             },
             uploadNewSuccess(resp, file){
-                console.log(resp)
                 this.newEmployee.picture = resp.data;
-                console.log(this.newEmployee.picture)
             },
             uploadSuccess(resp, file){
                 this.employee.picture = resp.data;
@@ -1298,6 +1308,13 @@
                     callback();
                 })
             },
+            addEmpFile(){
+                this.getRequest("/addEmpFile",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.addModal = true;
+                    }
+                })
+            }
         },
         mounted: function (){
             this.getEmployeeList();

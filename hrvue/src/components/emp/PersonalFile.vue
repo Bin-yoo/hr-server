@@ -541,6 +541,13 @@
                     this.dropDownList = resp.data.data;
                 })
             },
+            initdata(){
+                if(this.user.eid != null){
+                    this.getPerEmp();
+                    this.getEmpRp();
+                    this.getDepartAss();
+                }
+            },
             getPerEmp(){
                 this.getRequest("/employee/myfile").then(resp=>{
                     this.perEmpList = resp.data.data;
@@ -688,9 +695,7 @@
         },
         mounted: function (){
             this.getDropDownList();
-            this.getPerEmp();
-            this.getEmpRp();
-            this.getDepartAss();
+            this.initdata();
         },
         watch: {
             rpPage: "getEmpRp",

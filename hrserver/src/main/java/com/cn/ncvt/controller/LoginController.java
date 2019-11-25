@@ -3,6 +3,7 @@ package com.cn.ncvt.controller;
 import com.cn.ncvt.biz.UserBiz;
 import com.cn.ncvt.entity.User;
 import com.cn.ncvt.result.Result;
+import com.cn.ncvt.result.ResultCode;
 import com.cn.ncvt.result.ResultFactory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +40,12 @@ public class LoginController {
     @ApiOperation(value = "未登录或token过期", notes = "后台会鉴别用户状态或token,返回提示")
     public Result unauthorized(){
         return ResultFactory.buildPermissionFailResult("用户未登录或token过期");
+    }
+
+    @GetMapping("/unauthorization")
+    @ApiOperation(value = "未登录或token过期", notes = "后台会鉴别用户状态或token,返回提示")
+    public Result unauthorization(){
+        return ResultFactory.buildResult(ResultCode.UNAUTHORIZATION,true,"你没有权限进行此操作,请联系管理员",null);
     }
 
 }
