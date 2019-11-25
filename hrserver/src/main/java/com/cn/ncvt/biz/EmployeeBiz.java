@@ -149,4 +149,9 @@ public class EmployeeBiz {
             return ResultFactory.buildSuccessResult("工号未重复");
         }
     }
+
+    public List<Employee> outputAllEmpFile() {
+        List<Employee> list = employeeMapper.selectAllEmployeeFile();
+        return list;
+    }
 }

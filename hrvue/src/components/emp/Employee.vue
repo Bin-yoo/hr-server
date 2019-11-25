@@ -22,6 +22,9 @@
                     <Col span="1">
                         <Button icon="ios-search" @click="getEmployeeList">搜索</Button>
                     </Col>
+                    <Col span="1" offset="1">
+                        <Button icon="ios-cloud-download-outline" type="warning" target="_blank" to="http://localhost:8080/hrserver/employee/empExcel">导出所有档案</Button>
+                    </Col>
                 </Row>
             </Col>
             <Col span="2"><Button type="primary" @click="addModal = true">添加档案</Button></Col>

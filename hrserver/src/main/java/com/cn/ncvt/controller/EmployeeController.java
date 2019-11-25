@@ -4,12 +4,18 @@ import com.cn.ncvt.biz.EmployeeBiz;
 import com.cn.ncvt.entity.Employee;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
+import com.cn.ncvt.util.PoiUtil;
 import com.cn.ncvt.util.UploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @version : V1.0
@@ -100,5 +106,14 @@ public class EmployeeController {
     @ApiOperation(value = "检查工号是否重复", notes = "")
     public Result checkWorkID(Integer workId){
         return employeeBiz.checkWorkID(workId);
+    }
+
+    @GetMapping("/empExcel")
+    public void excelDownload(HttpServletResponse response) throws IOException {
+        List<Employee> list = employeeBiz.outputAllEmpFile();
+        if (list==null){
+            return;
+        }
+        PoiUtil.exportExcel(response, list);
     }
 }
