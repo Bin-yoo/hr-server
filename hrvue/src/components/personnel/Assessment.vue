@@ -22,7 +22,7 @@
                 </Row>
             </Col>
             <Col span="2">
-                <Button type="primary" @click="addModal = true">添加考核</Button>
+                <Button type="primary" @click="openaddAssessment">添加考核</Button>
             </Col>
         </Row>
         <br>
@@ -350,29 +350,31 @@
                 })
             },
             examine(index) {
-                this.examineModal = true;
-                if(this.aid == null || this.aid == ''){
-                    this.aid = this.assessments[index].id;
-                }
-                this.getRequest("/assessment/"+ this.aid +"/empAssessment",{
-                    page: this.examinePage,
-                    limit: this.examineLimit,
-                    name: this.souExamineName,
-                }).then(resp=>{
-                    this.examineLists = resp.data.data.list;
-                    this.examineTotal = resp.data.data.total;
+                this.getRequest("/reviewAssessment",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.examineModal = true;
+                        if(this.aid == null || this.aid == ''){
+                            this.aid = this.assessments[index].id;
+                        }
+                        this.getRequest("/assessment/"+ this.aid +"/empAssessment",{
+                            page: this.examinePage,
+                            limit: this.examineLimit,
+                            name: this.souExamineName,
+                        }).then(resp=>{
+                            this.examineLists = resp.data.data.list;
+                            this.examineTotal = resp.data.data.total;
+                        })
+                    }
                 })
             },
             beforeExamine(index){
                 this.examineingModal = true;
                 this.getRequest("/assessment/empAssessment/" + this.examineLists[index].eaid).then(resp=>{
-                    console.log(resp)
                     this.examineAss = resp.data.data;
                     this.beforeExamineAss.id = this.examineAss.id;
                     this.beforeExamineAss.data = this.examineAss.data;
                     this.beforeExamineAss.remark = this.examineAss.remark;
                     this.beforeExamineAss.result = this.examineAss.result;
-
                 })
             },
             updateExamineAss(name){
@@ -397,72 +399,88 @@
                 })
             },
             startASS(id,index){
-                this.$Modal.confirm({
-                    title: '开始考核',
-                    content: '<p>你确定要开始该考核吗?</p>',
-                    onOk: () => {
-                        var _this = this;
-                        this.putRequest("/assessment/updateAssesmentState",{
-                            id: id,
-                            name: this.assessments[index].name,
-                            state: "已开始",
-                            beginDate: this.beginDate,
-                        }).then(resp => {
-                            if (resp.data.code != 400) {
-                                this.$Message.success(resp.data.data);
-                                _this.getAssessment();
-                            } else {
-                                this.$Message.error(resp.data.message);
-                            }
-                        })
-                    },
-                });
+                this.getRequest("/changeAssState",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.$Modal.confirm({
+                            title: '开始考核',
+                            content: '<p>你确定要开始该考核吗?</p>',
+                            onOk: () => {
+                                var _this = this;
+                                this.putRequest("/assessment/updateAssesmentState",{
+                                    id: id,
+                                    name: this.assessments[index].name,
+                                    state: "已开始",
+                                    beginDate: this.beginDate,
+                                }).then(resp => {
+                                    if (resp.data.code != 400) {
+                                        this.$Message.success(resp.data.data);
+                                        _this.getAssessment();
+                                    } else {
+                                        this.$Message.error(resp.data.message);
+                                    }
+                                })
+                            },
+                        });
+                    }
+                })
             },
             overAss(id,index){
-                this.$Modal.confirm({
-                    title: '结束考核',
-                    content: '<p>你确定要结束该考核吗?</p>',
-                    onOk: () => {
-                        var _this = this;
-                        this.putRequest("/assessment/updateAssesmentState",{
-                            id: id,
-                            name: this.assessments[index].name,
-                            state: "已结束",
-                            endDate: this.endDate,
-                        }).then(resp => {
-                            if (resp.data.code != 400) {
-                                this.$Message.success(resp.data.data);
-                                _this.getAssessment();
-                            } else {
-                                this.$Message.error(resp.data.message);
-                            }
-                        })
-                    },
-                });
+                this.getRequest("/changeAssState",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.$Modal.confirm({
+                            title: '结束考核',
+                            content: '<p>你确定要结束该考核吗?</p>',
+                            onOk: () => {
+                                var _this = this;
+                                this.putRequest("/assessment/updateAssesmentState",{
+                                    id: id,
+                                    name: this.assessments[index].name,
+                                    state: "已结束",
+                                    endDate: this.endDate,
+                                }).then(resp => {
+                                    if (resp.data.code != 400) {
+                                        this.$Message.success(resp.data.data);
+                                        _this.getAssessment();
+                                    } else {
+                                        this.$Message.error(resp.data.message);
+                                    }
+                                })
+                            },
+                        });
+                    }
+                })
             },
             remove(id) {
-                this.$Modal.confirm({
-                    title: '你正在进行删除操作',
-                    content: '<p>你确定要删除该考核吗?</p>',
-                    onOk: () => {
-                        var _this = this;
-                        this.deleteRequest("/assessment/deleteAssesment/" + id).then(resp=> {
-                            if(resp.data.code != 400){
-                                this.$Message.success(resp.data.data);
-                                this.spinShow = false;
-                                _this.getAssessment();
-                            }else{
-                                this.$Message.error(resp.data.message);
-                            }
+                this.getRequest("/deleteAssessment",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.$Modal.confirm({
+                            title: '你正在进行删除操作',
+                            content: '<p>你确定要删除该考核吗?</p>',
+                            onOk: () => {
+                                var _this = this;
+                                this.deleteRequest("/assessment/deleteAssesment/" + id).then(resp=> {
+                                    if(resp.data.code != 400){
+                                        this.$Message.success(resp.data.data);
+                                        this.spinShow = false;
+                                        _this.getAssessment();
+                                    }else{
+                                        this.$Message.error(resp.data.message);
+                                    }
+                                })
+                            },
                         })
-                    },
+                    }
                 })
             },
             beforeUpdate(index) {
-                this.updateModal = true;
-                this.assessment.id = this.assessments[index].id;
-                this.assessment.name = this.assessments[index].name;
-                this.assessment.remarks = this.assessments[index].remarks;
+                this.getRequest("/modifyAssessment",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.updateModal = true;
+                        this.assessment.id = this.assessments[index].id;
+                        this.assessment.name = this.assessments[index].name;
+                        this.assessment.remarks = this.assessments[index].remarks;
+                    }
+                })
             },
             update(name){
                 var check = /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、\s]/im;
@@ -503,6 +521,13 @@
             handleReset (name) {
                 this.$refs[name].resetFields();
             },
+            openaddAssessment(){
+                this.getRequest("/addAssessment",null).then(resp=>{
+                    if(resp.data.code != 403){
+                        this.addModal = true;
+                    }
+                })
+            }
         },
         mounted: function (){
             this.getDropDownList();

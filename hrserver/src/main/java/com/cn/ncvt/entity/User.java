@@ -12,7 +12,7 @@ import java.util.List;
  * @Auther: Bin
  * @Date: 2019/9/22 16:55
  **/
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_EMPTY)
 public class User {
 
     private Integer id;

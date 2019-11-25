@@ -17,7 +17,7 @@
                 <Table  border  :columns="columns1" :data="roles" :loading="loading">
                     <template slot-scope="{ row, index }" slot="action">
                             <Button type="primary" style="margin-right: 5px" @click="beforeUpdate(index)" :disabled="row.id === 2 ? true : false">编辑信息</Button>
-                            <Button type="primary" style="margin-right: 5px" @click="getMenuTree(row.id)">编辑权限</Button>
+                            <Button type="primary" style="margin-right: 5px" @click="getTree(row.id)">编辑权限</Button>
                             <Button type="error" style="margin-right: 5px" @click="deleteRole(row.id)" :disabled="row.id === 2 ? true : false">删除</Button>
                     </template>
                 </Table>
@@ -86,19 +86,29 @@
                 <TabPane label="模块(菜单)访问权限" name="RoleMana">
                     <Row>
                         <Col>
-                            <Tree :data="treeData" ref="tree" show-checkbox multiple></Tree>
+                            <Tree :data="menuTreeData" ref="mtree" show-checkbox multiple></Tree>
                         </Col>
                     </Row>
                     <br>
                     <Row type="flex" justify="center">
                         <Col span="24">
-                            <Button type="primary" @click="updateTree" long>保存</Button>
+                            <Button type="primary" @click="updateMenuTree" long>保存</Button>
                         </Col>
                     </Row>
                 </TabPane>
-                <!-- <TabPane label="操作权限" name="CharacterMana">
-                    <user-role></user-role>滴滴滴
-                </TabPane> -->
+                <TabPane label="操作权限" name="CharacterMana">
+                    <Row>
+                        <Col>
+                            <Tree :data="ptreeData" ref="ptree" show-checkbox multiple></Tree>
+                        </Col>
+                    </Row>
+                    <br>
+                    <Row type="flex" justify="center">
+                        <Col span="24">
+                            <Button type="primary" @click="updatePermissionTree" long>保存</Button>
+                        </Col>
+                    </Row>
+                </TabPane>
             </Tabs>
             <Spin fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -162,7 +172,8 @@
                     name: '',
                     remark: ''
                 },
-                treeData: [],
+                menuTreeData: [],
+                ptreeData: [],
                 treeRid:'',
             }
         },
@@ -282,17 +293,22 @@
                     },
                 });
             },
-            getMenuTree(id){
+            getTree(id){
                 this.openRole = true;
                 this.getRequest("/system/role/menuTree/" + id).then(resp=> {
                     if (resp && resp.status == 200) {
-                        this.treeData = resp.data.data;
+                        this.menuTreeData = resp.data.data;
+                    }
+                })
+                this.getRequest("/system/role/permissionTree/" + id).then(resp=> {
+                    if (resp && resp.status == 200) {
+                        this.ptreeData = resp.data.data;
                     }
                 })
                 this.treeRid = id;
             },
-            updateTree(){
-                var treeCheckedData = this.$refs.tree.getCheckedNodes();
+            updateMenuTree(){
+                var treeCheckedData = this.$refs.mtree.getCheckedNodes();
                 var checkedKeys = [];
                 treeCheckedData.forEach(item => {
                     if(item.children == null){
@@ -310,6 +326,25 @@
                     this.$Message.error(error);
                 });
             },
+            updatePermissionTree(){
+                var treeCheckedData = this.$refs.ptree.getCheckedNodes();
+                var checkedKeys = [];
+                treeCheckedData.forEach(item => {
+                    if(item.children == null){
+                        checkedKeys.push(item.id)
+                    }
+                });
+                this.putRequest("/system/role/updatePermissionTree", {
+                    rid: this.treeRid,
+                    checkedKeys: checkedKeys
+                }).then(resp=> {
+                    this.$Message.success(resp.data.data);
+                    this.spinShow = false;
+                }).catch(error => {
+                    this.spinShow = false;
+                    this.$Message.error(error);
+                });
+            }
         }
     }
 </script>

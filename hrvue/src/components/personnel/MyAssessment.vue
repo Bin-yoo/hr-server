@@ -1,126 +1,132 @@
 <template>
     <div>
-        <Row>
-            <Col span="22">
-                <Row :gutter="6">
-                    <Col span="2">
-                        <Select v-model="souFormItem.state" placeholder="考核状态" clearable>
-                            <Option value="已开始">已开始</Option>
-                            <Option value="已结束">已结束</Option>
-                        </Select>
-                    </Col>
-                    <Col span="3">
-                        <Input v-model="souFormItem.name" clearable placeholder="请输入考核名称"/>
-                    </Col>
-                    <Col span="1">
-                        <Button icon="ios-search" @click="getDepartAss" >搜索</Button>
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
-        <br>
-        <Row>
-            <Table border ref="selection" :columns="departAssColumns" :data="departAssLists">
-                <template slot-scope="{ row, index }" slot="commit">
-                    <p v-if="row.commit">已提交</p>
-                    <p v-else>未提交</p>
-                </template>
-                <template slot-scope="{ row, index }" slot="action">
-                    <Button type="primary" style="margin-right: 5px" @click="beforeMyAss(index)" v-if="row.commit && row.state == '已开始'">编辑</Button>
-                    <Button type="primary" style="margin-right: 5px" @click="getMyAss(index)" v-else-if="row.commit && row.state == '已结束'">查看</Button>
-                    <Button type="primary" style="margin-right: 5px" v-else-if="row.state == '已结束'" disabled>未考核</Button>
-                    <Button type="primary" style="margin-right: 5px" @click="addAss(index)" v-else-if="row.state == '已开始'">提交</Button>
-                </template>
-            </Table>
-            <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
-                <Page :total="departAssTotal" :page-size="departAssPageSize" show-elevator show-total @on-change="departAssPageChange"/>            
-            </Row>
-        </Row>
-        <Modal
-            v-model="addModal"
-            title="提交考核"
-            @on-visible-change="cancel">
+        <div v-if="this.$store.state.user.eid == null">
+            <h1>你登录的是系统测试用户</h1>
+        </div>
+        <div v-else>
             <Row>
                 <Col span="22">
-                    <Form :model="myAssessmentList" :rules="rules" :label-width="100" ref="myAssessmentList">
-                        <FormItem label="考核项目:" prop="name">
-                            {{myAssessmentList.name}}
-                        </FormItem>
-                        <FormItem label="附件:" prop="data">
-                            <Upload
-                                ref="upload"
-                                :headers="headers"
-                                :on-success="uploadSuccess"
-                                name="picture"
-                                action="http://localhost:8080/hrserver/empAssessment/data">
-                                <Button icon="ios-cloud-upload-outline">上传文件</Button>
-                            </Upload>
-                        </FormItem>
-                        <FormItem label="说明:" prop="remark">
-                            <Input v-model="myAssessmentList.remark" type="textarea" placeholder="请输入考核说明"></Input>
-                        </FormItem>
-                    </Form>
+                    <Row :gutter="6">
+                        <Col span="2">
+                            <Select v-model="souFormItem.state" placeholder="考核状态" clearable>
+                                <Option value="已开始">已开始</Option>
+                                <Option value="已结束">已结束</Option>
+                            </Select>
+                        </Col>
+                        <Col span="3">
+                            <Input v-model="souFormItem.name" clearable placeholder="请输入考核名称"/>
+                        </Col>
+                        <Col span="1">
+                            <Button icon="ios-search" @click="getDepartAss" >搜索</Button>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
-            <div slot="footer">
-                <Button @click="handleReset('myAssessmentList')">重置</Button>
-                <Button type="primary" @click="addMyAss('myAssessmentList')">保存</Button>
-            </div>
-        </Modal>
-        <Modal
-            v-model="showMyAssModal"
-            title="查看我的考核"
-            width=40%>
-            
-            <Form :model="showMyAss" :label-width="100" ref="showMyAss">
-                <FormItem label="考核项目:">
-                    {{showMyAss.name}}
-                </FormItem>
-                <FormItem label="附件:">
-                    {{showMyAss.data}}
-                </FormItem>
-                <FormItem label="说明:">
-                    {{showMyAss.remark}}
-                </FormItem>
-                <FormItem label="是否查阅:">
-                    {{showMyAss.check}}
-                </FormItem>
-                <FormItem label="审核结果:">
-                    {{showMyAss.result}}
-                </FormItem>
-            </Form>
-            <div slot="footer">
-                <Button @click="selectAssModal=false">返回</Button>
-            </div>
-        </Modal>
-        <Modal
-            v-model="updateMyAssModal"
-            title="编辑我的考核">
-            
-            <Form :model="updateMyAss" :label-width="100" ref="updateMyAss" :rules="rules" >
-                <FormItem label="考核项目:">
-                    {{updateMyAss.name}}
-                </FormItem>
-                <FormItem label="附件:">
-                    <a :href="updateMyAss.data"  target="_blank" download>{{updateMyAss.data|formatData}}</a>
-                    <Upload
-                        ref="upload"
-                        :headers="headers"
-                        :on-success="updateUploadSuccess"
-                        name="picture"
-                        action="http://localhost:8080/hrserver/empAssessment/data">
-                        <Button icon="ios-cloud-upload-outline">上传新文件</Button>
-                    </Upload>
-                </FormItem>
-                <FormItem label="说明:" prop="remark">
-                    <Input v-model="updateMyAss.remark" type="textarea" placeholder="请输入考核说明"></Input>
-                </FormItem>
-            </Form>
-            <div slot="footer">
-                <Button type="primary" @click="updateMyAssessment('updateMyAss')">保存</Button>
-            </div>
-        </Modal>
+            <br>
+            <Row>
+                <Table border ref="selection" :columns="departAssColumns" :data="departAssLists">
+                    <template slot-scope="{ row, index }" slot="commit">
+                        <p v-if="row.commit">已提交</p>
+                        <p v-else>未提交</p>
+                    </template>
+                    <template slot-scope="{ row, index }" slot="action">
+                        <Button type="primary" style="margin-right: 5px" @click="beforeMyAss(index)" v-if="row.commit && row.state == '已开始'">编辑</Button>
+                        <Button type="primary" style="margin-right: 5px" @click="getMyAss(index)" v-else-if="row.commit && row.state == '已结束'">查看</Button>
+                        <Button type="primary" style="margin-right: 5px" v-else-if="row.state == '已结束'" disabled>未考核</Button>
+                        <Button type="primary" style="margin-right: 5px" @click="addAss(index)" v-else-if="row.state == '已开始'">提交</Button>
+                    </template>
+                </Table>
+                <Row type="flex" justify="center"  :style="{margin: '10px 0 0 0'}">
+                    <Page :total="departAssTotal" :page-size="departAssPageSize" show-elevator show-total @on-change="departAssPageChange"/>            
+                </Row>
+            </Row>
+            <Modal
+                v-model="addModal"
+                title="提交考核"
+                @on-visible-change="cancel">
+                <Row>
+                    <Col span="22">
+                        <Form :model="myAssessmentList" :rules="rules" :label-width="100" ref="myAssessmentList">
+                            <FormItem label="考核项目:" prop="name">
+                                {{myAssessmentList.name}}
+                            </FormItem>
+                            <FormItem label="附件:" prop="data">
+                                <Upload
+                                    ref="upload"
+                                    :headers="headers"
+                                    :on-success="uploadSuccess"
+                                    name="picture"
+                                    action="http://localhost:8080/hrserver/empAssessment/data">
+                                    <Button icon="ios-cloud-upload-outline">上传文件</Button>
+                                </Upload>
+                            </FormItem>
+                            <FormItem label="说明:" prop="remark">
+                                <Input v-model="myAssessmentList.remark" type="textarea" placeholder="请输入考核说明"></Input>
+                            </FormItem>
+                        </Form>
+                    </Col>
+                </Row>
+                <div slot="footer">
+                    <Button @click="handleReset('myAssessmentList')">重置</Button>
+                    <Button type="primary" @click="addMyAss('myAssessmentList')">保存</Button>
+                </div>
+            </Modal>
+            <Modal
+                v-model="showMyAssModal"
+                title="查看我的考核"
+                width=40%>
+                
+                <Form :model="showMyAss" :label-width="100" ref="showMyAss">
+                    <FormItem label="考核项目:">
+                        {{showMyAss.name}}
+                    </FormItem>
+                    <FormItem label="附件:">
+                        {{showMyAss.data}}
+                    </FormItem>
+                    <FormItem label="说明:">
+                        {{showMyAss.remark}}
+                    </FormItem>
+                    <FormItem label="是否查阅:">
+                        {{showMyAss.check}}
+                    </FormItem>
+                    <FormItem label="审核结果:">
+                        {{showMyAss.result}}
+                    </FormItem>
+                </Form>
+                <div slot="footer">
+                    <Button @click="selectAssModal=false">返回</Button>
+                </div>
+            </Modal>
+            <Modal
+                v-model="updateMyAssModal"
+                title="编辑我的考核">
+                
+                <Form :model="updateMyAss" :label-width="100" ref="updateMyAss" :rules="rules" >
+                    <FormItem label="考核项目:">
+                        {{updateMyAss.name}}
+                    </FormItem>
+                    <FormItem label="附件:">
+                        <a :href="updateMyAss.data"  target="_blank" download>{{updateMyAss.data|formatData}}</a>
+                        <Upload
+                            ref="upload"
+                            :headers="headers"
+                            :on-success="updateUploadSuccess"
+                            name="picture"
+                            action="http://localhost:8080/hrserver/empAssessment/data">
+                            <Button icon="ios-cloud-upload-outline">上传新文件</Button>
+                        </Upload>
+                    </FormItem>
+                    <FormItem label="说明:" prop="remark">
+                        <Input v-model="updateMyAss.remark" type="textarea" placeholder="请输入考核说明"></Input>
+                    </FormItem>
+                </Form>
+                <div slot="footer">
+                    <Button type="primary" @click="updateMyAssessment('updateMyAss')">保存</Button>
+                </div>
+            </Modal>
+        </div>
     </div>
+    
 </template>
 <script>
     import moment from "moment"
@@ -244,7 +250,8 @@
                         result: '',
                         check: '否',
                     }
-                ]
+                ],
+                user: this.$store.state.user,
             }
         },
         methods: {
@@ -261,10 +268,18 @@
             departAssPageChange(index){
                 this.departAssPage = index;
             },
+            initdata(){
+                if(this.user.eid != null){
+                    this.getPerEmp();
+                    this.getDepartAss();
+                }
+            },
             getPerEmp(){
-                this.getRequest("/employee/myfile").then(resp=>{
-                    this.perEmpList = resp.data.data;
-                })
+                if(user.eid != null){
+                    this.getRequest("/employee/myfile").then(resp=>{
+                        this.perEmpList = resp.data.data;
+                    })
+                }
             },
             getDepartAss() {
                 this.getRequest("/empAssessment/myAssessment",{
@@ -358,8 +373,7 @@
             },
         },
         mounted: function (){
-            this.getPerEmp();
-            this.getDepartAss();
+            this.initdata();
         },
         watch: {
             departAssPage: "getDepartAss",

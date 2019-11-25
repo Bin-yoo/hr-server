@@ -3,6 +3,7 @@ package com.cn.ncvt.biz;
 import com.cn.ncvt.entity.Role;
 import com.cn.ncvt.mapper.MenuRoleMapper;
 import com.cn.ncvt.mapper.RoleMapper;
+import com.cn.ncvt.mapper.RolePermissionMapper;
 import com.cn.ncvt.result.Result;
 import com.cn.ncvt.result.ResultFactory;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +30,9 @@ public class RoleBiz {
 
     @Autowired
     MenuRoleMapper menuRoleMapper;
+
+    @Autowired
+    RolePermissionMapper rolePermissionMapper;
 
     public Result roles(Integer page, Integer limit, String name) {
         PageHelper.startPage(page, limit);
@@ -60,6 +64,7 @@ public class RoleBiz {
 
     public Result deleteRoleByRid(int rid) {
         try {
+            rolePermissionMapper.deleteByRid(rid);
             menuRoleMapper.deleteByRid(rid);    //数据库表不设置级联,所以要先删除关联的菜单权限表中数据
             roleMapper.deleteRoleById(rid);
             return ResultFactory.buildSuccessResult("删除成功");

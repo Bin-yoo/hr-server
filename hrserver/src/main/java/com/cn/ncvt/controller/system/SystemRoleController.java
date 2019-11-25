@@ -1,10 +1,10 @@
 package com.cn.ncvt.controller.system;
 
-import com.cn.ncvt.biz.MenuBiz;
-import com.cn.ncvt.biz.MenuRoleBiz;
-import com.cn.ncvt.biz.RoleBiz;
+import com.cn.ncvt.biz.*;
 import com.cn.ncvt.entity.MenuTreeUtil;
+import com.cn.ncvt.entity.Permission;
 import com.cn.ncvt.entity.Role;
+import com.cn.ncvt.entity.RolePermission;
 import com.cn.ncvt.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,13 @@ public class SystemRoleController {
     MenuBiz menuBiz;
 
     @Autowired
+    PermissionBiz permissionBiz;
+
+    @Autowired
     MenuRoleBiz menuRoleBiz;
+
+    @Autowired
+    RolePermissionBiz rolePermissionBiz;
 
     @GetMapping("/roles")
     @ApiOperation(value = "角色列表", notes = "返回全部角色列表,page为当前页,limit为记录每页数量,name为查询条件")
@@ -57,7 +63,7 @@ public class SystemRoleController {
     }
 
     @PutMapping("/updateMenuTree")
-    @ApiOperation(value = "更新角色权限", notes = "传入参数rid和勾选节点的id数组,进行更新")
+    @ApiOperation(value = "更新角色菜单权限", notes = "传入参数rid和勾选节点的id数组,进行更新")
     public Result updateMenuTree(@RequestBody MenuTreeUtil menuTreeUtil) {
         //注释的代码不要删
         //@RequestBody String object
@@ -91,5 +97,16 @@ public class SystemRoleController {
         return roleBiz.deleteRoleByRid(rid);
     }
 
+    @GetMapping("/permissionTree/{rid}")
+    @ApiOperation(value = "获取权限树", notes = "")
+    public Result updatePermissionTree(@PathVariable Integer rid) {
+        return permissionBiz.getPermissionTreeByRid(rid);
+    }
+
+    @PutMapping("/updatePermissionTree")
+    @ApiOperation(value = "更新角色操作权限", notes = "传入参数rid和勾选节点的id数组,进行更新")
+    public Result updatePermissionTree(@RequestBody MenuTreeUtil menuTreeUtil) {
+        return rolePermissionBiz.updatePermissionTreeByRid(menuTreeUtil);
+    }
 
 }
