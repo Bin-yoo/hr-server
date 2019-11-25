@@ -23,6 +23,12 @@
           </if>
             order by e.id desc
 	    </select>
+    <select id="selectAllEmployeeFile" resultType="Employee">
+        select e.*,d.name as departmentName,p.name as positionName,n.name as nationName,ps.name as politiclName,j.name as jobLevelName
+        from employee e,department d,position p,nation n,political_status ps,job_level j
+        where e.departmentId=d.id and e.politiclId=ps.id and e.positionId=p.id and e.jobLevelId=j.id
+        and e.nationId=n.id order by e.id desc
+    </select>
         <insert id="insert" statementType="CALLABLE">
             call addEmp(#{emp.workId,mode=IN,jdbcType=BIGINT}, #{emp.name,mode=IN,jdbcType=VARCHAR},
             #{emp.sex,mode=IN,jdbcType=VARCHAR}, #{emp.nationId,mode=IN,jdbcType=INTEGER}, #{emp.birthday,mode=IN,jdbcType=DATE},
