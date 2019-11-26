@@ -19,11 +19,27 @@
                     <Col span="5">
                         <Input v-model="souformItem.name" clearable placeholder="请输入姓名..." />
                     </Col>
-                    <Col span="1">
-                        <Button icon="ios-search" @click="getEmployeeList">搜索</Button>
+                    <Col span="2">
+                        <Button icon="ios-search" long @click="getEmployeeList">搜索</Button>
                     </Col>
-                    <Col span="1" offset="1">
-                        <Button icon="ios-cloud-download-outline" type="warning" target="_blank" to="http://localhost:8080/hrserver/employee/empExcel">导出所有档案</Button>
+                    <Col span="2">
+                        <Button icon="ios-cloud-download-outline" type="warning" long target="_blank" to="http://localhost:8080/hrserver/employee/empExcel">导出所有档案</Button>
+                    </Col>
+                    <Col span="2">
+                        <Upload
+                            ref="upload"
+                            name='emps'
+                            :show-upload-list="false"
+                            :on-success="importSuccess"
+                            :headers="headers"
+                            multiple
+                            action="http://localhost:8080/hrserver/employee/import"
+                            style="display: inline-block;width:100%;">
+                            <Button icon="ios-cloud-upload-outline" type="warning">导入所有档案</Button>
+                        </Upload>
+                    </Col>
+                    <Col span="1">
+                        <Button icon="ios-cloud-download-outline" type="warning" @click="downloadModel">下载导入模板</Button>
                     </Col>
                 </Row>
             </Col>
@@ -231,13 +247,13 @@
                         </FormItem>
                     </Col>
                 </Row>
-                <Row>
+                <!-- <Row>
                     <Col span="8">
                         <FormItem label="工号：" prop="workId">
                             <Input v-model="newEmployee.workId" placeholder="请输入"></Input>
                         </FormItem>
                     </Col>
-                </Row>
+                </Row> -->
             </Form>
             <div slot="footer">
                 <Button @click="handleReset('newEmployee')">重置</Button>
@@ -1103,7 +1119,6 @@
                             beginContract: this.formatDate.beginContract,
                             endContract: this.formatDate.endContract,
                             baseSalary: this.newEmployee.baseSalary,
-                            workId: this.newEmployee.workId,
                             picture: this.newEmployee.picture
                         }).then(resp=> {
                             if (resp.data.code != 400) {
@@ -1219,7 +1234,6 @@
                             beginContract: this.formatDate.beginContract,
                             endContract: this.formatDate.endContract,
                             baseSalary: this.employee.baseSalary,
-                            workId: this.employee.workId,
                             picture: this.employee.picture
                         }).then(resp => {
                             if (resp.data.code != 400) {
@@ -1314,6 +1328,12 @@
                         this.addModal = true;
                     }
                 })
+            },
+            importSuccess(){
+                this.getEmployeeList();
+            },
+            downloadModel(){
+                window.open("./employee.xls")
             }
         },
         mounted: function (){

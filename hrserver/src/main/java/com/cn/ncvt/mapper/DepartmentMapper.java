@@ -19,4 +19,5 @@ public interface DepartmentMapper {
 
     Department selectByDepNum(Integer depNum);
 
+    List<Department> selectAllDep();
 }

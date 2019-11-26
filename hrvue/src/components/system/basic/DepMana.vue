@@ -4,9 +4,9 @@
             <Col span="1">
                 <Button type="primary" @click="openAdd=true">新增部门</Button>
             </Col>
-            <Col span="6" style="marginLeft:50px">
+            <!-- <Col span="6" style="marginLeft:50px">
                 <Input v-model="department.depNum" search placeholder="搜索部门名称..." />
-            </Col>
+            </Col> -->
         </Row>
         <br>
         <Row>

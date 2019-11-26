@@ -69,4 +69,9 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="selectAllDep" resultType="department">
+        select
+        <include refid="Base_Column_List"/>
+        from department
+    </select>
 </mapper>

@@ -38,4 +38,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectAllPosi" resultType="Position">
+    select
+    *
+    from position
+  </select>
 </mapper>

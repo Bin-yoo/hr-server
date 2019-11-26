@@ -1,14 +1,24 @@
 package com.cn.ncvt.util;
 
-import com.cn.ncvt.entity.Employee;
+import com.cn.ncvt.entity.*;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -116,6 +126,174 @@ public class PoiUtil {
 
         //workbook将Excel写入到response的输出流中，供页面下载
         workbook.write(response.getOutputStream());
+    }
+
+    public static List<Employee> importExcel(MultipartFile file,
+                                             List<Nation> allNations,
+                                             List<PoliticalStatus> allPolitics,
+                                             List<Department> allDeps,
+                                             List<Position> allPos,
+                                             List<JobLevel> allJobLevels){
+
+        List<Employee> emps = new ArrayList<>();
+        try {
+            HSSFWorkbook workbook =
+                    new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
+            int numberOfSheets = workbook.getNumberOfSheets();
+            for (int i = 0; i < numberOfSheets; i++) {
+                HSSFSheet sheet = workbook.getSheetAt(i);
+                int physicalNumberOfRows = sheet.getPhysicalNumberOfRows();
+                Employee employee;
+                Date d;
+                for (int j = 0; j < physicalNumberOfRows; j++) {
+                    if (j == 0) {
+                        continue;//标题行
+                    }
+                    HSSFRow row = sheet.getRow(j);
+                    if (row == null) {
+                        continue;//没数据
+                    }
+                    int physicalNumberOfCells = row.getPhysicalNumberOfCells();
+                    employee = new Employee();
+                    for (int k = 0; k < physicalNumberOfCells; k++) {
+                        HSSFCell cell = row.getCell(k);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        d = new Date();
+                        switch (k) {
+                            case 0:
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyHHmmssSS");
+                                String workId = sdf.format(d);
+                                employee.setWorkId(Long.parseLong(workId));
+                                break;
+                            case 1:
+                                employee.setName(cell.getStringCellValue());
+                                break;
+                            case 2:
+                                employee.setSex(cell.getStringCellValue());
+                                break;
+                            case 3:
+                                String b = dateFormat.format(cell.getDateCellValue());
+                                employee.setBirthday(Timestamp.valueOf(b));
+                                break;
+                            case 4:
+                                int nationIndex = 0;
+                                for (Nation nation: allNations) {
+                                    if (nation.getName().equals(cell.getStringCellValue())){
+                                        nationIndex = nation.getId();
+                                    }
+                                }
+                                employee.setNationId(nationIndex);
+                                break;
+                            case 5:
+                                int psIndex = 0;
+                                for (PoliticalStatus politicalStatus: allPolitics) {
+                                    if (politicalStatus.getName().equals(cell.getStringCellValue())){
+                                        psIndex = politicalStatus.getId();
+                                    }
+                                }
+                                employee.setPoliticlId(psIndex);
+                                break;
+                            case 6:
+                                employee.setNativePlace(cell.getStringCellValue());
+                                break;
+                            case 7:
+                                employee.setWedlock(cell.getStringCellValue());
+                                break;
+                            case 8:
+                                cell.setCellType(CellType.STRING);
+                                String idcard = cell.getStringCellValue();
+                                employee.setIdCard(idcard);
+                                String password = idcard.substring(idcard.length() - 6);
+                                String salt = new SecureRandomNumberGenerator().nextBytes().toString();    //生成加密盐
+                                String encodedPassword = new SimpleHash("md5",password,salt,2).toString();    //生成加密后的密码
+                                employee.setPassword(encodedPassword);
+                                employee.setSalt(salt);
+                                break;
+                            case 9:
+                                employee.setPhone(cell.getStringCellValue());
+                                break;
+                            case 10:
+                                employee.setEmail(cell.getStringCellValue());
+                                break;
+                            case 11:
+                                employee.setAddress(cell.getStringCellValue());
+                                break;
+                            case 12:
+                                employee.setSchool(cell.getStringCellValue());
+                                break;
+                            case 13:
+                                employee.setSpecialty(cell.getStringCellValue());
+                                break;
+                            case 14:
+                                employee.setTitopDegree(cell.getStringCellValue());
+                                break;
+                            case 15:
+                                int depIndex = 0;
+                                for (Department department: allDeps) {
+                                    if (department.getName().equals(cell.getStringCellValue())){
+                                        depIndex = department.getId();
+                                    }
+                                }
+                                employee.setDepartmentId(depIndex);
+                                break;
+                            case 16:
+                                int posIndex = 0;
+                                for (Position position: allPos) {
+                                    if (position.getName().equals(cell.getStringCellValue())){
+                                        posIndex = position.getId();
+                                    }
+                                }
+                                employee.setPositionId(posIndex);
+                                break;
+                            case 17:
+                                int jlIndex = 0;
+                                for (JobLevel jobLevel: allJobLevels) {
+                                    if (jobLevel.getName().equals(cell.getStringCellValue())){
+                                        jlIndex = jobLevel.getId();
+                                    }
+                                }
+                                employee.setJobLevelId(jlIndex);
+                                break;
+                            case 18:
+                                String wb = dateFormat.format(cell.getDateCellValue());
+                                employee.setBeginDate(Timestamp.valueOf(wb));
+                                break;
+                            case 19:
+                                employee.setWorkState(cell.getStringCellValue());
+                                break;
+                            case 20:
+                                if (cell.getDateCellValue()!=null){
+                                    String q = dateFormat.format(cell.getDateCellValue());
+                                    employee.setQuitTime(Timestamp.valueOf(q));
+                                }
+                                break;
+                            case 21:
+                                if (cell.getDateCellValue()!=null){
+                                    String c = dateFormat.format(cell.getDateCellValue());
+                                    employee.setConversionTime(Timestamp.valueOf(c));
+                                }
+                                break;
+                            case 22:
+                                String bc = dateFormat.format(cell.getDateCellValue());
+                                employee.setBeginContract(Timestamp.valueOf(bc));
+                                break;
+                            case 23:
+                                String ec = dateFormat.format(cell.getDateCellValue());
+                                employee.setEndContract(Timestamp.valueOf(ec));
+                                break;
+                            case 24:
+                                employee.setBaseSalary(cell.getNumericCellValue());
+                                break;
+                        }
+                    }
+                    emps.add(employee);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return emps;
+
     }
 
 }

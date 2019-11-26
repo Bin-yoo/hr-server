@@ -17,4 +17,6 @@ public interface PositionMapper {
     int updateByIDSelective(Position position);
 
     List<Position> selectPositionByCondition(@Param("name") String name);
+
+    List<Position> selectAllPosi();
 }

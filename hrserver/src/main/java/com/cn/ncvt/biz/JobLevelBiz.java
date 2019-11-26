@@ -72,4 +72,8 @@ public class JobLevelBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public List<JobLevel> getAllJobLevels() {
+        return jobLevelMapper.selectAllJoblvl();
+    }
 }

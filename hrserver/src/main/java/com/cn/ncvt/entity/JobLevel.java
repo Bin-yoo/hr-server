@@ -19,6 +19,17 @@ public class JobLevel {
     private Timestamp createDate = new Timestamp(((new java.util.Date()).getTime()));
     private String remark;
 
+    public JobLevel(String name) {
+        this.name = name;
+    }
+
+    public JobLevel(Integer id, String name, Timestamp createDate, String remark) {
+        this.id = id;
+        this.name = name;
+        this.createDate = createDate;
+        this.remark = remark;
+    }
+
     public Integer getId() {
         return id;
     }
