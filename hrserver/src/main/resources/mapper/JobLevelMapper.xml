@@ -38,4 +38,9 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="selectAllJoblvl" resultType="JobLevel">
+        select
+        *
+        from job_level
+    </select>
 </mapper>

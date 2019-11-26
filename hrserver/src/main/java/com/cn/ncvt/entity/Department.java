@@ -27,6 +27,23 @@ public class Department {
     private String label;
     private boolean expand = true;
 
+    public Department(String name) {
+        this.name = name;
+    }
+
+    public Department(Integer id, Integer depNum, Integer orderNum, String name, Integer parentId, String depPath) {
+        this.id = id;
+        this.depNum = depNum;
+        this.orderNum = orderNum;
+        this.name = name;
+        this.parentId = parentId;
+        this.depPath = depPath;
+        this.children = children;
+        this.title = title;
+        this.label = label;
+        this.expand = expand;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -13,6 +13,8 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,10 @@ public class EmployeeBiz {
 
 
     public Result addEmployeeFile(Employee employee) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyHHmmssSS");
+        String workId = sdf.format(d);
+        employee.setWorkId(Long.parseLong(workId));
         String password = employee.getIdCard().substring(employee.getIdCard().length() - 6);
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();    //生成加密盐
         int times = 2;    //加密两次
@@ -153,5 +159,17 @@ public class EmployeeBiz {
     public List<Employee> outputAllEmpFile() {
         List<Employee> list = employeeMapper.selectAllEmployeeFile();
         return list;
+    }
+
+    public boolean importEmployeeFile(List<Employee> emps) {
+        try {
+            for (Employee e : emps) {
+                employeeMapper.importEmps(e);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

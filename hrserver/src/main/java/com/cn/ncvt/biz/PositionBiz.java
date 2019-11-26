@@ -72,4 +72,8 @@ public class PositionBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public List<Position> getAllPos() {
+        return positionMapper.selectAllPosi();
+    }
 }

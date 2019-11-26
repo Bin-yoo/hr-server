@@ -18,4 +18,5 @@ public interface JobLevelMapper {
 
     List<JobLevel> selectJobLvlByCondition(@Param("name") String name);
 
+    List<JobLevel> selectAllJoblvl();
 }

@@ -31,4 +31,6 @@ public interface EmployeeMapper {
     Employee selectByWorkIdFun(@Param("workId") Integer workId);
 
     List<Employee> selectAllEmployeeFile();
+
+    int importEmps(@Param("emp") Employee emps);
 }

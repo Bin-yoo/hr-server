@@ -79,4 +79,8 @@ public class DepartmentBiz {
             return ResultFactory.buildFailResult("删除失败");
         }
     }
+
+    public List<Department> getAllDeps() {
+        return departmentMapper.selectAllDep();
+    }
 }
