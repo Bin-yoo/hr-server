@@ -117,7 +117,8 @@
         <Modal
             v-model="selectEmpModal"
             title="选择员工"
-            width=40%>
+            width=40%
+            @on-visible-change="cancel">
             
             <Row :gutter="6">
                 <Col span="6">
@@ -560,6 +561,8 @@
             cancel(flag){
                 if(flag == false){
                     this.$refs['rpList'].resetFields();
+                    this.$refs['souformItem2'].resetFields();
+                    this.empPage = 1,
                     this.rpList.eid = "";
                     this.rpList.name = "";
                     this.rpList.workId = "";

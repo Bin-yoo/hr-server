@@ -465,7 +465,8 @@
             <Modal
                 v-model="showModal"
                 title="员工档案详情"
-                width=40%>
+                width=40%
+                @on-visible-change="cancel">
 
                 <Row>
                     <Col span="8">
@@ -1297,6 +1298,8 @@
                 if(flag == false){
                     this.$refs['newEmployee'].resetFields();
                     this.$refs['employee'].resetFields();
+                    this.rpPage = 1;
+                    this.departAssPage = 1;
                 }
             },
             uploadNewSuccess(resp, file){
