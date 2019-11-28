@@ -516,6 +516,8 @@
                     this.$refs['newAssessment'].resetFields();
                     this.$refs['assessment'].resetFields();
                     this.$refs['beforeExamineAss'].resetFields();
+                    this.examinePage = 1;
+                    this.souExamineName = '';
                 }
             },
             handleReset (name) {

@@ -83,7 +83,8 @@
         <Modal
             v-model="selectModal"
             title="调薪记录"
-            width=60%>
+            width=60%
+            @on-visible-change="cancel">
 
             <Row :style="{margin: '0 0 15px 0'}">
                 <Col span="2"><p>姓名：{{name}}</p></Col>
@@ -353,6 +354,8 @@
             cancel(flag){
                 if(flag == false){
                     this.$refs['rpList'].resetFields();
+                    this.selectModalPage = 1;
+                    this.selectModalLimit= 10,
                     this.rpList.name = "";
                     this.rpList.workId = "";
                 }
