@@ -143,7 +143,7 @@
             </Row>
             <br>
             <Row type="flex" justify="center">
-                <Page :total="empTotal" :page-size="pageSize" show-elevator show-total @on-change="empPageChange"  @on-page-size-change="onEmpPageSizeChange"/>
+                <Page :total="empTotal" :page-size="pageSize" show-total @on-change="empPageChange"  @on-page-size-change="onEmpPageSizeChange"/>
             </Row>
             <div slot="footer">
                 <Button>返回</Button>
@@ -561,7 +561,9 @@
             cancel(flag){
                 if(flag == false){
                     this.$refs['rpList'].resetFields();
-                    this.$refs['souformItem2'].resetFields();
+                    this.souformItem2.departmentId = null;
+                    this.souformItem2.positionId = null;
+                    this.souformItem2.departmentId = null;
                     this.empPage = 1,
                     this.rpList.eid = "";
                     this.rpList.name = "";

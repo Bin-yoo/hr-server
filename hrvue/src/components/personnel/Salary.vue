@@ -96,7 +96,7 @@
             </Row>
             <Row type="flex" justify="center">
                 <Col>
-                    <Page :total="total" show-sizer show-elevator show-total @on-change="onSelectModalPageChange"
+                    <Page :total="total" show-sizer show-total @on-change="onSelectModalPageChange"
                           @on-page-size-change="onSelectModalPageSizeChange"/>
                 </Col>
             </Row>

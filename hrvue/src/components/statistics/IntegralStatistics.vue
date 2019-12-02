@@ -31,7 +31,7 @@
             </Table>
         </Row>
         <Row :style="{margin: '20px 0 0 0'}">
-            <Page :total="total" show-sizer show-elevator show-total @on-change="pageChange"
+            <Page :total="total" show-sizer show-total @on-change="pageChange"
                   @on-page-size-change="onPageSizeChange"/>
         </Row>
         <Modal

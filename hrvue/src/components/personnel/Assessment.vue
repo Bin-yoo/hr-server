@@ -100,7 +100,7 @@
             
             <Row :gutter="6">
                 <Col span="5">
-                    <Input v-model="souExamineName" clearable placeholder="请输入考核名称"/>
+                    <Input v-model="souExamineName" clearable placeholder="员工姓名"/>
                 </Col>
                 <Col span="1">
                     <Button icon="ios-search" @click="examine" >搜索</Button>
@@ -115,7 +115,7 @@
             </Table>
             <br>
             <Row type="flex" justify="center">
-                <Page :total="examineTotal" :page-size="examinePageSize" show-elevator show-total @on-change="examinePageChange"/>
+                <Page :total="examineTotal" :page-size="examinePageSize" show-total @on-change="examinePageChange"/>
             </Row>
             <div slot="footer">
                 <Button @click="examineModal = flase">返回</Button>
