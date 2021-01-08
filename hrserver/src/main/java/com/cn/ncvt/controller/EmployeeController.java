@@ -1,5 +1,7 @@
 package com.cn.ncvt.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.cn.ncvt.biz.*;
 import com.cn.ncvt.entity.Employee;
 import com.cn.ncvt.entity.PoliticalStatus;
@@ -11,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -129,7 +132,21 @@ public class EmployeeController {
         if (list == null) {
             return;
         }
-        PoiUtil.exportExcel(response, list);
+        //PoiUtil.exportExcel(response, list);
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("导入出员工列表","员工列表"), Employee .class, list);
+
+        //准备将Excel的输出流通过response输出到页面下载
+        //八进制输出流
+        response.setContentType("application/octet-stream");
+
+        //这后面可以设置导出Excel的名称，此例中名为student.xls
+        response.setHeader("Content-disposition", "attachment;filename=employee.xls");
+
+        //刷新缓冲
+        response.flushBuffer();
+
+        //workbook将Excel写入到response的输出流中，供页面下载
+        workbook.write(response.getOutputStream());
     }
 
     @PostMapping("/import")

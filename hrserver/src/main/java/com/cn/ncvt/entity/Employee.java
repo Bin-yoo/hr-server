@@ -1,5 +1,6 @@
 package com.cn.ncvt.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -15,40 +16,64 @@ import java.sql.Timestamp;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_DEFAULT)
 public class Employee {
     private Integer id;
+    @Excel(name = "工号")
     private Long workId;
+    @Excel(name = "员工姓名")
     private String name;
+    @Excel(name = "性别")
     private String sex;
     private Integer nationId;
+    @Excel(name = "民族")
     private String nationName;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    @Excel(name = "出生日期", databaseFormat = "yyyy-MM-dd")
     private Timestamp birthday;
     private Integer politiclId;
+    @Excel(name = "政治面貌")
     private String politiclName;
+    @Excel(name = "婚姻状况")
     private String wedlock;
+    @Excel(name = "籍贯")
     private String nativePlace;
+    @Excel(name = "身份证号码")
     private String idCard;
+    @Excel(name = "邮件地址")
     private String email;
+    @Excel(name = "联系电话")
     private String phone;
+    @Excel(name = "居住地址")
     private String address;
     private Integer departmentId;
+    @Excel(name = "所属部门")
     private String departmentName;
     private Integer positionId;
+    @Excel(name = "职位")
     private String positionName;
     private Integer jobLevelId;
+    @Excel(name = "职称")
     private String jobLevelName;
+    @Excel(name = "最高学历")
     private String titopDegree;
+    @Excel(name = "所学专业")
     private String specialty;
+    @Excel(name = "毕业院校")
     private String school;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    @Excel(name = "入职日期", databaseFormat = "yyyy-MM-dd")
     private Timestamp beginDate;
+    @Excel(name = "在职状态")
     private String workState;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    @Excel(name = "入职日期", databaseFormat = "yyyy-MM-dd")
     private Timestamp conversionTime;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    @Excel(name = "入职日期", databaseFormat = "yyyy-MM-dd")
     private Timestamp quitTime;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    @Excel(name = "入职日期", databaseFormat = "yyyy-MM-dd")
     private Timestamp beginContract;
     @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
+    @Excel(name = "入职日期", databaseFormat = "yyyy-MM-dd")
     private Timestamp endContract;
     private String picture;
     private double baseSalary;
