@@ -12,7 +12,9 @@ import java.util.Date;
 
 public class UploadUtil {
 
-    private String uploadDir = "D:/uploadFiles/";
+
+    // private String uploadDir = "C:/uploadFiles/";
+    private String uploadDir = "/www/wwwroot/uploadFiles/";
 
     public String upload(@RequestParam("picture") MultipartFile picture, String dir) {
 
