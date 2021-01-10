@@ -38,7 +38,8 @@ axios.interceptors.response.use(resp => {
   }
   // return Promise.resolve(err);
 })
-let base = 'http://localhost:8080/hrserver';
+// let base = 'http://localhost:8080/hrserver';
+let base = '/hrserver';
 export const postRequest = (url, params) => {
   return axios({
     method: 'post',
